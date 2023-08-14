@@ -19,3 +19,35 @@
 body {
 
 }
+
+.effect-red {
+  border: 2px solid red ;
+  box-sizing: border-box;
+}
+
+.effect-orange {
+  border: 2px solid orange;
+  box-sizing: border-box;
+}
+
+.effect-yellow {
+  border: 2px solid yellow;
+  box-sizing: border-box;
+}
+
+.effect-green {
+  border: 2px solid green;
+  box-sizing: border-box;
+}
+
+.effect-blue {
+  border: 2px solid blue;
+  box-sizing: border-box;
+}
+
+.effect-purple {
+  border: 2px solid purple;
+  box-sizing: border-box;
+}
+
+
