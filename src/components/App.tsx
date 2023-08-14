@@ -1,16 +1,16 @@
 import React from 'react';
-import { useGrid } from './Grid';
+import { useGrid } from './useGrid';
+import Header from './Header';
+import Footer from './Footer';
 
 function App({}) {
 
     const grid = useGrid();
 
-    console.log(grid);
-
     return (
-        <div>
-            Hello!
-        </div>
+        <main className=' py-6 px-4 mt-4 border-red-800 border-2 '> 
+            
+        </main>
     );
 }
 
