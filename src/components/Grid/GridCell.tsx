@@ -7,7 +7,7 @@ type GridCellProps = {
     onCellClick: (x: number, y: number) => void;
 };
 
-const effectToClassMap: Record<string, string> = {
+export const effectToBorderClassMap: Record<string, string> = {
     "Water Retain": "effect-red",
     "Quality Boost": "effect-orange",
     "Grow Speed Increase": "effect-yellow",
@@ -16,33 +16,32 @@ const effectToClassMap: Record<string, string> = {
     // ... other effects
 };
 
+// For background colors (used in GridCellComponent)
+export const effectToBgClassMap: Record<string, string> = {
+    "Water Retain": "bg-red-500",
+    "Quality Boost": "bg-orange-500",
+    "Grow Speed Increase": "bg-yellow-500",
+    "Weed Block": "bg-green-500",
+    "Increased Yield Amount": "bg-blue-500",
+    // ... other effects
+};
+
 export const GridCellComponent: React.FC<GridCellProps> = ({ cellData, x, y, onCellClick }) => {
-    const renderEffects = (effects: string[]) => {
-        if (effects.length === 0) {
-            return (
-                <div className="innermost-div flex items-center justify-center min-h-[65px] max-h-[75px]">
-                    <div>
-                        hi
-                    </div>
-                </div>
-            );
-        }
-
-        const effect = effects[0];
-        const remainingEffects = effects.slice(1);
-        const effectClass = effectToClassMap[effect];
-
-        return (
-            <div className={`${effectClass} w-full min-h-[65px] max-h-[75px]`}>
-                {renderEffects(remainingEffects)}
-            </div>
-        );
-    };
-
-
     return (
-        <div className={`grid-cell w-[75px] h-[75px] border-2 border-black-300 m-1 shadow-inner-blue shadow-inner-yellow`} onClick={() => onCellClick(x, y)}>
-            {renderEffects(cellData.effects)}
+        <div className={`grid-cell w-[75px] h-[75px] border-2 border-black-300 m-1 relative`} onClick={() => {
+            onCellClick(x, y)
+        }}>
+            {/* Render the crop image in the center */}
+            {cellData.crop && (
+                <img src={cellData.crop.image} alt={cellData.crop.name} className="absolute inset-1/4 w-1/2 h-1/2" />
+            )}
+
+            {/* Render colored boxes on the top row for each effect */}
+            <div className="absolute top-0 left-0 w-full flex">
+                {cellData.effects.map((effect, index) => (
+                    <div key={index} className={`${effectToBgClassMap[effect]} w-1/5 h-4`}></div>
+                ))}
+            </div>
         </div>
     );
 };

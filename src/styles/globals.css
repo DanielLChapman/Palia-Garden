@@ -21,7 +21,7 @@ body {
 }
 
 .effect-red {
-  border: 2px solid red ;
+  border: 2px solid red;
   box-sizing: border-box;
 }
 
@@ -50,4 +50,20 @@ body {
   box-sizing: border-box;
 }
 
+.effect-black {
+  border: 2px solid black;
+  box-sizing: border-box;
+}
 
+tr::after {
+  content: "";
+  display: block;
+  height: 4px; /* Adjust this value for desired spacing */
+  background-color: transparent;
+}
+
+.selected {
+  transform: scale(0.95);
+  transition: transform 0.3s ease; /* Optional: for smooth scaling */
+  border-sizing: 4px
+}
