@@ -28,7 +28,7 @@ export const effectToBgClassMap: Record<string, string> = {
 
 export const GridCellComponent: React.FC<GridCellProps> = ({ cellData, x, y, onCellClick }) => {
     return (
-        <div className={`grid-cell w-[75px] h-[75px] border-2 border-black-300 m-1 relative`} onClick={() => {
+        <div className={`grid-cell w-[75px] h-[75px] border-2 border-black m-0.5 relative`} onClick={() => {
             onCellClick(x, y)
         }}>
             {/* Render the crop image in the center */}
