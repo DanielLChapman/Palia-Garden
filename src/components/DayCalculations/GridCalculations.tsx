@@ -40,7 +40,7 @@ const getHarvestOutput = (crop: Crop, effects: CellEffects) => {
 }
 
 const getHarvestSpeed = (crop: Crop, effects: CellEffects) => {
-    return crop.gardenBuff['Grow Speed Increase'] && Math.random() < 0.1 
+    return effects.includes('Grow Speed Increase') && Math.random() < 0.1 
         ? crop.growthTime - 1
         : crop.growthTime;
 }
