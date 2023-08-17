@@ -12,30 +12,36 @@ export type CropQualityTyping = 'regular' | 'starred' ;
 
 export type ExpectedCropState = {
     regular: {
-        count: number
-    }
+        count: number;
+    };
     starred: {
-        count: number
-    }
-    name: string,
-}
+        count: number;
+    };
+    replants: number;
+};
 
+export type CropStates = {
+    [cropName: string]: ExpectedCropState;
+};
 
-const initialState: ExpectedCropState[] = Object.keys(crops).map((x) => {
-    return {
-        name: crops[x].name,
-        regular: {
-            count: 0
-        },
-        starred: {
-            count: 0
-        },
-    }
-})
+const initialState: CropStates = Object.fromEntries(
+    Object.keys(crops).map((x) => [
+        crops[x].name,
+        {
+            regular: {
+                count: 0
+            },
+            starred: {
+                count: 0
+            },
+            replants: 0
+        }
+    ])
+);
 
 const DayContainer: React.FC<DayContainerProps> = ({ cropCounts, grid }) => {
     const [amountOfDays, setAmountOfDays] = useState<number>(0);
-    const [expectedCrops, setExpectedCrops] = useState<ExpectedCropState[]>(initialState);
+    const [expectedCrops, setExpectedCrops] = useState<CropStates>(initialState);
 
     if (!cropCounts || cropCounts.size === 0) {
         return null;

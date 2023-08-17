@@ -24,7 +24,10 @@ export type Crop = {
     requiredForBuffs: number;
 };
 
-export const crops: Record<string, Crop> = {
+export type CropTyping = {
+    [cropName: string]: Crop,
+}
+export const crops: CropTyping = {
     Tomato: {
         name: "Tomato",
         growthTime: 4,

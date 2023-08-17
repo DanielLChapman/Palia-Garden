@@ -1,13 +1,14 @@
 import { Crop } from "@/data/crops";
 import { GridState } from "../useGrid";
-import { ExpectedCropState } from "./DayContainer";
+import { CropStates, ExpectedCropState } from "./DayContainer";
+import { CellEffects } from "../Effects";
 
-const getHarvestOutput = (crop: Crop) => {
+const getHarvestOutput = (crop: Crop, effects: CellEffects) => {
     const harvestAmountBase = crop?.harvestQuantity[Math.floor(Math.random() * crop.harvestQuantity.length)] || 2;
     let harvestAmount = harvestAmountBase;
 
-    const hasQualityBoost = crop?.gardenBuff['Quality Boost'];
-    const hasHarvestBoost = crop?.gardenBuff['Harvest Boost'];
+    const hasQualityBoost = effects.includes('Quality Boost');
+    const hasHarvestBoost = effects.includes('Increased Yield Amount');
 
     // Handle Harvest Boost
     if (hasHarvestBoost && Math.random() < 0.75) {
@@ -38,7 +39,7 @@ const getHarvestOutput = (crop: Crop) => {
         : { regular: harvestAmount, starred: 0 };
 }
 
-const getHarvestSpeed = (crop: Crop) => {
+const getHarvestSpeed = (crop: Crop, effects: CellEffects) => {
     return crop.gardenBuff['Grow Speed Increase'] && Math.random() < 0.1 
         ? crop.growthTime - 1
         : crop.growthTime;
@@ -84,30 +85,40 @@ const calculateHarvests = (
     };
 }
 
-export function countGrid(initialState: ExpectedCropState[], days: number, grid: GridState):ExpectedCropState[]  {
+export function countGrid(initialState: CropStates, days: number, grid: GridState):CropStates {
     if (!grid) return initialState;
     let newState = {...initialState};
-    let newGrid = [...grid.map((row) => [{
-    }])];
-    const newSeeds = {};
 
     for (let i = 0; i < grid.length; i++) {
         for (let j = 0; j < grid[0].length; j++) {
             const cell = grid[i][j];
             if (!cell) continue;
     
-            const { crop, primaryCoord } = cell;
+            const { crop, effects, primaryCoord } = cell;
             if (!crop) continue;
             if (!primaryCoord) continue;
             if (primaryCoord[0] !== i || primaryCoord[1] !== j) continue;
     
-            const harvestOutput = getHarvestOutput(crop);
-            const harvestSpeed = getHarvestSpeed(crop);
-            const harvests = calculateHarvests(days, crop.growthTime, crop.reharvestable, 4, crop.reharvestTime );
-
-            console.log(harvests);
-    
- 
+            const harvestOutput = getHarvestOutput(crop, effects);
+            const harvestSpeed = getHarvestSpeed(crop, effects);
+            const {totalHarvests: numberOfHarvests, replants} = calculateHarvests(days, harvestSpeed, crop.reharvestable, 4, crop.reharvestTime );
+            const totalRegular = numberOfHarvests * harvestOutput.regular;
+            const totalStarred = numberOfHarvests * harvestOutput.starred;
+            if (!newState[crop.name]) {
+                newState[crop.name] = {
+                    regular: {
+                        count: 0
+                    }, 
+                    starred: {
+                        count: 0
+                    },
+                    replants: 0
+                }
+            }
+            newState[crop.name].regular.count += totalRegular;
+            newState[crop.name].starred.count += totalStarred;
+            newState[crop.name].replants += replants;
+            
         }
     }  
 
