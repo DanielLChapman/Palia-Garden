@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useGrid } from "./useGrid";
+import React, { useCallback, useState } from "react";
+import { GridState, useGrid } from "./useGrid";
 import Header from "./Header";
 import Footer from "./Footer";
 import Grid from "./Grid/Grid";
@@ -16,6 +16,14 @@ function App({}) {
     const [currentCrop, setCurrentCrop] = useState<Crop | null>(null);
     const [cropCounts, setCropCounts] = useState<CropCounts>(new Map());
 
+    const updateGrid = (newGrid: GridState) => {
+        setGrid(prevGrid => {
+            if (newGrid !== prevGrid) {
+                return newGrid;
+            }
+            return prevGrid;
+        });
+    };
 
     return (
         <main className=" py-6 px-4 mt-4 border-red-800 border-2 ">
@@ -25,22 +33,22 @@ function App({}) {
                     <CropTable
                         currentCrop={currentCrop}
                         setCurrentCrop={setCurrentCrop}
+                        cropCounts={cropCounts}
                     />
                 </div>
                 <div className="flex-1 bg-gray-300 p-4 justify-center flex">
                     <Grid
                         grid={grid}
-                        setGrid={setGrid}
+                        setGrid={updateGrid}
                         currentCrop={currentCrop}
                         setCropCounts={setCropCounts}
                     />
                 </div>
             </div>
-            <div className="justify-center flex">
-                <CropDisplay cropCounts={cropCounts} />
-            </div>
 
-            <DayContainer cropCounts={cropCounts} grid={grid} />
+            {cropCounts.size > 0 && (
+                <DayContainer grid={grid} />
+            )}
         </main>
     );
 }

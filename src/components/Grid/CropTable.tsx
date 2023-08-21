@@ -5,15 +5,19 @@ import { effectToBorderClassMap } from "./GridCell";
 import { Effect } from "../Effects";
 
 import Image from "next/image";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSeedling } from '@fortawesome/free-solid-svg-icons'
 
 type CropTableProps = {
     currentCrop: Crop | null;
     setCurrentCrop: React.Dispatch<React.SetStateAction<Crop | null>>;
+    cropCounts: Map<string, number>;
 };
 
 export const CropTable: React.FC<CropTableProps> = ({
     currentCrop,
     setCurrentCrop,
+    cropCounts,
 }) => {
     if (!crops) return <span>Please Refresh, something went wrong</span>;
 
@@ -73,6 +77,13 @@ export const CropTable: React.FC<CropTableProps> = ({
                         <div className="absolute bottom-1 right-1">
                             {crops[crop].growthTime}
                         </div>
+                        {cropCounts.get(crops[crop].name) &&
+                        //@ts-ignore
+                            cropCounts.get(crops[crop].name) > 0 && (
+                                <div className="absolute top-1 left-1 text-green-800">
+                                   <FontAwesomeIcon icon={faSeedling} beat />: {cropCounts.get(crops[crop].name)}
+                                </div>
+                            )}
                     </div>
                 ))}
                 <div

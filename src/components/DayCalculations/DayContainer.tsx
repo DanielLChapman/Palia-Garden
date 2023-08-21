@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Crop, crops } from "@/data/crops";
 import { GridState } from "../useGrid";
 import { countGrid } from "./GridCalculations";
+import PreservationContainer, { CrafterState } from "./PreservationContainer";
+import CropDisplay from "../Grid/CropDisplay";
 
 type DayContainerProps = {
-    cropCounts: Map<string, number>;
     grid: GridState
 };
 
@@ -24,7 +25,7 @@ export type CropStates = {
     [cropName: string]: ExpectedCropState;
 };
 
-const initialState: CropStates = Object.fromEntries(
+export const initialState: CropStates = Object.fromEntries(
     Object.keys(crops).map((x) => [
         crops[x].name,
         {
@@ -39,18 +40,23 @@ const initialState: CropStates = Object.fromEntries(
     ])
 );
 
-const DayContainer: React.FC<DayContainerProps> = ({ cropCounts, grid }) => {
+const DayContainer: React.FC<DayContainerProps> = ({ grid }) => {
     const [amountOfDays, setAmountOfDays] = useState<number>(0);
     const [expectedCrops, setExpectedCrops] = useState<CropStates>(initialState);
+    const [leftOverCrops, setLeftOverCrops] = useState<CropStates>(expectedCrops);
+    const [crafters, setCrafters] = useState<CrafterState[]>([]);
 
-    if (!cropCounts || cropCounts.size === 0) {
-        return null;
-    }
+    useEffect(() => {
+        const newExpectedCrops = countGrid(initialState, amountOfDays, grid);
+        setExpectedCrops(newExpectedCrops);
+        setLeftOverCrops(newExpectedCrops)
+    }, [grid, amountOfDays]);
     
-    countGrid(expectedCrops, amountOfDays, grid)
+
+    
 
     return (
-        <div className="justify-center flex">
+        <div className="justify-center flex flex-col">
             {/* Day Selector */}
             <div className="flex flex-row justify-center">
                 <span>How Many Days To Simulate:</span>
@@ -63,6 +69,13 @@ const DayContainer: React.FC<DayContainerProps> = ({ cropCounts, grid }) => {
                         setAmountOfDays(Math.floor(parseInt(e.target.value)));
                     }}
                 />
+            </div>
+
+            <CropDisplay currentCrops={leftOverCrops}/>
+
+            <div className="flex flex-col justify-center">
+                <h3 className="flex flex-row justify-center">Crafters</h3>
+                <PreservationContainer expectedCrops={expectedCrops} leftOverCrops={leftOverCrops} setLeftOverCrops={setLeftOverCrops} crafters={crafters} setCrafters={setCrafters} />
             </div>
         </div>
     );

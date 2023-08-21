@@ -11,8 +11,8 @@ const getHarvestOutput = (crop: Crop, effects: CellEffects) => {
     const hasHarvestBoost = effects.includes('Increased Yield Amount');
 
     // Handle Harvest Boost
-    if (hasHarvestBoost && Math.random() < 0.75) {
-        harvestAmount += crop.width;
+    if (hasHarvestBoost && Math.random() < 0.8) {
+        harvestAmount += Math.floor(harvestAmount * 0.5);
     }
 
     // Calculate amount for starred quality
@@ -73,10 +73,11 @@ const calculateHarvests = (
             reharvests++;
         }
 
-        if (reharvests === numReharvest) {
+        if (reharvests === numReharvest && totalDays >= initialGrowthTime) {
             replants++;
             reharvests = 0;
         }
+        
     }
 
     return {
@@ -87,7 +88,8 @@ const calculateHarvests = (
 
 export function countGrid(initialState: CropStates, days: number, grid: GridState):CropStates {
     if (!grid) return initialState;
-    let newState = {...initialState};
+    let newState = JSON.parse(JSON.stringify(initialState));
+
 
     for (let i = 0; i < grid.length; i++) {
         for (let j = 0; j < grid[0].length; j++) {
@@ -98,12 +100,7 @@ export function countGrid(initialState: CropStates, days: number, grid: GridStat
             if (!crop) continue;
             if (!primaryCoord) continue;
             if (primaryCoord[0] !== i || primaryCoord[1] !== j) continue;
-    
-            const harvestOutput = getHarvestOutput(crop, effects);
-            const harvestSpeed = getHarvestSpeed(crop, effects);
-            const {totalHarvests: numberOfHarvests, replants} = calculateHarvests(days, harvestSpeed, crop.reharvestable, 4, crop.reharvestTime );
-            const totalRegular = numberOfHarvests * harvestOutput.regular;
-            const totalStarred = numberOfHarvests * harvestOutput.starred;
+
             if (!newState[crop.name]) {
                 newState[crop.name] = {
                     regular: {
@@ -115,14 +112,20 @@ export function countGrid(initialState: CropStates, days: number, grid: GridStat
                     replants: 0
                 }
             }
-            newState[crop.name].regular.count += totalRegular;
-            newState[crop.name].starred.count += totalStarred;
+    
+            
+            const harvestSpeed = getHarvestSpeed(crop, effects);
+            const {totalHarvests: numberOfHarvests, replants} = calculateHarvests(days, harvestSpeed, crop.reharvestable, 4, crop.reharvestTime );
+            for (let i = 0; i < numberOfHarvests; i++) {
+                const harvestOutput = getHarvestOutput(crop, effects);
+                newState[crop.name].regular.count += harvestOutput.regular;
+                newState[crop.name].starred.count += harvestOutput.starred;
+            }
+            
             newState[crop.name].replants += replants;
             
         }
     }  
-
-
 
     return newState;
 }
