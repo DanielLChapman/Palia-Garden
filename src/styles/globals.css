@@ -67,3 +67,7 @@ tr::after {
   transition: transform 0.3s ease; /* Optional: for smooth scaling */
   border-sizing: 4px
 }
+
+select {
+  font-family: 'FontAwesome', 'sans-serif';
+}

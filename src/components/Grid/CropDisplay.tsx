@@ -18,7 +18,6 @@ const CropDisplay:React.FC<CropDisplayProps> = ({currentCrops}) => {
         return effectToBorderClassMap[effect] || "effect-black";
     };
 
-    console.log(currentCrops)
     return (
         <div className='flex flex-row justify-start space-between w-full border-2 border-black mt-4'>
             {

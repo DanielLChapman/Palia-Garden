@@ -1,0 +1,142 @@
+{
+    "crops": [
+      {
+        "name": "Tomato",
+        "harvestTime": 3,
+        "baseValue": 10,
+        "starValue": 15,
+        "buff": "Water Retention",
+        "seedCost": 80,
+        "seedGeneration": {
+          "input": 2,
+          "output": 2,
+          "time": 0.75
+        },
+        "reharvestable": true,
+        "harvestQuantity": 1
+      },
+      {
+        "name": "Potato",
+        "harvestTime": 4,
+        "baseValue": 20,
+        "starValue": 30,
+        "buff": "Water Retention",
+        "seedCost": 20,
+        "seedGeneration": {
+          "input": 1,
+          "output": 4,
+          "time": 1.5
+        },
+        "reharvestable": false,
+        "harvestQuantity": 1
+      },
+      {
+        "name": "Rice",
+        "harvestTime": 3,
+        "baseValue": 20,
+        "starValue": 30,
+        "buff": "Harvest Boost",
+        "seedCost": 15,
+        "seedGeneration": {
+          "input": 1,
+          "output": 4,
+          "time": 0.75
+        },
+        "reharvestable": false,
+        "harvestQuantity": 1
+      },
+      {
+        "name": "Wheat",
+        "harvestTime": 4,
+        "baseValue": 20,
+        "starValue": 30,
+        "buff": "Harvest Boost",
+        "seedCost": 20,
+        "seedGeneration": {
+          "input": 1,
+          "output": 4,
+          "time": 0.75
+        },
+        "reharvestable": false,
+        "harvestQuantity": 1
+      },
+      {
+        "name": "Carrot",
+        "harvestTime": 4,
+        "baseValue": 15,
+        "starValue": 23,
+        "buff": "Weed Prevention",
+        "seedCost": 15,
+        "seedGeneration": {
+          "input": 1,
+          "output": 4,
+          "time": 0.25
+        },
+        "reharvestable": false,
+        "harvestQuantity": 1
+      },
+      {
+        "name": "Onion",
+        "harvestTime": 4,
+        "baseValue": 20,
+        "starValue": 30,
+        "buff": "Weed Prevention",
+        "seedCost": 20,
+        "seedGeneration": {
+          "input": 1,
+          "output": 4,
+          "time": 0.5
+        },
+        "reharvestable": false,
+        "harvestQuantity": 1
+      },
+      {
+        "name": "Cotton",
+        "harvestTime": 5,
+        "baseValue": 30,
+        "starValue": 45,
+        "buff": "Quality Boost",
+        "seedCost": 40,
+        "seedGeneration": {
+          "input": 1,
+          "output": 3,
+          "time": 0.56
+        },
+        "reharvestable": false,
+        "harvestQuantity": 1
+      },
+      {
+        "name": "Blueberry",
+        "harvestTime": 9,
+        "baseValue": 39,
+        "starValue": 58,
+        "buff": "Grow Speed Increase",
+        "size": "2x2",
+        "seedCost": "Material",
+        "seedGeneration": {
+          "input": 4,
+          "output": 2,
+          "time": 1.3
+        },
+        "reharvestable": false,
+        "harvestQuantity": 1
+      },
+      {
+        "name": "Apple",
+        "harvestTime": 12,
+        "baseValue": 64,
+        "starValue": 96,
+        "buff": "Grow Speed Increase",
+        "size": "3x3",
+        "seedCost": "Material",
+        "seedGeneration": {
+          "input": 10,
+          "output": 1,
+          "time": 2.25
+        },
+        "reharvestable": false,
+        "harvestQuantity": 1
+      }
+    ]
+  }
+  

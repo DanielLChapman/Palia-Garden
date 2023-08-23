@@ -200,3 +200,6 @@ export const crops: CropTyping = {
         requiredForBuffs: 3,
     },
 };
+
+
+export type CropList = 'Onion' | 'Carrot' | 'Apple' | 'Tomato' | 'Potato' | 'Blueberry' | 'Wheat' | 'Rice' | 'Cotton';
