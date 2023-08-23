@@ -3,6 +3,7 @@ const { uuid } = require("uuidv4");
 import React, { useEffect, useState } from "react";
 import { CropStates } from "./DayContainer";
 import CropDropDown from "./CropDropDown";
+import { SEED_CRAFTER_INPUTS, SeedCrafterInputKey } from "@/data/seedCrafter";
 
 const CRAFTER_OBJECTS = ["Loom", "Preservation Jar", "Seed Crafter"] as const;
 export type CrafterObjects = (typeof CRAFTER_OBJECTS)[number];
@@ -123,11 +124,14 @@ const PreservationContainer: React.FC<PreservationProps> = ({
             return;
         }
 
-        
-
         const updatedCrafter = { ...crafters[index] };
 
-        if (updatedCrafter.name !== null && (type !== updatedCrafter.name || starred !== updatedCrafter.starred) && updatedCrafter.amount > 0) {
+        if (
+            updatedCrafter.name !== null &&
+            (type !== updatedCrafter.name ||
+                starred !== updatedCrafter.starred) &&
+            updatedCrafter.amount > 0
+        ) {
             const leftOverCopy = { ...leftOverCrops };
             if (!leftOverCopy[type]) {
                 leftOverCopy[type] = {
@@ -140,7 +144,8 @@ const PreservationContainer: React.FC<PreservationProps> = ({
                     replants: 0,
                 };
             }
-            leftOverCopy[updatedCrafter.name][updatedCrafter.starred].count += updatedCrafter.amount;
+            leftOverCopy[updatedCrafter.name][updatedCrafter.starred].count +=
+                updatedCrafter.amount;
 
             setLeftOverCrops(leftOverCopy);
         }
@@ -152,7 +157,6 @@ const PreservationContainer: React.FC<PreservationProps> = ({
         const updatedCrafters = [...crafters];
         updatedCrafters[index] = updatedCrafter;
 
-  
         setCrafters(updatedCrafters);
     };
 
@@ -166,10 +170,23 @@ const PreservationContainer: React.FC<PreservationProps> = ({
             return;
         }
 
+        let amount = 1;
+        if (currentCrafter.type === 'Seed Crafter' && currentCrafter.name in SEED_CRAFTER_INPUTS) {
+            amount = SEED_CRAFTER_INPUTS[currentCrafter.name as SeedCrafterInputKey].input;
+        }
+
+        if (
+            amount >
+            leftOverCrops[currentCrafter.name][currentCrafter.starred].count
+        ) {
+            alert("Not Enough To Allocate");
+            return;
+        }
         const updatedCrafter = { ...currentCrafter };
         const leftOverCopy = JSON.parse(JSON.stringify(leftOverCrops)); // Deep copy
-        updatedCrafter.amount -= 1;
-        leftOverCopy[currentCrafter.name][currentCrafter.starred].count += 1;
+        updatedCrafter.amount -= amount;
+        leftOverCopy[currentCrafter.name][currentCrafter.starred].count +=
+            amount;
 
         setLeftOverCrops(leftOverCopy);
         const updatedCrafters = [...crafters];
@@ -192,10 +209,33 @@ const PreservationContainer: React.FC<PreservationProps> = ({
             return;
         }
 
+        let amount = 1;
+        if (currentCrafter.type === 'Seed Crafter' && currentCrafter.name in SEED_CRAFTER_INPUTS) {
+            amount = SEED_CRAFTER_INPUTS[currentCrafter.name as SeedCrafterInputKey].input;
+        }
+        
+
+        if (
+            amount >
+            leftOverCrops[currentCrafter.name][currentCrafter.starred].count
+        ) {
+            alert("Not Enough To Allocate");
+            return;
+        }
+
+        if (
+            amount >
+            leftOverCrops[currentCrafter.name][currentCrafter.starred].count
+        ) {
+            alert("Not Enough To Allocate");
+            return;
+        }
+
         const updatedCrafter = { ...currentCrafter };
         const leftOverCopy = JSON.parse(JSON.stringify(leftOverCrops)); // Deep copy
-        updatedCrafter.amount += 1;
-        leftOverCopy[currentCrafter.name][currentCrafter.starred].count -= 1;
+        updatedCrafter.amount += amount;
+        leftOverCopy[currentCrafter.name][currentCrafter.starred].count -=
+            amount;
 
         setLeftOverCrops(leftOverCopy);
         const updatedCrafters = [...crafters];
