@@ -105,7 +105,21 @@ const Grid: React.FC<GridProps> = ({
     currentCrop,
     setCropCounts,
 }) => {
-    
+
+    const outputGridL = () => {
+        let results = [];
+        for (let i = 0; i < grid.length; i++) {
+            let t = [];
+            for (let j = 0; j < grid[0].length; j++) {
+                t.push(grid[i][j].crop?.name || ' ')
+                
+            }
+            results.push(t);
+        }
+
+        console.log(results);
+    }
+
 
     const recountGrid = (grid: GridState) => {
         if (!grid) {
@@ -113,6 +127,7 @@ const Grid: React.FC<GridProps> = ({
             return;
         }
         const newCropCounts = new Map<string, number>();
+
 
         for (let i = 0; i < grid.length; i++) {
             for (let j = 0; j < grid[i].length; j++) {

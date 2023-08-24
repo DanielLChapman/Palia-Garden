@@ -4,6 +4,7 @@ import { GridState } from "../useGrid";
 import { countGrid } from "./GridCalculations";
 import PreservationContainer, { CrafterState } from "./PreservationContainer";
 import CropDisplay from "../Grid/CropDisplay";
+import ProfitCalc from "./ProfitCalc";
 
 type DayContainerProps = {
     grid: GridState
@@ -76,6 +77,10 @@ const DayContainer: React.FC<DayContainerProps> = ({ grid }) => {
             <div className="flex flex-col justify-center">
                 <h3 className="flex flex-row justify-center">Crafters</h3>
                 <PreservationContainer expectedCrops={expectedCrops} leftOverCrops={leftOverCrops} setLeftOverCrops={setLeftOverCrops} crafters={crafters} setCrafters={setCrafters} />
+            </div>
+
+            <div>
+                <ProfitCalc days={amountOfDays} leftOverCrops={leftOverCrops} crafters={crafters} />
             </div>
         </div>
     );

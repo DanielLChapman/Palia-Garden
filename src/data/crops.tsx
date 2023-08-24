@@ -44,7 +44,7 @@ export const crops: CropTyping = {
             outputQuantity: 2,
             time: 0.75,
         },
-        harvestQuantity: [2, 3],
+        harvestQuantity: [2,2],
         requiredForBuffs: 1,
     },
     Potato: {
@@ -63,7 +63,7 @@ export const crops: CropTyping = {
             outputQuantity: 4,
             time: 1.5,
         },
-        harvestQuantity: [2, 3],
+        harvestQuantity: [2, 2],
         requiredForBuffs: 1,
     },
     Rice: {
@@ -82,7 +82,7 @@ export const crops: CropTyping = {
             outputQuantity: 4,
             time: 0.75,
         },
-        harvestQuantity: [2, 3],
+        harvestQuantity: [2, 2],
         requiredForBuffs: 1,
     },
     Wheat: {
@@ -101,7 +101,7 @@ export const crops: CropTyping = {
             outputQuantity: 4,
             time: 0.75,
         },
-        harvestQuantity: [2, 3],
+        harvestQuantity: [2, 2],
         requiredForBuffs: 1,
     },
     Carrot: {
@@ -120,7 +120,7 @@ export const crops: CropTyping = {
             outputQuantity: 4,
             time: 0.25,
         },
-        harvestQuantity: [2, 3],
+        harvestQuantity: [2, 2],
         requiredForBuffs: 1,
     },
     Onion: {
@@ -139,7 +139,7 @@ export const crops: CropTyping = {
             outputQuantity: 4,
             time: 0.5,
         },
-        harvestQuantity: [2, 3],
+        harvestQuantity: [2, 2],
         requiredForBuffs: 1,
     },
     Cotton: {
@@ -158,7 +158,7 @@ export const crops: CropTyping = {
             outputQuantity: 3,
             time: 0.56,
         },
-        harvestQuantity: [2, 3],
+        harvestQuantity: [2, 2],
         requiredForBuffs: 1,
     },
     Blueberry: {
@@ -177,7 +177,7 @@ export const crops: CropTyping = {
             outputQuantity: 2,
             time: 1.3,
         },
-        harvestQuantity: [5, 6],
+        harvestQuantity: [6, 6],
         requiredForBuffs: 2,
     },
     Apple: {
@@ -196,7 +196,7 @@ export const crops: CropTyping = {
             outputQuantity: 1,
             time: 2.25,
         },
-        harvestQuantity: [7,8],
+        harvestQuantity: [16,16],
         requiredForBuffs: 3,
     },
 };

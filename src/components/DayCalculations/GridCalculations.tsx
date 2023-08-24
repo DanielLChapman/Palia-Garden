@@ -4,7 +4,8 @@ import { CropStates, ExpectedCropState } from "./DayContainer";
 import { CellEffects } from "../Effects";
 
 const getHarvestOutput = (crop: Crop, effects: CellEffects) => {
-    const harvestAmountBase = crop?.harvestQuantity[Math.floor(Math.random() * crop.harvestQuantity.length)] || 2;
+    //muddled data, need to double check this
+    const harvestAmountBase = crop?.harvestQuantity[0]
     let harvestAmount = harvestAmountBase;
 
     const hasQualityBoost = effects.includes('Quality Boost');
