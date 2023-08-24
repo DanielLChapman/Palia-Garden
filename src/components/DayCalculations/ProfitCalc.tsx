@@ -2,7 +2,11 @@ import React, { useEffect, useState } from "react";
 import { CropStates } from "./DayContainer";
 import { CrafterState } from "./PreservationContainer";
 import { crops } from "@/data/crops";
-import { SEED_CRAFTER_INPUTS, SeedCrafterInputKey } from "@/data/seedCrafter";
+import {
+    SEED_CRAFTER_INPUTS,
+    SeedCrafterInputKey,
+    seedSellValues,
+} from "@/data/seedCrafter";
 import { PRESERVES_VALUES, PreserveJarInputKey } from "@/data/preservesJar";
 
 type ProfitCalcType = {
@@ -26,6 +30,13 @@ type initialSeedsCreatedState = {
     };
 };
 
+type SeedSellValueType = {
+    [key in SeedCrafterInputKey]: {
+        regular: number;
+        starred: number;
+    };
+};
+
 const ProfitCalc: React.FC<ProfitCalcType> = ({
     days,
     leftOverCrops,
@@ -37,6 +48,8 @@ const ProfitCalc: React.FC<ProfitCalcType> = ({
     const [seedsCreated, setSeedsCreated] = useState<initialSeedsCreatedState>(
         {}
     );
+    const [reinvestSeeds, setReinvestSeeds] = useState(true);
+    const [costs, setCosts] = useState(0)
 
     const calculateLeftOverCrops = () => {
         let newSeedsNeeded: initialSeedsNeededState = { ...seedsNeeded };
@@ -87,10 +100,10 @@ const ProfitCalc: React.FC<ProfitCalcType> = ({
                 [regular, starred] = [starred, regular];
             }
 
-            if (!seedsCreated[crafter.name  || 'default']) {
+            if (!seedsCreated[crafter.name || "default"]) {
                 setSeedsCreated((prevSeeds) => ({
                     ...prevSeeds,
-                    [crafter.name || 'default']: {
+                    [crafter.name || "default"]: {
                         regular: {
                             amount: 0,
                         },
@@ -103,12 +116,16 @@ const ProfitCalc: React.FC<ProfitCalcType> = ({
 
             setSeedsCreated((prevSeeds) => ({
                 ...prevSeeds,
-                [crafter.name || 'default']: {
+                [crafter.name || "default"]: {
                     regular: {
-                        amount: prevSeeds[crafter.name || 'default'].regular.amount + regular,
+                        amount:
+                            prevSeeds[crafter.name || "default"].regular
+                                .amount + regular,
                     },
                     starred: {
-                        amount: prevSeeds[crafter.name || 'default'].starred.amount + starred,
+                        amount:
+                            prevSeeds[crafter.name || "default"].starred
+                                .amount + starred,
                     },
                 },
             }));
@@ -162,31 +179,106 @@ const ProfitCalc: React.FC<ProfitCalcType> = ({
 
     const sellSeeds = () => {
         let profitFromSeeds = 0;
-        // Subtract neededSeeds from seedsCreated and calculate profit
-        // ...
+
+        let seedsNeededCopy = { ...seedsNeeded };
+        let seedsCreatedCopy = { ...seedsCreated };
+
+        if (reinvestSeeds) {
+            // Use the seeds we've created to offset the seeds we need
+            Object.keys(seedsNeededCopy).forEach((x) => {
+                if (seedsNeededCopy[x].amount > 0) {
+                    // Use regular seeds first
+                    let regularSeedsUsed = Math.min(
+                        seedsNeededCopy[x].amount,
+                        seedsCreatedCopy[x].regular.amount
+                    );
+                    seedsNeededCopy[x].amount -= regularSeedsUsed;
+                    seedsCreatedCopy[x].regular.amount -= regularSeedsUsed;
+
+                    // Use starred seeds if allowed and needed
+                    if (useStarSeeds && seedsNeededCopy[x].amount > 0) {
+                        let starredSeedsUsed = Math.min(
+                            seedsNeededCopy[x].amount,
+                            seedsCreatedCopy[x].starred.amount
+                        );
+                        seedsNeededCopy[x].amount -= starredSeedsUsed;
+                        seedsCreatedCopy[x].starred.amount -= starredSeedsUsed;
+                    }
+                }
+            });
+        }
+
+        // Sell the remaining seeds we've created
+        Object.keys(seedsCreatedCopy).forEach((x) => {
+            profitFromSeeds +=
+                seedsCreatedCopy[x].regular.amount *
+                seedSellValues[x as SeedCrafterInputKey].regular;
+            profitFromSeeds +=
+                seedsCreatedCopy[x].starred.amount *
+                seedSellValues[x as SeedCrafterInputKey].starred;
+        });
+
+        // Update the seedsNeeded state so we know how much to subtract
+        setSeedsNeeded({ ...seedsNeededCopy });
+
         return profitFromSeeds;
     };
 
     const calculateProfits = () => {
         let total = 0;
-
-        //leftOverCrops
         total += calculateLeftOverCrops();
-        console.log(total);
-
-        //Crafters
         total += calculateCrafters();
-        console.log(total);
+        total += sellSeeds(); // Add profit from selling seeds
 
         return total;
     };
 
+    const calculateRebuy = () => {
+        let total = 0;
+        Object.keys(seedsNeeded).forEach((x) => {
+            if (seedsNeeded[x].amount > 0) {
+                total += seedsNeeded[x].amount * crops[x].seedCost
+            }
+        })
+
+        return total;
+    }
+
     useEffect(() => {
         let total = calculateProfits();
         setProfits(total);
-    }, [days, leftOverCrops, crafters]);
+        total = calculateRebuy();
+        setCosts(total);
+    }, [days, leftOverCrops, crafters, useStarSeeds, reinvestSeeds]);
 
-    return <div></div>;
+    return (
+        <div>
+            <div>
+                <label>
+                    <input
+                        type="checkbox"
+                        checked={useStarSeeds}
+                        onChange={() => setUseStarSeeds((prev) => !prev)}
+                    />
+                    Use Starred Seeds
+                </label>
+            </div>
+
+            <div>
+                <label>
+                    <input
+                        type="checkbox"
+                        checked={reinvestSeeds}
+                        onChange={() => setReinvestSeeds((prev) => !prev)}
+                    />
+                    Reinvest in Seeds
+                </label>
+            </div>
+            <h2>Gold From Selling Everything: {profits}</h2>
+            <h2>Gold Needed To Rebuy Seeds: {costs}</h2>
+            <h2>Total: {profits-costs}</h2>
+        </div>
+    );
 };
 
 export default ProfitCalc;

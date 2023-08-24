@@ -11,3 +11,49 @@ export const SEED_CRAFTER_INPUTS = {
 };
 
 export type SeedCrafterInputKey = keyof typeof SEED_CRAFTER_INPUTS;
+
+type SeedSellValueType = {
+    [key in SeedCrafterInputKey]: {
+        regular: number;
+        starred: number;
+    };
+};
+
+export const seedSellValues: SeedSellValueType = {
+    'Apple': {
+        regular: 700,
+        starred: 1050,
+    },
+    'Blueberry': {
+        regular: 112,
+        starred: 168,
+    },
+    'Carrot': {
+        regular: 7,
+        starred: 11, // Extrapolated
+    },
+    'Cotton': {
+        regular: 20,
+        starred: 30,
+    },
+    'Onion': {
+        regular: 10,
+        starred: 15,
+    },
+    'Potato': {
+        regular: 20,
+        starred: 30, // Extrapolated
+    },
+    'Rice': {
+        regular: 11,
+        starred: 16,
+    },
+    'Tomato': {
+        regular: 40,
+        starred: 60,
+    },
+    'Wheat': {
+        regular: 12,
+        starred: 18,
+    },
+};
