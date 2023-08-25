@@ -23,6 +23,11 @@ function Footer() {
             <p className="text-lg font-semibold mb-2">🔮 What&apos;s Next?</p>
             <p>We&apos;re adding star seeds for profit boosts, introducing fertilizers, and designing a vibrant color palette.</p>
         </div>
+
+        <div className="text-center sm:text-left">
+            <p className="text-lg font-semibold mb-2">Special Thanks</p>
+            <p>Thank you to the Singularity 6 team for creating Palia. This is just a fun project I wanted to try. Thank you to the wiki editors for helping to fill in the information.</p>
+        </div>
     </div>
 </footer>
 
