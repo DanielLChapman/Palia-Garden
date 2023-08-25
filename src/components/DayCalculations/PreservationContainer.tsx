@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Crop } from "@/data/crops";
 const { uuid } = require("uuidv4");
 import React, { useEffect, useState } from "react";
