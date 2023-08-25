@@ -1,38 +1,44 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 🌱 Palia Garden Profit Planner
 
-## Getting Started
+**Palia Garden Profit Plannerr** is a fan-made tool designed to help players of the game "Palia" effectively manage their in-game garden. Whether you're optimizing for profit or simply want to keep track of your crops, this application has features to support your farming journey.
 
-First, run the development server:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+## 🚧 Initial Version Notice
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+This is a prototype of the application. I'm continually refining features based on player feedback and observations.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+## 🌍 Installation & Usage
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/DanielLChapman/Palia-Garden
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+2. **cd path-to-your-folder**
 
-## Learn More
+3. npm install
 
-To learn more about Next.js, take a look at the following resources:
+4. npm run dev
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## 📢 Feedback & Contributions
 
-## Deploy on Vercel
+We welcome all feedback and suggestions! Connect with us:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Discord: rustypeach
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## 🌱 App Behavior
+
+Crafters' Dependence: Crafters rely on crop counts. Options won't display in the seed crafter if you have insufficient crops.
+Dynamic Updates: The application recalculates the number of crops and potential profit whenever there are changes to the grid or the day.
+Bugs: We are aware of certain bugs, especially concerning state refreshes with the crafter, and are actively working on fixes.
+
+## 🔮 What's Next?
+Our roadmap includes:
+
+Introducing star seeds to increase profits.
+Incorporating fertilizers to enhance your crops.
+Unveiling a fresh and vibrant color palette.
+
+
+Special thanks to the wiki community for getting the data together
