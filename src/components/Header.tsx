@@ -3,9 +3,9 @@ import React from "react";
 function Header() {
     return (
         <header className="flex items-center justify-between py-4 px-4 md:px-8">
-            <div className="logo flex items-center font-serif font-bold text-2xl">
+            <h1 className="logo flex items-center font-serif font-bold text-2xl">
                 Palia Garden Profit Planner
-            </div>
+            </h1>
             <div className="hidden md:flex md:hidden justify-end space-x-4">
                 <button className="bg-white px-4 py-2 rounded">Button 1</button>
                 <button className="bg-white px-4 py-2 rounded">Button 2</button>
