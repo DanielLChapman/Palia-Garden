@@ -174,14 +174,6 @@ const PreservationContainer: React.FC<PreservationProps> = ({
         if (currentCrafter.type === 'Seed Crafter' && currentCrafter.name in SEED_CRAFTER_INPUTS) {
             amount = SEED_CRAFTER_INPUTS[currentCrafter.name as SeedCrafterInputKey].input;
         }
-
-        if (
-            amount >
-            leftOverCrops[currentCrafter.name][currentCrafter.starred].count
-        ) {
-            alert("Not Enough To Allocate");
-            return;
-        }
         const updatedCrafter = { ...currentCrafter };
         const leftOverCopy = JSON.parse(JSON.stringify(leftOverCrops)); // Deep copy
         updatedCrafter.amount -= amount;
