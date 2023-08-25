@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { CropStates } from "./DayContainer";
 import CropDropDown from "./CropDropDown";
 import { SEED_CRAFTER_INPUTS, SeedCrafterInputKey } from "@/data/seedCrafter";
+import Image from "next/image";
 
 const CRAFTER_OBJECTS = ["Loom", "Preservation Jar", "Seed Crafter"] as const;
 export type CrafterObjects = (typeof CRAFTER_OBJECTS)[number];
@@ -171,8 +172,13 @@ const PreservationContainer: React.FC<PreservationProps> = ({
         }
 
         let amount = 1;
-        if (currentCrafter.type === 'Seed Crafter' && currentCrafter.name in SEED_CRAFTER_INPUTS) {
-            amount = SEED_CRAFTER_INPUTS[currentCrafter.name as SeedCrafterInputKey].input;
+        if (
+            currentCrafter.type === "Seed Crafter" &&
+            currentCrafter.name in SEED_CRAFTER_INPUTS
+        ) {
+            amount =
+                SEED_CRAFTER_INPUTS[currentCrafter.name as SeedCrafterInputKey]
+                    .input;
         }
         const updatedCrafter = { ...currentCrafter };
         const leftOverCopy = JSON.parse(JSON.stringify(leftOverCrops)); // Deep copy
@@ -202,10 +208,14 @@ const PreservationContainer: React.FC<PreservationProps> = ({
         }
 
         let amount = 1;
-        if (currentCrafter.type === 'Seed Crafter' && currentCrafter.name in SEED_CRAFTER_INPUTS) {
-            amount = SEED_CRAFTER_INPUTS[currentCrafter.name as SeedCrafterInputKey].input;
+        if (
+            currentCrafter.type === "Seed Crafter" &&
+            currentCrafter.name in SEED_CRAFTER_INPUTS
+        ) {
+            amount =
+                SEED_CRAFTER_INPUTS[currentCrafter.name as SeedCrafterInputKey]
+                    .input;
         }
-        
 
         if (
             amount >
@@ -235,45 +245,49 @@ const PreservationContainer: React.FC<PreservationProps> = ({
         setCrafters(updatedCrafters);
     };
 
+
+    const imageMap = {
+        "Loom": "/images/crafters/loom.webp",
+        "Preservation Jar": "/images/crafters/preserves_jar.webp",
+        "Seed Crafter": "/images/crafters/seed_collector.webp",
+    };
+    
+    
     return (
-        <div className="w-full flex flex-col items-center">
+        <div className="w-full flex flex-col items-center text-lion font-pt-serif p-4 pb-2">
             <div className="w-[28rem] flex flex-col items-center">
-                <div className="flex justify-center space-x-4 py-6 px-4">
-                    <div
-                        className="w-32 h-32 border-2 border-red-800 cursor-pointer active:transform active:scale-95"
-                        onClick={() => {
-                            handleAddCrafter("Loom");
-                        }}
-                    ></div>
-
-                    <div
-                        className="w-32 h-32 border-2 border-red-800 cursor-pointer active:transform active:scale-95"
-                        onClick={() => {
-                            handleAddCrafter("Preservation Jar");
-                        }}
-                    ></div>
-
-                    <div
-                        className="w-32 h-32 border-2 border-red-800 cursor-pointer active:transform active:scale-95"
-                        onClick={() => {
-                            handleAddCrafter("Seed Crafter");
-                        }}
-                    ></div>
+                <div className="flex justify-center space-x-4 pb-6 px-4">
+                    {CRAFTER_OBJECTS.map((crafter) => (
+                        <div
+                            key={crafter}
+                            className="w-32 h-32 border-2 border-avocado cursor-pointer active:transform active:scale-95 flex justify-center items-center"
+                            onClick={() => handleAddCrafter(crafter)}
+                        >
+                            <Image
+                                src={imageMap[crafter]}
+                                alt={crafter}
+                                width={64}
+                                height={64}
+                                onError={(e) => {
+                                    e.currentTarget.src = "/path/to/placeholder.png"; 
+                                }}
+                            />
+                        </div>
+                    ))}
                 </div>
             </div>
 
-            <div className="p-4 w-full">
+            <div className="p-4 pb-2 w-full mt-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                     {crafters.map((item, index) => (
                         <div
                             key={index}
-                            className="border p-4 flex flex-col relative"
+                            className="border p-4 flex flex-col relative bg-field-drab"
                         >
-                            {/* Top Row: item.type on the left and X on the right */}
                             <div className="flex justify-between items-center mb-2">
                                 <span>{item.type}</span>
                                 <div
-                                    className="cursor-pointer"
+                                    className="cursor-pointer text-dark-moss-green"
                                     onClick={() => {
                                         handleRemoveCrafter(item.id);
                                     }}
@@ -282,7 +296,6 @@ const PreservationContainer: React.FC<PreservationProps> = ({
                                 </div>
                             </div>
 
-                            {/* Middle Row: CropDropDown */}
                             <div className="mb-2 flex justify-center space-x-5">
                                 <CropDropDown
                                     leftOverCrops={leftOverCrops}
@@ -294,10 +307,9 @@ const PreservationContainer: React.FC<PreservationProps> = ({
                                 />
                             </div>
 
-                            {/* Bottom Row: Centered decrease, amount, increase */}
-                            <div className="flex justify-center space-x-5">
+                            <div className="flex justify-center space-x-5 pt-3">
                                 <button
-                                    className=""
+                                    className="bg-avocado px-2 py-1 rounded text-night disabled:opacity-50"
                                     aria-disabled={
                                         item.type === null || item.amount === 0
                                     }
@@ -310,9 +322,9 @@ const PreservationContainer: React.FC<PreservationProps> = ({
                                 >
                                     decrease
                                 </button>
-                                <span>{item.amount}</span>
+                                <span className="mt-[3px]">{item.amount}</span>
                                 <button
-                                    className=""
+                                    className="bg-avocado px-2 py-1 rounded text-night disabled:opacity-50"
                                     aria-disabled={item.type === null}
                                     disabled={item.type === null}
                                     onClick={() => {

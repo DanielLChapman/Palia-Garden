@@ -60,12 +60,13 @@ const CropDropDown: React.FC<CropDropDownProps> = ({ leftOverCrops, type, handle
 
     const handleDropDownChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         let t = e.target.value.split('-');
-        if (t[1] === 'starred' || 'regular') {
+        if (t[1] === 'starred' || t[1] === 'regular') {
             //@ts-ignore
             handleSelect(id, t[0], t[1]);
         }
         
     }
+    
         
 
 
@@ -77,6 +78,7 @@ const CropDropDown: React.FC<CropDropDownProps> = ({ leftOverCrops, type, handle
                     !shouldDisplayCrop(crop, "starred")
             )}
             onChange={handleDropDownChange}
+            className="bg-transparent text-white px-2 w-28"
         >
             <option
                             key={`$null-regular`}
@@ -92,15 +94,15 @@ const CropDropDown: React.FC<CropDropDownProps> = ({ leftOverCrops, type, handle
                         <option
                             key={`${crop}-regular`}
                             value={`${crop}-regular`}
-                            
+                            className="space-x-5"
                         >
-                            {crop} <FontAwesomeIcon icon={faLeaf} />
+                            {crop} 
                         </option>
                     )}
                     {
                         shouldDisplayCrop(crop, 'starred') && (
-                            <option key={`${crop}-starred`} value={`${crop}-starred`}>
-                                {crop} &#xf005;
+                            <option  className="space-x-5" key={`${crop}-starred`} value={`${crop}-starred`}>
+                                {crop} <span className="pl-5">&#xf005;</span>
                             </option>
                         )
                     }

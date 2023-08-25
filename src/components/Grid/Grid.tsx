@@ -4,6 +4,7 @@ import { GridCellComponent } from "./GridCell";
 import { Crop, crops } from "@/data/crops";
 import { applyEffect, checkSelfForEffects, removeEffect } from "../Effects";
 import { CropCounts } from "../App";
+import { EffectKey } from "./EffectKey";
 
 type GridProps = {
     grid: GridState;
@@ -105,29 +106,25 @@ const Grid: React.FC<GridProps> = ({
     currentCrop,
     setCropCounts,
 }) => {
-
     const outputGridL = () => {
         let results = [];
         for (let i = 0; i < grid.length; i++) {
             let t = [];
             for (let j = 0; j < grid[0].length; j++) {
-                t.push(grid[i][j].crop?.name || ' ')
-                
+                t.push(grid[i][j].crop?.name || " ");
             }
             results.push(t);
         }
 
         console.log(results);
-    }
-
+    };
 
     const recountGrid = (grid: GridState) => {
         if (!grid) {
-            alert('Something went really wrong!');
+            alert("Something went really wrong!");
             return;
         }
         const newCropCounts = new Map<string, number>();
-
 
         for (let i = 0; i < grid.length; i++) {
             for (let j = 0; j < grid[i].length; j++) {
@@ -151,39 +148,50 @@ const Grid: React.FC<GridProps> = ({
         setCropCounts(newCropCounts);
     };
 
-    const handleCellClick = useCallback(async (x: number, y: number) => {
-        if (!grid) {
-            return;
-        }
-        //handle click
-        if (currentCrop) {
-            let t = addToGrid(grid, x, y, currentCrop);
-            recountGrid(t);
-            setGrid(t);
-        } else {
-            //remove
-            const newGrid = removeFromGrid(grid, x, y);
-            recountGrid(newGrid);
-            setGrid(newGrid);
-        }
-    }, [grid, currentCrop]);
+    const handleCellClick = useCallback(
+        async (x: number, y: number) => {
+            if (!grid) {
+                return;
+            }
+            //handle click
+            if (currentCrop) {
+                let t = addToGrid(grid, x, y, currentCrop);
+                recountGrid(t);
+                setGrid(t);
+            } else {
+                //remove
+                const newGrid = removeFromGrid(grid, x, y);
+                recountGrid(newGrid);
+                setGrid(newGrid);
+            }
+        },
+        [grid, currentCrop]
+    );
 
     return (
-        <div className="grid-container flex justify-center items-start flex-wrap max-w-screen-lg">
-            {grid.map((row, rowIndex) => (
-                <div key={rowIndex} className="grid-row flex flex-wrap">
-                    {row.map((cell, cellIndex) => (
-                        <GridCellComponent
-                            key={cellIndex}
-                            cellData={cell}
-                            x={rowIndex}
-                            y={cellIndex}
-                            onCellClick={handleCellClick}
-                        />
-                    ))}
+            <div className="flex justify-center items-start h-full w-full">
+                <div className="overflow-x-auto max-w-screen-lg">
+                    <div className="grid-container flex justify-center items-start flex-wrap w-[750px]">
+                        {grid.map((row, rowIndex) => (
+                            <div
+                                key={rowIndex}
+                                className="grid-row flex flex-wrap"
+                            >
+                                {row.map((cell, cellIndex) => (
+                                    <GridCellComponent
+                                        key={cellIndex}
+                                        cellData={cell}
+                                        x={rowIndex}
+                                        y={cellIndex}
+                                        onCellClick={handleCellClick}
+                                    />
+                                ))}
+                            </div>
+                        ))}
+                    </div>
                 </div>
-            ))}
-        </div>
+            </div>
+
     );
 };
 

@@ -7,6 +7,7 @@ import { CropTable } from "./Grid/CropTable";
 import { Crop } from "@/data/crops";
 import CropDisplay from "./Grid/CropDisplay";
 import DayContainer from "./DayCalculations/DayContainer";
+import { EffectKey } from "./Grid/EffectKey";
 
 export type CropCounts = Map<string, number>;
 
@@ -17,7 +18,7 @@ function App({}) {
     const [cropCounts, setCropCounts] = useState<CropCounts>(new Map());
 
     const updateGrid = (newGrid: GridState) => {
-        setGrid(prevGrid => {
+        setGrid((prevGrid) => {
             if (newGrid !== prevGrid) {
                 return newGrid;
             }
@@ -26,17 +27,20 @@ function App({}) {
     };
 
     return (
-        <main className=" py-6 px-4 mt-4 border-red-800 border-2 ">
+        <main className=" py-6 px-4 pt-0 ">
             {/* grid */}
             <div className="flex flex-col space-y-4 md:space-y-0 md:space-x-4 justify-center">
-                <div className="flex-1 bg-gray-400 p-4 justify-center flex">
+                <div className="flex-1 p-4 justify-center flex">
                     <CropTable
                         currentCrop={currentCrop}
                         setCurrentCrop={setCurrentCrop}
                         cropCounts={cropCounts}
                     />
                 </div>
-                <div className="flex-1 bg-gray-300 p-4 justify-center flex">
+                <div className="flex p-4 justify-center flex-1 ">
+                    <EffectKey />
+                </div>
+                <div className="flex-1  p-4 justify-center flex w-auto">
                     <Grid
                         grid={grid}
                         setGrid={updateGrid}
@@ -46,9 +50,7 @@ function App({}) {
                 </div>
             </div>
 
-            {cropCounts.size > 0 && (
-                <DayContainer grid={grid} />
-            )}
+            {cropCounts.size > 0 && <DayContainer grid={grid} />}
         </main>
     );
 }

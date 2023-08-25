@@ -11,7 +11,7 @@ export const effectToBorderClassMap: Record<string, string> = {
     "Water Retain": "effect-red",
     "Quality Boost": "effect-orange",
     "Grow Speed Increase": "effect-yellow",
-    "Weed Block": "effect-green",
+    "Weed Block": "effect-purple",
     "Increased Yield Amount": "effect-blue",
     // ... other effects
 };
@@ -21,14 +21,14 @@ export const effectToBgClassMap: Record<string, string> = {
     "Water Retain": "bg-red-500",
     "Quality Boost": "bg-orange-500",
     "Grow Speed Increase": "bg-yellow-500",
-    "Weed Block": "bg-green-500",
+    "Weed Block": "bg-purple-500",
     "Increased Yield Amount": "bg-blue-500",
     // ... other effects
 };
 
 export const GridCellComponent: React.FC<GridCellProps> = ({ cellData, x, y, onCellClick }) => {
     return (
-        <div className={`grid-cell w-[75px] h-[75px] border-2 border-black m-0.5 relative`} onClick={() => {
+        <div className={`grid-cell w-[75px] h-[75px] border-2 border-black  m-1 bg-field-drab relative`} onClick={() => {
             onCellClick(x, y)
         }}>
             {/* Render the crop image in the center */}

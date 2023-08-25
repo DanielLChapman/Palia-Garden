@@ -26,13 +26,13 @@ export const CropTable: React.FC<CropTableProps> = ({
     };
     return (
         <>
-            <div className="md:hidden">
+            <div className="hidden">
                 {Object.keys(crops).map((crop, index) => (
                     <div key={index} className="relative">
                         <button className="w-full text-left p-2 border-b">
                             {crops[crop].name}
                         </button>
-                        <div className="absolute left-0 w-full bg-white z-10 hidden">
+                        <div className="absolute left-0 w-full z-10 hidden">
                             <div
                                 className={`flex items-center border mb-4 ${getEffectBorder(
                                     crops[crop].gardenBuff
@@ -57,7 +57,7 @@ export const CropTable: React.FC<CropTableProps> = ({
                 {Object.keys(crops).map((crop, index) => (
                     <div
                         key={index}
-                        className={`relative m-2 w-24 h-24 border-2 ${getEffectBorder(
+                        className={`relative m-2 w-20 h-20 border-2 ${getEffectBorder(
                             crops[crop].gardenBuff
                         )} flex items-center justify-center cursor-pointer active:transform active:scale-95 ${
                             currentCrop && crops[crop].name === currentCrop.name
@@ -65,6 +65,10 @@ export const CropTable: React.FC<CropTableProps> = ({
                                 : ""
                         }`}
                         onClick={() => {
+                            if (currentCrop?.name === crops[crop].name) {
+                                setCurrentCrop(null);
+                                return;
+                            }
                             setCurrentCrop(crops[crop]);
                         }}
                     >
@@ -80,7 +84,7 @@ export const CropTable: React.FC<CropTableProps> = ({
                         {cropCounts.get(crops[crop].name) &&
                         //@ts-ignore
                             cropCounts.get(crops[crop].name) > 0 && (
-                                <div className="absolute top-1 left-1 text-green-800">
+                                <div className="absolute top-0 left-1 text-night text-sm">
                                    <FontAwesomeIcon icon={faSeedling} beat />: {cropCounts.get(crops[crop].name)}
                                 </div>
                             )}
@@ -88,7 +92,7 @@ export const CropTable: React.FC<CropTableProps> = ({
                 ))}
                 <div
                     key={-5}
-                    className={`cursor-pointer relative text-4xl m-2 w-24 h-24 border-2 effect-black flex items-center justify-center active:transform active:scale-95`}
+                    className={`cursor-pointer relative text-4xl m-2 w-20 h-20 border-2 effect-black flex items-center justify-center active:transform active:scale-95`}
                     onClick={() => {
                         setCurrentCrop(null);
                     }}

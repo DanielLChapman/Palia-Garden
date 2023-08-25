@@ -5,12 +5,14 @@ type ProfitsDisplayProps = {
 
 const ProfitsDisplay: React.FC<ProfitsDisplayProps> = ({ profits, costs }) => {
     return (
-        <div>
-            <h2>Gold From Selling Everything: {profits}</h2>
-            <h2>Gold Needed To Rebuy Seeds: {costs}</h2>
-            <h2>Total: {profits - costs}</h2>
+        <div className="text-center space-y-2 font-pt-serif">
+            <h2 className="text-green-600 text-xl font-bold">Gold From Selling Everything: {profits}</h2>
+            <h2 className="text-red-600 text-xl font-bold">Gold Needed To Rebuy Seeds: {costs}</h2>
+            <h2 className={`text-xl font-bold ${profits - costs > 0 ? 'text-green-600' : 'text-red-600'}`}>Total: {profits - costs}</h2>
         </div>
     );
+  
+    
 };
 
 

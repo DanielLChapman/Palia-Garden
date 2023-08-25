@@ -17,7 +17,7 @@
 }
 
 body {
-
+  scroll-behavior: smooth;
 }
 
 .effect-red {
@@ -71,3 +71,4 @@ tr::after {
 select {
   font-family: 'FontAwesome', 'sans-serif';
 }
+

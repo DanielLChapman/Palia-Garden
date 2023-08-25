@@ -7,10 +7,10 @@ import CropDisplay from "../Grid/CropDisplay";
 import ProfitCalc from "./ProfitCalc";
 
 type DayContainerProps = {
-    grid: GridState
+    grid: GridState;
 };
 
-export type CropQualityTyping = 'regular' | 'starred' ;
+export type CropQualityTyping = "regular" | "starred";
 
 export type ExpectedCropState = {
     regular: {
@@ -31,36 +31,37 @@ export const initialState: CropStates = Object.fromEntries(
         crops[x].name,
         {
             regular: {
-                count: 0
+                count: 0,
             },
             starred: {
-                count: 0
+                count: 0,
             },
-            replants: 0
-        }
+            replants: 0,
+        },
     ])
 );
 
 const DayContainer: React.FC<DayContainerProps> = ({ grid }) => {
     const [amountOfDays, setAmountOfDays] = useState<number>(0);
-    const [expectedCrops, setExpectedCrops] = useState<CropStates>(initialState);
-    const [leftOverCrops, setLeftOverCrops] = useState<CropStates>(expectedCrops);
+    const [expectedCrops, setExpectedCrops] =
+        useState<CropStates>(initialState);
+    const [leftOverCrops, setLeftOverCrops] =
+        useState<CropStates>(expectedCrops);
     const [crafters, setCrafters] = useState<CrafterState[]>([]);
 
     useEffect(() => {
         const newExpectedCrops = countGrid(initialState, amountOfDays, grid);
         setExpectedCrops(newExpectedCrops);
-        setLeftOverCrops(newExpectedCrops)
+        setLeftOverCrops(newExpectedCrops);
     }, [grid, amountOfDays]);
-    
-
-    
 
     return (
-        <div className="justify-center flex flex-col">
+        <div className="flex flex-col items-center space-y-6 font-pt-serif">
             {/* Day Selector */}
-            <div className="flex flex-row justify-center">
-                <span>How Many Days To Simulate:</span>
+            <div className="flex flex-row space-x-4 items-center">
+                <span className="text-lg font-semibold">
+                    How Many Days To Simulate:
+                </span>
                 <input
                     type="number"
                     min="0"
@@ -69,18 +70,29 @@ const DayContainer: React.FC<DayContainerProps> = ({ grid }) => {
                     onChange={(e) => {
                         setAmountOfDays(Math.floor(parseInt(e.target.value)));
                     }}
+                    className="w-20 p-2 border-2 border-gray-300 rounded focus:outline-none focus:border-indigo-500"
                 />
             </div>
 
-            <CropDisplay currentCrops={leftOverCrops}/>
+            <CropDisplay currentCrops={leftOverCrops} />
 
-            <div className="flex flex-col justify-center">
-                <h3 className="flex flex-row justify-center">Crafters</h3>
-                <PreservationContainer expectedCrops={expectedCrops} leftOverCrops={leftOverCrops} setLeftOverCrops={setLeftOverCrops} crafters={crafters} setCrafters={setCrafters} />
+            <div className="flex flex-col items-center space-y-4 w-full">
+                <h3 className="text-xl font-bold">Crafters</h3>
+                <PreservationContainer
+                    expectedCrops={expectedCrops}
+                    leftOverCrops={leftOverCrops}
+                    setLeftOverCrops={setLeftOverCrops}
+                    crafters={crafters}
+                    setCrafters={setCrafters}
+                />
             </div>
 
-            <div>
-                <ProfitCalc days={amountOfDays} leftOverCrops={leftOverCrops} crafters={crafters} />
+            <div className="w-full">
+                <ProfitCalc
+                    days={amountOfDays}
+                    leftOverCrops={leftOverCrops}
+                    crafters={crafters}
+                />
             </div>
         </div>
     );

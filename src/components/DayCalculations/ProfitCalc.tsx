@@ -263,19 +263,25 @@ const ProfitCalc: React.FC<ProfitCalcType> = ({
 
 
     return (
-        <div>
-            <ProfitSettings 
-                useStarSeeds={useStarSeeds} 
-                setUseStarSeeds={setUseStarSeeds}
-                reinvestSeeds={reinvestSeeds}
-                setReinvestSeeds={setReinvestSeeds}
-            />
-            <ProfitsDisplay profits={profits} costs={costs} />
-            <SeedsNeededDisplay
-                seedsNeeded={seedsNeed} 
-                expandSeedsNeeded={expandSeedsNeeded}
-                setExpandSeedsNeeded={setExpandSeedsNeeded}
-            />
+        <div className="space-y-2">
+            <div className=" p-4 rounded-md ">
+                <ProfitSettings 
+                    useStarSeeds={useStarSeeds} 
+                    setUseStarSeeds={setUseStarSeeds}
+                    reinvestSeeds={reinvestSeeds}
+                    setReinvestSeeds={setReinvestSeeds}
+                />
+            </div>
+            <div className=" p-4 rounded-md ">
+                <ProfitsDisplay profits={profits} costs={costs} />
+            </div>
+            <div className="p-4 rounded-md ">
+                <SeedsNeededDisplay
+                    seedsNeeded={seedsNeed} 
+                    expandSeedsNeeded={expandSeedsNeeded}
+                    setExpandSeedsNeeded={setExpandSeedsNeeded}
+                />
+            </div>
         </div>
     );
 };
