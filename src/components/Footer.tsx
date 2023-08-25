@@ -6,7 +6,7 @@ function Footer() {
     <div className="container mx-auto text-white space-y-4">
         <div className="text-center sm:text-left">
             <p className="text-lg font-semibold mb-2">🚧 Initial Version Notice</p>
-            <p>This is a prototype of the application. We're refining features based on feedback and observations.</p>
+            <p>This is a prototype of the application. We&apos;re refining features based on feedback and observations.</p>
         </div>
 
         <div className="text-center sm:text-left">
@@ -16,12 +16,12 @@ function Footer() {
 
         <div className="text-center sm:text-left">
             <p className="text-lg font-semibold mb-2">🌱 App Behavior</p>
-            <p>Crafters rely on crop counts. Insufficient crops won't display options in the seed crafter. Recalculations occur with grid/day changes. Known bugs are in review.</p>
+            <p>Crafters rely on crop counts. Insufficient crops won&apos;t display options in the seed crafter. Recalculations occur with grid/day changes. Known bugs are in review.</p>
         </div>
 
         <div className="text-center sm:text-left">
-            <p className="text-lg font-semibold mb-2">🔮 What's Next?</p>
-            <p>We're adding star seeds for profit boosts, introducing fertilizers, and designing a vibrant color palette.</p>
+            <p className="text-lg font-semibold mb-2">🔮 What&apos;s Next?</p>
+            <p>We&apos;re adding star seeds for profit boosts, introducing fertilizers, and designing a vibrant color palette.</p>
         </div>
     </div>
 </footer>

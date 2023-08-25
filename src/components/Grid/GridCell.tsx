@@ -33,6 +33,7 @@ export const GridCellComponent: React.FC<GridCellProps> = ({ cellData, x, y, onC
         }}>
             {/* Render the crop image in the center */}
             {cellData.crop && (
+                // eslint-disable-next-line @next/next/no-img-element
                 <img src={cellData.crop.image} alt={cellData.crop.name} className="absolute inset-1/4 w-1/2 h-1/2" />
             )}
 

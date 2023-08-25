@@ -115,8 +115,6 @@ const Grid: React.FC<GridProps> = ({
             }
             results.push(t);
         }
-
-        console.log(results);
     };
 
     const recountGrid = (grid: GridState) => {
@@ -165,6 +163,7 @@ const Grid: React.FC<GridProps> = ({
                 setGrid(newGrid);
             }
         },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         [grid, currentCrop]
     );
 

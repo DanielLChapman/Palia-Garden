@@ -259,6 +259,7 @@ const ProfitCalc: React.FC<ProfitCalcType> = ({
         setSeedsCreate(seedsCreatedCopy);
         setSeedsNeed(seedsNeededCopy);
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [days, crafters, leftOverCrops, useStarSeeds, reinvestSeeds])
 
 
