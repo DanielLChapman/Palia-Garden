@@ -22,6 +22,8 @@ export type Crop = {
     width: number;
     height: number;
     requiredForBuffs: number;
+    timeUntilReharvest?: number;
+    released: boolean;
 };
 
 export type CropTyping = {
@@ -40,12 +42,14 @@ export const crops: CropTyping = {
         height: 1,
         seedCost: 80,
         seedGeneration: {
-            inputQuantity: 2,
+            inputQuantity: 3,
             outputQuantity: 2,
-            time: 0.75,
+            time: 0.5,
         },
         harvestQuantity: [2,2],
         requiredForBuffs: 1,
+        timeUntilReharvest: 4,
+        released: true,
     },
     Potato: {
         name: "Potato",
@@ -65,6 +69,7 @@ export const crops: CropTyping = {
         },
         harvestQuantity: [2, 2],
         requiredForBuffs: 1,
+        released: true,
     },
     Rice: {
         name: "Rice",
@@ -84,6 +89,7 @@ export const crops: CropTyping = {
         },
         harvestQuantity: [2, 2],
         requiredForBuffs: 1,
+        released: true,
     },
     Wheat: {
         name: "Wheat",
@@ -103,6 +109,7 @@ export const crops: CropTyping = {
         },
         harvestQuantity: [2, 2],
         requiredForBuffs: 1,
+        released: true,
     },
     Carrot: {
         name: "Carrot",
@@ -122,6 +129,7 @@ export const crops: CropTyping = {
         },
         harvestQuantity: [2, 2],
         requiredForBuffs: 1,
+        released: true,
     },
     Onion: {
         name: "Onion",
@@ -141,6 +149,7 @@ export const crops: CropTyping = {
         },
         harvestQuantity: [2, 2],
         requiredForBuffs: 1,
+        released: true,
     },
     Cotton: {
         name: "Cotton",
@@ -160,6 +169,7 @@ export const crops: CropTyping = {
         },
         harvestQuantity: [2, 2],
         requiredForBuffs: 1,
+        released: true,
     },
     Blueberry: {
         name: "Blueberry",
@@ -179,6 +189,8 @@ export const crops: CropTyping = {
         },
         harvestQuantity: [6, 6],
         requiredForBuffs: 2,
+        timeUntilReharvest: 4,
+        released: true,
     },
     Apple: {
         name: "Apple",
@@ -198,7 +210,28 @@ export const crops: CropTyping = {
         },
         harvestQuantity: [16,16],
         requiredForBuffs: 3,
+        timeUntilReharvest: 4,
+        released: true,
     },
+    /*
+    Apricot: {
+        name: "Apricot",
+        growthTime: 12,
+        reharvestable: true,
+        timeUntilReharvest: 6,  // Time between reharvests
+        gardenBuff: undefined,  // This is not provided, so I'm setting it to undefined for now
+        baseValue: 97,
+        starValue: 97 * 1.5,  // Assuming a 50% increase for starred value
+        image: undefined,  // Image URL is not provided
+        seedCost: undefined,  // Seed cost is not provided
+        seedGeneration: undefined,  // Seed generation details are not provided
+        harvestQuantity: undefined,  // Harvest quantity is not provided
+        width: undefined,  // Width is not provided
+        height: undefined,  // Height is not provided
+        requiredForBuffs: undefined  // Required for buffs is not provided
+        released: false,
+    }*/
+    
 };
 
 
