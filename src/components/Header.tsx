@@ -3,7 +3,7 @@ import React from "react";
 function Header() {
     return (
         <header className="flex items-center justify-between py-4 px-4 md:px-8">
-            <h1 className="logo flex items-center font-serif font-bold text-2xl">
+            <h1 className="logo flex items-center font-montserrat text-gray-200 font-bold text-2xl ">
                 Palia Garden Profit Planner
             </h1>
             <div className="hidden md:flex md:hidden justify-end space-x-4">

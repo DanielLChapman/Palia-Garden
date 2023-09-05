@@ -1,4 +1,13 @@
 import { GridCell } from "../useGrid";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+    faTint,
+    faStar,
+    faForward,
+    IconDefinition,
+    faBan,
+    faArrowUpWideShort,
+} from "@fortawesome/free-solid-svg-icons";
 
 type GridCellProps = {
     cellData: GridCell;
@@ -8,39 +17,65 @@ type GridCellProps = {
 };
 
 export const effectToBorderClassMap: Record<string, string> = {
-    "Water Retain": "effect-red",
+    "Water Retain": "effect-blue",
     "Quality Boost": "effect-orange",
     "Grow Speed Increase": "effect-yellow",
     "Weed Block": "effect-purple",
-    "Increased Yield Amount": "effect-blue",
+    "Increased Yield Amount": "effect-green",
     // ... other effects
 };
 
 // For background colors (used in GridCellComponent)
 export const effectToBgClassMap: Record<string, string> = {
-    "Water Retain": "bg-red-500",
+    "Water Retain": "bg-blue-500",
     "Quality Boost": "bg-orange-500",
     "Grow Speed Increase": "bg-yellow-500",
     "Weed Block": "bg-purple-500",
-    "Increased Yield Amount": "bg-blue-500",
+    "Increased Yield Amount": "bg-green-500",
     // ... other effects
 };
 
-export const GridCellComponent: React.FC<GridCellProps> = ({ cellData, x, y, onCellClick }) => {
+export const effectToIconMap: Record<string, IconDefinition> = {
+    "Water Retain": faTint, // FontAwesome water droplet icon
+    "Quality Boost": faStar,
+    "Grow Speed Increase": faForward,
+    "Weed Block": faBan,
+    "Increased Yield Amount": faArrowUpWideShort,
+};
+
+export const GridCellComponent: React.FC<GridCellProps> = ({
+    cellData,
+    x,
+    y,
+    onCellClick,
+}) => {
     return (
-        <div className={`grid-cell w-[75px] h-[75px] border-2 border-black  m-1 bg-field-drab relative`} onClick={() => {
-            onCellClick(x, y)
-        }}>
+        <div
+            className={`grid-cell w-[100px] h-[100px] border-2 border-black  m-1 bg-field-drab relative`}
+            onClick={() => {
+                onCellClick(x, y);
+            }}
+        >
             {/* Render the crop image in the center */}
             {cellData.crop && (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src={cellData.crop.image} alt={cellData.crop.name} className="absolute inset-1/4 w-1/2 h-1/2" />
+                <img
+                    src={cellData.crop.image}
+                    alt={cellData.crop.name}
+                    className="absolute inset-1/4 w-1/2 h-1/2"
+                />
             )}
 
             {/* Render colored boxes on the top row for each effect */}
             <div className="absolute top-0 left-0 w-full flex">
                 {cellData.effects.map((effect, index) => (
-                    <div key={index} className={`${effectToBgClassMap[effect]} w-1/5 h-4`}></div>
+                    <div
+                        key={index}
+                        className={`${effectToBorderClassMap[effect]} effect-icon m-0.5`}
+                    >
+                        <FontAwesomeIcon icon={effectToIconMap[effect]} />
+                        {/*<div key={index} className={`${effectToBgClassMap[effect]} w-1/5 h-4`}></div>*/}
+                    </div>
                 ))}
             </div>
         </div>

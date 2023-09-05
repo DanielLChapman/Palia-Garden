@@ -255,13 +255,13 @@ const PreservationContainer: React.FC<PreservationProps> = ({
     
     
     return (
-        <div className="w-full flex flex-col items-center text-lion font-pt-serif p-4 pb-2">
+        <div className="w-full flex flex-col items-center font-pt-serif p-4 pb-2">
             <div className="w-[28rem] flex flex-col items-center">
                 <div className="flex justify-center space-x-4 pb-6 px-4">
                     {CRAFTER_OBJECTS.map((crafter) => (
                         <div
                             key={crafter}
-                            className="w-32 h-32 border-2 border-avocado cursor-pointer active:transform active:scale-95 flex justify-center items-center"
+                            className="w-32 h-32 border-2 cursor-pointer active:transform active:scale-95 flex justify-center items-center"
                             onClick={() => handleAddCrafter(crafter)}
                         >
                             <Image
@@ -288,7 +288,7 @@ const PreservationContainer: React.FC<PreservationProps> = ({
                             <div className="flex justify-between items-center mb-2">
                                 <span>{item.type}</span>
                                 <div
-                                    className="cursor-pointer text-dark-moss-green"
+                                    className="cursor-pointer"
                                     onClick={() => {
                                         handleRemoveCrafter(item.id);
                                     }}
@@ -310,7 +310,7 @@ const PreservationContainer: React.FC<PreservationProps> = ({
 
                             <div className="flex justify-center space-x-5 pt-3">
                                 <button
-                                    className="bg-avocado px-2 py-1 rounded text-night disabled:opacity-50"
+                                    className="px-2 py-1 rounded text-night disabled:opacity-50"
                                     aria-disabled={
                                         item.type === null || item.amount === 0
                                     }
@@ -325,7 +325,7 @@ const PreservationContainer: React.FC<PreservationProps> = ({
                                 </button>
                                 <span className="mt-[3px]">{item.amount}</span>
                                 <button
-                                    className="bg-avocado px-2 py-1 rounded text-night disabled:opacity-50"
+                                    className=" px-2 py-1 rounded text-night disabled:opacity-50"
                                     aria-disabled={item.type === null}
                                     disabled={item.type === null}
                                     onClick={() => {

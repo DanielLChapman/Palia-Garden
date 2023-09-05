@@ -21,7 +21,7 @@ function Footer() {
 
         <div className="text-center sm:text-left">
             <p className="text-lg font-semibold mb-2">🔮 What&apos;s Next?</p>
-            <p>We&apos;re adding star seeds for profit boosts, introducing fertilizers, and designing a vibrant color palette.</p>
+            <p>Adding star seeds for profit boosts, introducing fertilizers, and designing a vibrant color palette.</p>
         </div>
 
         <div className="text-center sm:text-left">

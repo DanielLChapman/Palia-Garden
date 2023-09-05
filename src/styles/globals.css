@@ -16,44 +16,74 @@
   }
 }
 
+:root { font-family: 'Inter', sans-serif; }
+@supports (font-variation-settings: normal) {
+  :root { font-family: 'Inter var', sans-serif; }
+}
+
 body {
   scroll-behavior: smooth;
 }
 
 .effect-red {
   border: 2px solid red;
+  border-color: red;
   box-sizing: border-box;
+  color: red;
 }
 
 .effect-orange {
   border: 2px solid orange;
+  border-color: orange;
   box-sizing: border-box;
+  color: orange;
 }
 
 .effect-yellow {
   border: 2px solid yellow;
+  border-color: yellow;
+  color: yellow;
   box-sizing: border-box;
 }
 
 .effect-green {
   border: 2px solid green;
   box-sizing: border-box;
+  border-color: green;
+  color:green;
 }
 
 .effect-blue {
   border: 2px solid blue;
   box-sizing: border-box;
+  border-color: blue;
+  color: blue;
 }
 
 .effect-purple {
   border: 2px solid purple;
   box-sizing: border-box;
+  border-color: purple;
+  color: purple;
 }
 
 .effect-black {
   border: 2px solid black;
   box-sizing: border-box;
+  border-color: black;
+  color: black;
 }
+
+.effect-icon {
+    width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 0px solid; /* Color will be set by effect-specific class */
+}
+
 
 tr::after {
   content: "";
