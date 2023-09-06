@@ -8,12 +8,15 @@ import {
     faBan,
     faArrowUpWideShort,
 } from "@fortawesome/free-solid-svg-icons";
+import { Effect } from "../Effects";
 
 type GridCellProps = {
     cellData: GridCell;
     x: number;
     y: number;
     onCellClick: (x: number, y: number) => void;
+    hover: Effect | null;
+    selectedEffects: Effect[];
 };
 
 export const effectToBorderClassMap: Record<string, string> = {
@@ -47,11 +50,23 @@ export const GridCellComponent: React.FC<GridCellProps> = ({
     cellData,
     x,
     y,
+    hover,
     onCellClick,
+    selectedEffects,
 }) => {
+    const isSelectedEffectPresent = cellData.effects.some((effect) =>
+        selectedEffects.includes(effect as Effect)
+    );
+
     return (
         <div
-            className={`grid-cell w-[100px] h-[100px] border-2 border-black  m-1 bg-field-drab relative`}
+            className={`grid-cell w-[75px] h-[75px] border-2 border-black transition delay-150 m-1 bg-field-drab relative ${
+                cellData.effects.includes(hover as Effect)
+                    ? "bg-cadet-gray"
+                    : isSelectedEffectPresent
+                    ? "bg-blue-300"
+                    : ""
+            }`}
             onClick={() => {
                 onCellClick(x, y);
             }}
@@ -73,7 +88,10 @@ export const GridCellComponent: React.FC<GridCellProps> = ({
                         key={index}
                         className={`${effectToBorderClassMap[effect]} effect-icon m-0.5`}
                     >
-                        <FontAwesomeIcon icon={effectToIconMap[effect]} />
+                        <FontAwesomeIcon
+                            icon={effectToIconMap[effect]}
+                            size="xs"
+                        />
                         {/*<div key={index} className={`${effectToBgClassMap[effect]} w-1/5 h-4`}></div>*/}
                     </div>
                 ))}

@@ -2,7 +2,7 @@ import React, { useCallback } from "react";
 import { GridCell, GridState } from "../useGrid";
 import { GridCellComponent } from "./GridCell";
 import { Crop, crops } from "@/data/crops";
-import { applyEffect, checkSelfForEffects, removeEffect } from "../Effects";
+import { Effect, applyEffect, checkSelfForEffects, removeEffect } from "../Effects";
 import { CropCounts } from "../App";
 import { EffectKey } from "./EffectKey";
 
@@ -11,6 +11,8 @@ type GridProps = {
     setGrid: (newGrid: GridState) => void;
     currentCrop: Crop | null;
     setCropCounts: React.Dispatch<React.SetStateAction<CropCounts>>;
+    hover: Effect | null,
+    selectedEffects: Effect[],
 };
 
 export const removeFromGrid = (
@@ -105,6 +107,8 @@ const Grid: React.FC<GridProps> = ({
     setGrid,
     currentCrop,
     setCropCounts,
+    hover,
+    selectedEffects
 }) => {
     const outputGridL = () => {
         let results = [];
@@ -171,7 +175,7 @@ const Grid: React.FC<GridProps> = ({
             <div className="flex justify-center items-start h-full w-full">
                 <div className="overflow-x-auto max-w-screen-lg">
                     <div className="grid-container flex justify-center items-start flex-wrap 
-                    w-[1000px] border-black py-2 bg-olivine rounded-lg">
+                    w-[750px] border-black py-2 bg-olivine rounded-lg">
                         {grid.map((row, rowIndex) => (
                             <div
                                 key={rowIndex}
@@ -184,6 +188,8 @@ const Grid: React.FC<GridProps> = ({
                                         x={rowIndex}
                                         y={cellIndex}
                                         onCellClick={handleCellClick}
+                                        hover={hover}
+                                        selectedEffects={selectedEffects}
                                     />
                                 ))}
                             </div>

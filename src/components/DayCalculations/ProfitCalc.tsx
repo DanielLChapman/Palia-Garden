@@ -187,8 +187,6 @@ const ProfitCalc: React.FC<ProfitCalcType> = ({
 
         let seedsNeededCopy = { ...seedsNeeded };
         let seedsCreatedCopy = { ...seedsCreated };
-
-        console.log(seedsNeededCopy, seedsCreatedCopy)
         if (reinvestSeeds) {
             // Use the seeds we've created to offset the seeds we need
             Object.keys(seedsNeededCopy).forEach((x) => {
