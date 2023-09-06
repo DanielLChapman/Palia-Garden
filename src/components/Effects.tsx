@@ -50,12 +50,21 @@ export const getNeighbors: (
     return neighbors;
 };
 
-const countNeighborEffects = (grid: GridState, x: number, y: number, width: number, height: number): Map<Effect, number> => {
+const countNeighborEffects = (
+    grid: GridState,
+    x: number,
+    y: number,
+    width: number,
+    height: number
+): Map<Effect, number> => {
     const effects = new Map<Effect, number>();
     const cropNeighbors = getNeighbors(x, y, width, height);
     for (let [cx, cy] of cropNeighbors) {
         const currentEffect = grid[cx][cy].crop?.gardenBuff;
-        if (grid[x][y].crop?.name !== grid[cx][cy].crop?.name && currentEffect) {
+        if (
+            grid[x][y].crop?.name !== grid[cx][cy].crop?.name &&
+            currentEffect
+        ) {
             effects.set(currentEffect, (effects.get(currentEffect) || 0) + 1);
         }
     }
@@ -80,7 +89,10 @@ export const checkSelfForEffects = (
     for (let i = 0; i < width; i++) {
         for (let j = 0; j < height; j++) {
             for (let [currentEffect, count] of effectsCount.entries()) {
-                if (count >= requiredForBuffs && !newGrid[x + i][y + j].effects.includes(currentEffect)) {
+                if (
+                    count >= requiredForBuffs &&
+                    !newGrid[x + i][y + j].effects.includes(currentEffect)
+                ) {
                     newGrid[x + i][y + j].effects.push(currentEffect);
                 }
             }
@@ -89,7 +101,6 @@ export const checkSelfForEffects = (
 
     return newGrid;
 };
-
 
 export const applyEffect: (
     grid: GridState,
@@ -105,19 +116,36 @@ export const applyEffect: (
     for (let [nx, ny] of neighbors) {
         if (!newGrid[nx] || !newGrid[nx][ny]) continue;
         const neighborCrop = newGrid[nx][ny].crop;
-        if (!neighborCrop || neighborCrop.name === newGrid[x][y].crop?.name) continue;
+        if (!neighborCrop || neighborCrop.name === newGrid[x][y].crop?.name)
+            continue;
 
         if (["Blueberry", "Apple"].includes(neighborCrop.name)) {
             const primaryCoord = newGrid[nx][ny].primaryCoord;
             if (primaryCoord) {
                 const [px, py] = primaryCoord;
-                const effectsCount = countNeighborEffects(newGrid, px, py, neighborCrop.width, neighborCrop.height);
+                const effectsCount = countNeighborEffects(
+                    newGrid,
+                    px,
+                    py,
+                    neighborCrop.width,
+                    neighborCrop.height
+                );
                 const requiredForBuffs = neighborCrop.requiredForBuffs || 1;
                 for (let i = 0; i < neighborCrop.width; i++) {
                     for (let j = 0; j < neighborCrop.height; j++) {
-                        for (let [currentEffect, count] of effectsCount.entries()) {
-                            if (count >= requiredForBuffs && !newGrid[px + i][py + j].effects.includes(currentEffect)) {
-                                newGrid[px + i][py + j].effects.push(currentEffect);
+                        for (let [
+                            currentEffect,
+                            count,
+                        ] of effectsCount.entries()) {
+                            if (
+                                count >= requiredForBuffs &&
+                                !newGrid[px + i][py + j].effects.includes(
+                                    currentEffect
+                                )
+                            ) {
+                                newGrid[px + i][py + j].effects.push(
+                                    currentEffect
+                                );
                             }
                         }
                     }
@@ -131,7 +159,7 @@ export const applyEffect: (
     return newGrid;
 };
 
-
+/*
 export const removeEffect: (
     grid: GridState,
     x: number,
@@ -168,6 +196,73 @@ export const removeEffect: (
                 const effectIndex = newGrid[nx][ny].effects.indexOf(effect);
                 if (effectIndex !== -1) {
                     grid[nx][ny].effects.splice(effectIndex, 1);
+                }
+            }
+        }
+    }
+
+    return newGrid;
+};
+*/
+export const removeEffect: (
+    grid: GridState,
+    x: number,
+    y: number,
+    effect: Effect
+) => GridState = (grid, x, y, effect) => {
+    const newGrid = [...grid.map((row) => [...row])];
+
+    const removedCropWidth = grid[x][y].crop?.width || 1;
+    const removedCropHeight = grid[x][y].crop?.height || 1;
+
+    const neighbors = getNeighbors(x, y, removedCropWidth, removedCropHeight);
+
+    for (let [nx, ny] of neighbors) {
+        const neighborCrop = newGrid[nx][ny].crop;
+        if (neighborCrop && newGrid[nx][ny].effects.includes(effect)) {
+            let shouldRemove = true;
+            const otherNeighbors = getNeighbors(
+                nx,
+                ny,
+                neighborCrop.width,
+                neighborCrop.height
+            ).filter(([ox, oy]) => {
+                // Exclude all cells occupied by the removed crop
+                return (
+                    ox < x ||
+                    ox >= x + removedCropWidth ||
+                    oy < y ||
+                    oy >= y + removedCropHeight
+                );
+            });
+
+            let effectCount = 0;
+            for (let [ox, oy] of otherNeighbors) {
+                if (
+                    newGrid[ox] &&
+                    newGrid[ox][oy] &&
+                    newGrid[ox][oy].crop?.gardenBuff === effect &&
+                    newGrid[ox][oy].crop?.name !== neighborCrop.name
+                ) {
+                    effectCount++;
+                }
+            }
+
+            if (effectCount < (neighborCrop.requiredForBuffs || 1)) {
+                // Use primaryCoord to determine the starting point for the loop
+                const [px, py] = newGrid[nx][ny].primaryCoord || [nx, ny];
+                // Remove the effect from all cells occupied by the crop
+                for (let i = 0; i < neighborCrop.width; i++) {
+                    for (let j = 0; j < neighborCrop.height; j++) {
+                        const effectIndex =
+                            newGrid[px + i][py + j].effects.indexOf(effect);
+                        if (effectIndex !== -1) {
+                            newGrid[px + i][py + j].effects.splice(
+                                effectIndex,
+                                1
+                            );
+                        }
+                    }
                 }
             }
         }
