@@ -143,7 +143,8 @@ const PreservationContainer: React.FC<PreservationProps> = ({
                     starred: {
                         count: 0,
                     },
-                    replants: 0,
+                    regularReplants: 0,
+                    starredReplants: 0,
                 };
             }
             leftOverCopy[updatedCrafter.name][updatedCrafter.starred].count +=
@@ -261,7 +262,7 @@ const PreservationContainer: React.FC<PreservationProps> = ({
                     {CRAFTER_OBJECTS.map((crafter) => (
                         <div
                             key={crafter}
-                            className="w-32 h-32 border-2 cursor-pointer active:transform active:scale-95 flex justify-center items-center"
+                            className="w-24 h-24 rounded-md border-dark-moss-green  border-2 cursor-pointer active:transform active:scale-95 flex justify-center items-center"
                             onClick={() => handleAddCrafter(crafter)}
                         >
                             <Image

@@ -23,7 +23,7 @@ const CropDisplay: React.FC<CropDisplayProps> = ({ currentCrops }) => {
             {/* Title Line */}
             <div className="text-center mb-4">
                 <span className="mr-3">Generated Crops:</span>
-                <FontAwesomeIcon icon={faLeaf} className="text-green-500 mr-2" />
+                <FontAwesomeIcon icon={faLeaf} className="text-dark-moss-green mr-2" />
                 <span>= Regular</span>
                 <FontAwesomeIcon icon={faStar} className="text-yellow-500 mx-3" />
                 <span>= Starred</span>
@@ -33,9 +33,9 @@ const CropDisplay: React.FC<CropDisplayProps> = ({ currentCrops }) => {
                 {Object.keys(crops).map((crop, i) => (
                     <div
                         key={i}
-                        className={`relative group w-24 h-24 border-2 ${getEffectBorder(
+                        className={`relative group w-20 h-20 border-2 ${getEffectBorder(
                             crops[crop].gardenBuff
-                        )} flex items-center justify-center cursor-pointer transform transition-transform duration-150 hover:scale-105 ${i === 0 ? 'mt-[7px]' : ''}`}
+                        )} flex rounded-md items-center justify-center cursor-pointer transform transition-transform duration-150 hover:scale-105 ${i === 0 ? 'mt-[7px]' : ''}`}
                     >
                         <Image
                             src={crops[crop].image}
@@ -50,7 +50,7 @@ const CropDisplay: React.FC<CropDisplayProps> = ({ currentCrops }) => {
                         </div>
 
                         <div className="absolute bottom-1 right-1 flex items-center space-x-2">
-                            <FontAwesomeIcon icon={faLeaf} className="text-green-500" />
+                            <FontAwesomeIcon icon={faLeaf} className="text-dark-moss-green" />
                             <span className="text-sm">{currentCrops[crops[crop].name].regular.count}</span>
                         </div>
 

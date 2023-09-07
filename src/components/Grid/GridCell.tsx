@@ -60,12 +60,13 @@ export const GridCellComponent: React.FC<GridCellProps> = ({
 
     return (
         <div
-            className={`grid-cell w-[75px] h-[75px] border-2 border-black transition delay-150 m-1 bg-field-drab relative ${
+            className={`grid-cell w-[75px] h-[75px] border-2 border-black transition delay-150 m-1  relative ${
                 cellData.effects.includes(hover as Effect)
-                    ? "bg-cadet-gray"
-                    : isSelectedEffectPresent
+                
                     ? "bg-blue-300"
-                    : ""
+                    : isSelectedEffectPresent
+                    ? "bg-cadet-gray"
+                    : "bg-field-drab"
             }`}
             onClick={() => {
                 onCellClick(x, y);

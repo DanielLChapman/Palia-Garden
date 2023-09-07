@@ -172,8 +172,8 @@ const Grid: React.FC<GridProps> = ({
     );
 
     return (
-            <div className="flex justify-center items-start h-full w-full">
-                <div className="overflow-x-auto max-w-screen-lg">
+            
+                <div className="overflow-x-auto max-w-screen-lg pl-4 md:pl-10">
                     <div className="grid-container flex justify-center items-start flex-wrap 
                     w-[750px] border-black py-2 bg-olivine rounded-lg">
                         {grid.map((row, rowIndex) => (
@@ -196,7 +196,6 @@ const Grid: React.FC<GridProps> = ({
                         ))}
                     </div>
                 </div>
-            </div>
 
     );
 };

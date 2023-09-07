@@ -41,18 +41,33 @@ function App({}) {
                         cropCounts={cropCounts}
                     />
                 </div>
-                <div className="flex p-4 justify-center flex-1 ">
-                    <EffectKey hover={hover} setHover={setHover} selectedEffects={selectedEffects} setSelectedEffects={setSelectedEffects}/>
-                </div>
-                <div className="flex-1  p-4 justify-center flex w-auto">
-                    <Grid
-                        grid={grid}
-                        setGrid={updateGrid}
-                        currentCrop={currentCrop}
-                        setCropCounts={setCropCounts}
+                <div className="flex md:hidden p-r justify-center flex-1">
+                    <EffectKey
                         hover={hover}
+                        setHover={setHover}
                         selectedEffects={selectedEffects}
+                        setSelectedEffects={setSelectedEffects}
                     />
+                </div>
+                <div className="flex  p-4 justify-center  w-auto">
+                    <div className="flex justify-center items-start h-full w-full">
+                        <Grid
+                            grid={grid}
+                            setGrid={updateGrid}
+                            currentCrop={currentCrop}
+                            setCropCounts={setCropCounts}
+                            hover={hover}
+                            selectedEffects={selectedEffects}
+                        />
+                        <div className="hidden md:block">
+                            <EffectKey
+                                hover={hover}
+                                setHover={setHover}
+                                selectedEffects={selectedEffects}
+                                setSelectedEffects={setSelectedEffects}
+                            />
+                        </div>
+                    </div>{" "}
                 </div>
             </div>
 

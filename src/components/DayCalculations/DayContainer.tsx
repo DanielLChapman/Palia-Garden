@@ -19,7 +19,8 @@ export type ExpectedCropState = {
     starred: {
         count: number;
     };
-    replants: number;
+    regularReplants: number;
+    starredReplants: number;
 };
 
 export type CropStates = {
@@ -36,7 +37,8 @@ export const initialState: CropStates = Object.fromEntries(
             starred: {
                 count: 0,
             },
-            replants: 0,
+            regularReplants: 0,
+            starredReplants: 0,
         },
     ])
 );

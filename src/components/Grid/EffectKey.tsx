@@ -49,8 +49,9 @@ export const EffectKey: React.FC<EffectKeyProps> = ({hover, setHover, selectedEf
     
 
     return (
-        <div className="px-4 pt-2 pb-1 -my-2 bg-cambridge-blue text-gray-200 rounded-md font-inter">
-            <div className="flex justify-between items-center mb-2 font-montserrat">
+        <div className="px-4 pt-2 pb-1 text-gray-200 rounded-md font-inter">
+           {/* 
+           <div className="flex justify-between items-center mb-2 font-montserrat">
                 <h3 className="text-lg font-bold ">Effects Key</h3>
                 <button
                     onClick={() => setExpand(!expand)}
@@ -59,8 +60,9 @@ export const EffectKey: React.FC<EffectKeyProps> = ({hover, setHover, selectedEf
                     {expand ? <span>&#9650;</span> : <span>&#9660;</span>}
                 </button>
             </div>
+           */} 
             {expand && (
-                <div className="flex flex-wrap justify-center items-center">
+                <div className="flex flex-wrap md:flex-col justify-center items-center">
                     {effects.map((effect, index) => {
                         const isSelectedEffectPresent = selectedEffects.some(effects => selectedEffects.includes(effect as Effect));
                         return (
@@ -76,7 +78,7 @@ export const EffectKey: React.FC<EffectKeyProps> = ({hover, setHover, selectedEf
                                         }
                                     }}
                                     onClick={() => handleEffectClick(effect as Effect)}
-                                    className={`${effectToBorderClassMap[effect]} cursor-pointer effect-key-icon w-16 h-16 border-8 hover:scale-95 ${isSelectedEffectPresent ? 'bg-blue-200' : ''} hover:bg-cadet-gray`}
+                                    className={`${effectToBorderClassMap[effect]} cursor-pointer effect-key-icon w-16 h-16 border-8 hover:scale-95 ${isSelectedEffectPresent ? 'bg-cadet-gray' : ''} hover:bg-blue-200`}
                                 >
                                     <FontAwesomeIcon
                                         icon={effectToIconMap[effect]}

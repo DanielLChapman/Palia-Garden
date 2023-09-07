@@ -91,7 +91,6 @@ export function countGrid(initialState: CropStates, days: number, grid: GridStat
     if (!grid) return initialState;
     let newState = JSON.parse(JSON.stringify(initialState));
 
-
     for (let i = 0; i < grid.length; i++) {
         for (let j = 0; j < grid[0].length; j++) {
             const cell = grid[i][j];
@@ -110,9 +109,11 @@ export function countGrid(initialState: CropStates, days: number, grid: GridStat
                     starred: {
                         count: 0
                     },
-                    replants: 0
+                    regularReplants: 0,
+                    starredReplants: 0,
                 }
             }
+            
     
             
             const harvestSpeed = getHarvestSpeed(crop, effects);
@@ -122,9 +123,7 @@ export function countGrid(initialState: CropStates, days: number, grid: GridStat
                 newState[crop.name].regular.count += harvestOutput.regular;
                 newState[crop.name].starred.count += harvestOutput.starred;
             }
-            
-            newState[crop.name].replants += replants;
-            
+            cell.starred === 'starred' ? newState[crop.name].starredReplants += replants: newState[crop.name].regularReplants += replants;
         }
     }  
 

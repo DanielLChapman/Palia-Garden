@@ -204,6 +204,7 @@ export const removeEffect: (
     return newGrid;
 };
 */
+
 export const removeEffect: (
     grid: GridState,
     x: number,
@@ -212,57 +213,54 @@ export const removeEffect: (
 ) => GridState = (grid, x, y, effect) => {
     const newGrid = [...grid.map((row) => [...row])];
 
-    const removedCropWidth = grid[x][y].crop?.width || 1;
-    const removedCropHeight = grid[x][y].crop?.height || 1;
+    const width = grid[x][y].crop?.width || 1;
+    const height = grid[x][y].crop?.height || 1;
 
-    const neighbors = getNeighbors(x, y, removedCropWidth, removedCropHeight);
+    const neighbors = getNeighbors(x, y, width, height);
+
+    console.log(neighbors)
 
     for (let [nx, ny] of neighbors) {
-        const neighborCrop = newGrid[nx][ny].crop;
-        if (neighborCrop && newGrid[nx][ny].effects.includes(effect)) {
-            let shouldRemove = true;
-            const otherNeighbors = getNeighbors(
-                nx,
-                ny,
-                neighborCrop.width,
-                neighborCrop.height
-            ).filter(([ox, oy]) => {
-                // Exclude all cells occupied by the removed crop
-                return (
-                    ox < x ||
-                    ox >= x + removedCropWidth ||
-                    oy < y ||
-                    oy >= y + removedCropHeight
+        if (newGrid[nx] && newGrid[nx][ny]) {
+            const primaryCoord = newGrid[nx][ny].primaryCoord;
+            if (primaryCoord) {
+                const [px, py] = primaryCoord;
+                const effectsCount = countNeighborEffects(
+                    newGrid,
+                    px,
+                    py,
+                    newGrid[nx][ny].crop?.width || 1,
+                    newGrid[nx][ny].crop?.height || 1
                 );
-            });
+                const requiredForBuffs =
+                    newGrid[nx][ny].crop?.requiredForBuffs || 1;
 
-            let effectCount = 0;
-            for (let [ox, oy] of otherNeighbors) {
-                if (
-                    newGrid[ox] &&
-                    newGrid[ox][oy] &&
-                    newGrid[ox][oy].crop?.gardenBuff === effect &&
-                    newGrid[ox][oy].crop?.name !== neighborCrop.name
-                ) {
-                    effectCount++;
-                }
-            }
-
-            if (effectCount < (neighborCrop.requiredForBuffs || 1)) {
-                // Use primaryCoord to determine the starting point for the loop
-                const [px, py] = newGrid[nx][ny].primaryCoord || [nx, ny];
-                // Remove the effect from all cells occupied by the crop
-                for (let i = 0; i < neighborCrop.width; i++) {
-                    for (let j = 0; j < neighborCrop.height; j++) {
-                        const effectIndex =
-                            newGrid[px + i][py + j].effects.indexOf(effect);
-                        if (effectIndex !== -1) {
-                            newGrid[px + i][py + j].effects.splice(
-                                effectIndex,
-                                1
-                            );
+                if (effectsCount.get(effect) || 0 < requiredForBuffs) {
+                    for (
+                        let i = 0;
+                        i < (newGrid[nx][ny].crop?.width || 1);
+                        i++
+                    ) {
+                        for (
+                            let j = 0;
+                            j < (newGrid[nx][ny].crop?.height || 1);
+                            j++
+                        ) {
+                            const effectIndex =
+                                newGrid[px + i][py + j].effects.indexOf(effect);
+                            if (effectIndex !== -1) {
+                                newGrid[px + i][py + j].effects.splice(
+                                    effectIndex,
+                                    1
+                                );
+                            }
                         }
                     }
+                }
+            } else {
+                const effectIndex = newGrid[nx][ny].effects.indexOf(effect);
+                if (effectIndex !== -1) {
+                    newGrid[nx][ny].effects.splice(effectIndex, 1);
                 }
             }
         }

@@ -92,7 +92,7 @@ export const CropTable: React.FC<CropTableProps> = ({
                 ))}
                 <div
                     key={-5}
-                    className={`cursor-pointer relative text-4xl m-2 w-24 h-24 border-2 rounded-md effect-black flex items-center justify-center active:transform active:scale-95`}
+                    className={`cursor-pointer relative text-4xl m-2 w-20 h-20 border-2 rounded-md effect-black flex items-center justify-center active:transform active:scale-95`}
                     onClick={() => {
                         setCurrentCrop(null);
                     }}

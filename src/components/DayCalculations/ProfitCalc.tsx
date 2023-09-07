@@ -19,17 +19,19 @@ type ProfitCalcType = {
 };
 
 type neededSeeds = {
-    amount: number;
+    regular_amount: number;
+    starred_amount: number;
 };
 
 export type initialSeedsNeededState = {
-    [name: string]: neededSeeds;
+    [name: string]: {
+        amounts: neededSeeds;
+    }
 };
 
 type initialSeedsCreatedState = {
     [name: string]: {
-        regular: neededSeeds;
-        starred: neededSeeds;
+        amounts: neededSeeds
     };
 };
 
@@ -64,14 +66,19 @@ const ProfitCalc: React.FC<ProfitCalcType> = ({
             if (c.starred.count > 0) {
                 total += c.starred.count * crops[x].starValue;
             }
-            if (c.replants > 0) {
+            if (c.regularReplants + c.starredReplants > 0) {
                 if (!newSeedsNeeded[x]) {
                     newSeedsNeeded[x] = {
-                        amount: 0,
+                        amounts: {
+                            regular_amount: 0,
+                            starred_amount: 0
+                        }
+                        
                     };
                 }
 
-                newSeedsNeeded[x].amount += c.replants;
+                newSeedsNeeded[x].amounts.regular_amount += c.regularReplants;
+                newSeedsNeeded[x].amounts.starred_amount += c.starredReplants;
             }
         });
 
@@ -106,12 +113,11 @@ const ProfitCalc: React.FC<ProfitCalcType> = ({
                 newSeedsCreatedObject = {
                     ...newSeedsCreatedObject,
                     [crafter.name || "default"]: {
-                        regular: {
-                            amount: 0,
-                        },
-                        starred: {
-                            amount: 0,
-                        },
+                        amounts: {
+                            regular_amount: 0,
+                            starred_amount: 0,
+                        }
+                        
                     },
                 };
             }
@@ -119,19 +125,16 @@ const ProfitCalc: React.FC<ProfitCalcType> = ({
             newSeedsCreatedObject = {
                 ...newSeedsCreatedObject ,
                 [crafter.name || "default"]: {
-                    regular: {
-                        amount:
-                        newSeedsCreatedObject[crafter.name || "default"].regular
-                                .amount + regular,
-                    },
-                    starred: {
-                        amount:
-                        newSeedsCreatedObject[crafter.name || "default"].starred
-                                .amount + starred,
-                    },
+                    amounts: {
+                        regular_amount: newSeedsCreatedObject[crafter.name || "default"].amounts.regular_amount + regular,
+                        starred_amount: newSeedsCreatedObject[crafter.name || "default"].amounts.starred_amount + starred
+                    }
+                    
                 },
             };
         }
+
+        //calculate harvest seeds
         return {profit, newSeedsCreatedObject};
     };
 
@@ -184,71 +187,81 @@ const ProfitCalc: React.FC<ProfitCalcType> = ({
 
     const sellSeeds = (seedsNeeded: initialSeedsNeededState, seedsCreated: initialSeedsCreatedState) => {
         let profitFromSeeds = 0;
-
+    
         let seedsNeededCopy = { ...seedsNeeded };
         let seedsCreatedCopy = { ...seedsCreated };
+    
         if (reinvestSeeds) {
             // Use the seeds we've created to offset the seeds we need
             Object.keys(seedsNeededCopy).forEach((x) => {
-                if (seedsNeededCopy[x].amount > 0) {
+                if (seedsNeededCopy[x].amounts.regular_amount > 0 || seedsNeededCopy[x].amounts.starred_amount > 0) {
                     // Ensure seedsCreatedCopy[x] exists or initialize it with default values
                     if (!seedsCreatedCopy[x]) {
                         seedsCreatedCopy[x] = {
-                            regular: { amount: 0 },
-                            starred: { amount: 0 }
+                            amounts: {
+                                regular_amount: 0,
+                                starred_amount: 0,
+                            }
                         };
                     }
-        
+    
                     // Use regular seeds first
+                    //THIS NEEDS TO BE UPDATED WHEN STAR SEEDS ARE ALLOWED TO BE USED
+
                     let regularSeedsUsed = Math.min(
-                        seedsNeededCopy[x].amount,
-                        seedsCreatedCopy[x].regular.amount
+                        seedsNeededCopy[x].amounts.regular_amount,
+                        seedsCreatedCopy[x].amounts.regular_amount
                     );
-                    seedsNeededCopy[x].amount -= regularSeedsUsed;
-                    seedsCreatedCopy[x].regular.amount -= regularSeedsUsed;
-        
+                    seedsNeededCopy[x].amounts.regular_amount -= regularSeedsUsed;
+                    seedsCreatedCopy[x].amounts.regular_amount -= regularSeedsUsed;
+    
                     // Use starred seeds if allowed and needed
-                    if (useStarSeeds && seedsNeededCopy[x].amount > 0) {
+                    if (useStarSeeds && seedsNeededCopy[x].amounts.regular_amount > 0) {
                         let starredSeedsUsed = Math.min(
-                            seedsNeededCopy[x].amount,
-                            seedsCreatedCopy[x].starred.amount
+                            seedsNeededCopy[x].amounts.regular_amount,
+                            seedsCreatedCopy[x].amounts.starred_amount
                         );
-                        seedsNeededCopy[x].amount -= starredSeedsUsed;
-                        seedsCreatedCopy[x].starred.amount -= starredSeedsUsed;
+                        seedsNeededCopy[x].amounts.regular_amount -= starredSeedsUsed;
+                        seedsCreatedCopy[x].amounts.starred_amount -= starredSeedsUsed;
                     }
                 }
             });
         }
-
-
+    
         Object.keys(seedsCreatedCopy).forEach((x) => {
             profitFromSeeds +=
-                seedsCreatedCopy[x].regular.amount *
+                seedsCreatedCopy[x].amounts.regular_amount *
                 seedSellValues[x as SeedCrafterInputKey].regular;
-            seedsCreatedCopy[x].regular.amount = 0; // Reset the amount after selling
+            seedsCreatedCopy[x].amounts.regular_amount = 0; // Reset the amount after selling
     
             profitFromSeeds +=
-                seedsCreatedCopy[x].starred.amount *
+                seedsCreatedCopy[x].amounts.starred_amount *
                 seedSellValues[x as SeedCrafterInputKey].starred;
-            seedsCreatedCopy[x].starred.amount = 0; // Reset the amount after selling
+            seedsCreatedCopy[x].amounts.starred_amount = 0; // Reset the amount after selling
         });
-
-        return {profitFromSeeds, seedsNeededCopy, seedsCreatedCopy};
+    
+        return { profitFromSeeds, seedsNeededCopy, seedsCreatedCopy };
     };
-
+    
+    //UPDATE THAT LATER
     const calculateRebuy = (seedsNeeded: initialSeedsNeededState) => {
         let total = 0;
         Object.keys(seedsNeeded).forEach((x) => {
-            if (seedsNeeded[x].amount > 0) {
-                total += seedsNeeded[x].amount * crops[x].seedCost;
+            if (seedsNeeded[x].amounts.regular_amount > 0) {
+                total += seedsNeeded[x].amounts.regular_amount * crops[x].seedCost;
+            }
+            if (seedsNeeded[x].amounts.starred_amount > 0) {
+                total += seedsNeeded[x].amounts.starred_amount * crops[x].seedCost; // Assuming starred seeds have the same cost
             }
         });
+        
 
         return total;
     };
 
     useEffect(() => {
         let { total: leftOverTotal, newSeedsNeeded } = calculateLeftOverCrops();
+        console.log(newSeedsNeeded)
         let {crafterTotal, newSeedsCreated } = calculateCrafters();
         let {profitFromSeeds, seedsNeededCopy, seedsCreatedCopy} = sellSeeds(newSeedsNeeded, newSeedsCreated);
         let totalCost = calculateRebuy(seedsNeededCopy);
@@ -259,8 +272,6 @@ const ProfitCalc: React.FC<ProfitCalcType> = ({
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [days, crafters, leftOverCrops, useStarSeeds, reinvestSeeds])
-
-
     return (
         <div className="space-y-2">
             <div className=" p-4 rounded-md ">
