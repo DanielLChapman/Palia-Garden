@@ -12,12 +12,16 @@ type CropTableProps = {
     currentCrop: Crop | null;
     setCurrentCrop: React.Dispatch<React.SetStateAction<Crop | null>>;
     cropCounts: Map<string, number>;
+    plantStarSeeds: boolean,
+    setPlantStarSeeds: React.Dispatch<React.SetStateAction<boolean>>
 };
 
 export const CropTable: React.FC<CropTableProps> = ({
     currentCrop,
     setCurrentCrop,
     cropCounts,
+    plantStarSeeds,
+    setPlantStarSeeds
 }) => {
     if (!crops) return <span>Please Refresh, something went wrong</span>;
 
@@ -26,33 +30,7 @@ export const CropTable: React.FC<CropTableProps> = ({
     };
     return (
         <>
-            <div className="hidden">
-                {Object.keys(crops).map((crop, index) => (
-                    <div key={index} className="relative">
-                        <button className="w-full text-left p-2 border-b">
-                            {crops[crop].name}
-                        </button>
-                        <div className="absolute left-0 w-full z-10 hidden">
-                            <div
-                                className={`flex items-center border mb-4 ${getEffectBorder(
-                                    crops[crop].gardenBuff
-                                )} `}
-                            >
-                                <Image
-                                    src={crops[crop].image}
-                                    alt={crops[crop].name}
-                                    layout="fill"
-                                    objectFit="cover"
-                                />
-                                <div className="p-2 font-inter">
-                                    {crops[crop].growthTime} days
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                ))}
-            </div>
-
+        
             <div className="flex flex-wrap justify-center">
                 {Object.keys(crops).map((crop, index) => (
                     <div

@@ -261,7 +261,6 @@ const ProfitCalc: React.FC<ProfitCalcType> = ({
 
     useEffect(() => {
         let { total: leftOverTotal, newSeedsNeeded } = calculateLeftOverCrops();
-        console.log(newSeedsNeeded)
         let {crafterTotal, newSeedsCreated } = calculateCrafters();
         let {profitFromSeeds, seedsNeededCopy, seedsCreatedCopy} = sellSeeds(newSeedsNeeded, newSeedsCreated);
         let totalCost = calculateRebuy(seedsNeededCopy);

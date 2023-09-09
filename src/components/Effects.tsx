@@ -218,8 +218,6 @@ export const removeEffect: (
 
     const neighbors = getNeighbors(x, y, width, height);
 
-    console.log(neighbors)
-
     for (let [nx, ny] of neighbors) {
         if (newGrid[nx] && newGrid[nx][ny]) {
             const primaryCoord = newGrid[nx][ny].primaryCoord;
@@ -235,7 +233,8 @@ export const removeEffect: (
                 const requiredForBuffs =
                     newGrid[nx][ny].crop?.requiredForBuffs || 1;
 
-                if (effectsCount.get(effect) || 0 < requiredForBuffs) {
+                // Check if the effect should be removed
+                if ((effectsCount.get(effect) || 0) < requiredForBuffs) {
                     for (
                         let i = 0;
                         i < (newGrid[nx][ny].crop?.width || 1);
@@ -268,3 +267,4 @@ export const removeEffect: (
 
     return newGrid;
 };
+

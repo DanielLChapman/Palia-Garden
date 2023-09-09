@@ -8,6 +8,7 @@ import ProfitCalc from "./ProfitCalc";
 
 type DayContainerProps = {
     grid: GridState;
+    overTwentyFive: boolean,
 };
 
 export type CropQualityTyping = "regular" | "starred";
@@ -43,7 +44,7 @@ export const initialState: CropStates = Object.fromEntries(
     ])
 );
 
-const DayContainer: React.FC<DayContainerProps> = ({ grid }) => {
+const DayContainer: React.FC<DayContainerProps> = ({ grid, overTwentyFive }) => {
     const [amountOfDays, setAmountOfDays] = useState<number>(0);
     const [expectedCrops, setExpectedCrops] =
         useState<CropStates>(initialState);
@@ -52,7 +53,7 @@ const DayContainer: React.FC<DayContainerProps> = ({ grid }) => {
     const [crafters, setCrafters] = useState<CrafterState[]>([]);
 
     useEffect(() => {
-        const newExpectedCrops = countGrid(initialState, amountOfDays, grid);
+        const newExpectedCrops = countGrid(initialState, amountOfDays, grid, overTwentyFive);
         setExpectedCrops(newExpectedCrops);
         setLeftOverCrops(newExpectedCrops);
     }, [grid, amountOfDays]);

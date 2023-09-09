@@ -259,9 +259,9 @@ const PreservationContainer: React.FC<PreservationProps> = ({
         <div className="w-full flex flex-col items-center font-pt-serif p-4 pb-2">
             <div className="w-[28rem] flex flex-col items-center">
                 <div className="flex justify-center space-x-4 pb-6 px-4">
-                    {CRAFTER_OBJECTS.map((crafter) => (
+                    {CRAFTER_OBJECTS.map((crafter, index) => (
                         <div
-                            key={crafter}
+                            key={index}
                             className="w-24 h-24 rounded-md border-dark-moss-green  border-2 cursor-pointer active:transform active:scale-95 flex justify-center items-center"
                             onClick={() => handleAddCrafter(crafter)}
                         >

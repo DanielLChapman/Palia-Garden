@@ -13,6 +13,7 @@ type GridProps = {
     setCropCounts: React.Dispatch<React.SetStateAction<CropCounts>>;
     hover: Effect | null,
     selectedEffects: Effect[],
+    plantStarSeeds: boolean
 };
 
 export const removeFromGrid = (
@@ -46,7 +47,8 @@ export const addToGrid = (
     grid: GridState,
     x: number,
     y: number,
-    currentCrop: Crop
+    currentCrop: Crop,
+    plantStarSeeds: boolean,
 ): GridState => {
     let newGrid = [...grid.map((row) => [...row])];
 
@@ -77,6 +79,7 @@ export const addToGrid = (
                 effects: [],
                 fertilizer: null,
                 primaryCoord: [x, y],
+                starred: plantStarSeeds ? 'starred' : 'regular',
             };
         }
     }
@@ -107,6 +110,7 @@ const Grid: React.FC<GridProps> = ({
     setGrid,
     currentCrop,
     setCropCounts,
+    plantStarSeeds,
     hover,
     selectedEffects
 }) => {
@@ -157,7 +161,7 @@ const Grid: React.FC<GridProps> = ({
             }
             //handle click
             if (currentCrop) {
-                let t = addToGrid(grid, x, y, currentCrop);
+                let t = addToGrid(grid, x, y, currentCrop, plantStarSeeds);
                 recountGrid(t);
                 setGrid(t);
             } else {

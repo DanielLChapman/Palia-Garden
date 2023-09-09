@@ -62,7 +62,6 @@ export const GridCellComponent: React.FC<GridCellProps> = ({
         <div
             className={`grid-cell w-[75px] h-[75px] border-2 border-black transition delay-150 m-1  relative ${
                 cellData.effects.includes(hover as Effect)
-                
                     ? "bg-blue-300"
                     : isSelectedEffectPresent
                     ? "bg-cadet-gray"
@@ -97,6 +96,16 @@ export const GridCellComponent: React.FC<GridCellProps> = ({
                     </div>
                 ))}
             </div>
+
+            {/* render if a starred cell */}
+            {cellData.starred === "starred" && (
+                <div className="absolute bottom-1 left-1 flex items-center space-x-2">
+                    <FontAwesomeIcon
+                        icon={faStar}
+                        className="text-yellow-500"
+                    />
+                </div>
+            )}
         </div>
     );
 };
