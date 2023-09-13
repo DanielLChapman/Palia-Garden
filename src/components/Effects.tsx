@@ -119,7 +119,7 @@ export const applyEffect: (
         if (!neighborCrop || neighborCrop.name === newGrid[x][y].crop?.name)
             continue;
 
-        if (["Blueberry", "Apple"].includes(neighborCrop.name)) {
+        if (["Blueberry", "Apple", 'Spicy Pepper'].includes(neighborCrop.name)) {
             const primaryCoord = newGrid[nx][ny].primaryCoord;
             if (primaryCoord) {
                 const [px, py] = primaryCoord;

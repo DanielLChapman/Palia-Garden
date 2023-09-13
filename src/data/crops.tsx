@@ -213,6 +213,48 @@ export const crops: CropTyping = {
         timeUntilReharvest: 4,
         released: true,
     },
+    Corn: {
+        name: "Apple",
+        growthTime: 5,
+        reharvestable: false,
+        gardenBuff: "Increased Yield Amount",
+        baseValue: 40,
+        seedCost: 30,
+        starValue: 60,
+        width: 1,
+        height: 1,
+        image: '/images/crops/corn.webp',
+        seedGeneration: {
+            inputQuantity: 10,
+            outputQuantity: 1,
+            time: 2.25,
+        },
+        harvestQuantity: [2,2],
+        requiredForBuffs: 1,
+        timeUntilReharvest: 0,
+        released: true,
+    },
+    'Spicy Pepper': {
+        name: "Spicy Pepper",
+        growthTime: 6,
+        reharvestable: true,
+        gardenBuff: "Quality Boost",
+        baseValue: 32,
+        seedCost: 170,
+        starValue: 48,
+        width: 2,
+        height: 2,
+        image: '/images/crops/spicy_pepper.webp',
+        seedGeneration: {
+            inputQuantity: 10,
+            outputQuantity: 1,
+            time: 2.25,
+        },
+        harvestQuantity: [6,6],
+        requiredForBuffs: 2,
+        timeUntilReharvest: 4,
+        released: true,
+    }
     /*
     Apricot: {
         name: "Apricot",
@@ -235,4 +277,4 @@ export const crops: CropTyping = {
 };
 
 
-export type CropList = 'Onion' | 'Carrot' | 'Apple' | 'Tomato' | 'Potato' | 'Blueberry' | 'Wheat' | 'Rice' | 'Cotton';
+export type CropList = 'Onion' | 'Carrot' | 'Apple' | 'Tomato' | 'Potato' | 'Blueberry' | 'Wheat' | 'Rice' | 'Cotton' | 'Corn' | 'Spicy Pepper';

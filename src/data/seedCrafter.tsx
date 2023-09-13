@@ -8,6 +8,8 @@ export const SEED_CRAFTER_INPUTS = {
     "Blueberry": { input: 4, craftingTime: 81/60, output: 2, outputType: "Blueberry Bush Seed" },
     "Apple": { input: 10, craftingTime: 142/60, output: 1, outputType: "Apple Tree Seed" },
     "Cotton": { input: 1, craftingTime: 36/60, output: 3, outputType: "Cotton Seed" },
+    "Corn": { input: 1, craftingTime: 48/60, output: 4, outputType: "Corn Seed" },
+    "Spicy Pepper": { input: 4, craftingTime: 100/60, output: 1, outputType: "Spicy Pepper Seed" },
 };
 
 export type SeedCrafterInputKey = keyof typeof SEED_CRAFTER_INPUTS;
@@ -55,5 +57,13 @@ export const seedSellValues: SeedSellValueType = {
     'Wheat': {
         regular: 12,
         starred: 18,
+    },
+    'Corn': {
+        regular: 15,
+        starred: 22,
+    },
+    'Spicy Pepper': {
+        regular: 85,
+        starred: 127,
     },
 };

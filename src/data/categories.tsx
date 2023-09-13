@@ -17,12 +17,12 @@ export const cropCategories: Category[] = [
     {
         name: 'Vegetables',
         description: 'Typically consumed in both raw and cooked forms.',
-        crops: ['Potato', 'Onion', 'Carrot', 'Rice']
+        crops: ['Potato', 'Onion', 'Carrot', 'Rice', 'Spicy Pepper', 'Corn']
     },
     {
         name: 'Grains',
         description: 'Crops that are grown primarily for the edible part of their seeds.',
-        crops: ['Wheat', 'Rice']
+        crops: ['Wheat', 'Rice', 'Corn']
     },
     {
         name: 'Fibers',
@@ -32,12 +32,12 @@ export const cropCategories: Category[] = [
     {
         name: 'Reharvestable',
         description: 'Crops that can be harvested multiple times during their growth cycle.',
-        crops: ['Tomato', 'Blueberry', 'Apple'/*, 'Apricot'*/]
+        crops: ['Tomato', 'Blueberry', 'Apple', 'Spicy Pepper', /*Apricot'*/]
     },
     {
         name: 'Single Harvest',
         description: 'Crops that are harvested only once and then need to be replanted.',
-        crops: ['Potato', 'Onion', 'Carrot', 'Rice', 'Wheat', 'Cotton']
+        crops: ['Potato', 'Onion', 'Carrot', 'Rice', 'Wheat', 'Cotton', 'Corn']
     },
     {
         name: 'Water Retain',
@@ -47,7 +47,7 @@ export const cropCategories: Category[] = [
     {
         name: 'Increased Yield Amount',
         effect: "Increased Yield Amount",
-        crops: ['Rice', 'Wheat']
+        crops: ['Rice', 'Wheat', 'Corn']
     },
     {
         name: 'Weed Block',
@@ -57,7 +57,7 @@ export const cropCategories: Category[] = [
     {
         name: 'Quality Boost',
         effect: "Quality Boost",
-        crops: ['Cotton']
+        crops: ['Cotton', 'Spicy Pepper']
     },
     {
         name: 'Grow Speed Increase',
@@ -72,7 +72,7 @@ export const cropCategories: Category[] = [
     {
         name: 'Bush/Shrub Crops',
         description: 'Crops that grow on bushes or shrubs.',
-        crops: ['Blueberry']
+        crops: ['Blueberry', 'Spicy Pepper']
     },
     {
         name: 'Root Crops',
