@@ -10,6 +10,7 @@ export type GridCell = {
     effects: CellEffects; // Array of effect names, e.g., ["Water Retain", "Quality Boost"]
     fertilizer: FertilizerType | null;
     primaryCoord: [number, number] | null;
+    starred?: 'regular' | 'starred'
 };
 
 export type GridState = GridCell[][];
@@ -21,6 +22,7 @@ export function useGrid(): GridState {
             effects: [],
             fertilizer: null,
             primaryCoord: null,
+            starred: 'regular'
         }
 
         return t;
