@@ -13,7 +13,8 @@ type GridProps = {
     setCropCounts: React.Dispatch<React.SetStateAction<CropCounts>>;
     hover: Effect | null,
     selectedEffects: Effect[],
-    plantStarSeeds: boolean
+    plantStarSeeds: boolean,
+    overTwentyFive: boolean
 };
 
 export const removeFromGrid = (
@@ -112,6 +113,7 @@ const Grid: React.FC<GridProps> = ({
     setCropCounts,
     plantStarSeeds,
     hover,
+    overTwentyFive,
     selectedEffects
 }) => {
     const outputGridL = () => {
