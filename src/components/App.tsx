@@ -34,7 +34,7 @@ function App({}) {
     };
 
     return (
-        <main className=" py-6 px-4 pt-0 ">
+        <main className=" py-6 pt-0 ">
             {/* grid */}
             <div className="flex flex-col space-y-4 md:space-y-0 md:space-x-4 justify-center">
                 <div className="flex-1 p-4 justify-center flex">
@@ -46,7 +46,7 @@ function App({}) {
                         setPlantStarSeeds={setPlantStarSeeds}
                     />
                 </div>
-                <div className="flex justify-center my-4 space-x-8">
+                <div className="flex justify-center my-4 space-x-8 xl:hidden">
                     <label className="flex items-center space-x-2 border-2 border-white p-2 rounded-md shadow-sm hover:bg-gray-100 transition duration-200">
                         <input
                             type="checkbox"
@@ -71,7 +71,7 @@ function App({}) {
                     </label>
                 </div>
 
-                <div className="flex md:hidden p-r justify-center flex-1">
+                <div className="flex lg:hidden p-r justify-center flex-1">
                     <EffectKey
                         hover={hover}
                         setHover={setHover}
@@ -80,7 +80,62 @@ function App({}) {
                     />
                 </div>
                 <div className="flex  p-4 justify-center  w-auto">
-                    <div className="flex justify-center items-start h-full w-full">
+                    <div className="flex justify-center  h-full w-full font-montserrat">
+                        <div className="hidden xl:block border-2">
+                            <div className="flex flex-wrap flex-col justify-center items-center pt-2">
+                                {/* Checkbox for Plant Star Seeds */}
+                                <div className="flex flex-col items-center m-2">
+                                    <label className="cursor-pointer w-16 h-16 border-4 rounded-full hover:scale-95 hover:bg-cadet-gray relative">
+                                        <input
+                                            type="checkbox"
+                                            className="opacity-0 absolute"
+                                            checked={plantStarSeeds}
+                                            onChange={() =>
+                                                setPlantStarSeeds(
+                                                    !plantStarSeeds
+                                                )
+                                            }
+                                        />
+                                        <span
+                                            className={`block w-full h-full rounded-full ${
+                                                plantStarSeeds
+                                                    ? "bg-cadet-gray"
+                                                    : ""
+                                            }`}
+                                        ></span>
+                                    </label>
+                                    <span className="text-md text-center mt-2">
+                                        Plant Star Seeds
+                                    </span>
+                                </div>
+
+                                {/* Checkbox for Gardening Over level 25 */}
+                                <div className="flex flex-col items-center m-2">
+                                    <label className="cursor-pointer w-16 h-16 border-4 rounded-full hover:scale-95 hover:bg-cadet-gray relative">
+                                        <input
+                                            type="checkbox"
+                                            className="opacity-0 absolute"
+                                            checked={overTwentyFive}
+                                            onChange={() =>
+                                                setOverTwentyFive(
+                                                    !overTwentyFive
+                                                )
+                                            }
+                                        />
+                                        <span
+                                            className={`block w-full h-full rounded-full ${
+                                                overTwentyFive
+                                                    ? "bg-cadet-gray"
+                                                    : ""
+                                            }`}
+                                        ></span>
+                                    </label>
+                                    <span className="text-md text-center mt-2">
+                                        Gardening Over level 25
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
                         <Grid
                             grid={grid}
                             setGrid={updateGrid}
@@ -91,7 +146,7 @@ function App({}) {
                             plantStarSeeds={plantStarSeeds}
                             selectedEffects={selectedEffects}
                         />
-                        <div className="hidden md:block">
+                        <div className="hidden lg:block border-2 ">
                             <EffectKey
                                 hover={hover}
                                 setHover={setHover}
@@ -99,11 +154,13 @@ function App({}) {
                                 setSelectedEffects={setSelectedEffects}
                             />
                         </div>
-                    </div>{" "}
+                    </div>
                 </div>
             </div>
 
-            {cropCounts.size > 0 && <DayContainer grid={grid} overTwentyFive={overTwentyFive} />}
+            {cropCounts.size > 0 && (
+                <DayContainer grid={grid} overTwentyFive={overTwentyFive} />
+            )}
         </main>
     );
 }

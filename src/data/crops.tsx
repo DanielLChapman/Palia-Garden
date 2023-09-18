@@ -214,7 +214,7 @@ export const crops: CropTyping = {
         released: true,
     },
     Corn: {
-        name: "Apple",
+        name: "Corn",
         growthTime: 5,
         reharvestable: false,
         gardenBuff: "Increased Yield Amount",

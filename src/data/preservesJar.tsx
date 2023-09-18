@@ -34,6 +34,18 @@ export const PRESERVES_VALUES = {
         starred: 34,
         processedRegular: 34,
         processedStarred: 51
+    },
+    "Corn": {
+        base: 40,
+        starred: 60,
+        processedRegular: -1,
+        processedStarred: -1
+    },
+    "Spicy Pepper": {
+        base: 32,
+        starred: 48,
+        processedRegular: -1,
+        processedStarred: -1
     }
 };
 

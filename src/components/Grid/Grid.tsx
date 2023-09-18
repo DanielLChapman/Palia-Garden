@@ -2,7 +2,12 @@ import React, { useCallback } from "react";
 import { GridCell, GridState } from "../useGrid";
 import { GridCellComponent } from "./GridCell";
 import { Crop, crops } from "@/data/crops";
-import { Effect, applyEffect, checkSelfForEffects, removeEffect } from "../Effects";
+import {
+    Effect,
+    applyEffect,
+    checkSelfForEffects,
+    removeEffect,
+} from "../Effects";
 import { CropCounts } from "../App";
 import { EffectKey } from "./EffectKey";
 
@@ -11,10 +16,10 @@ type GridProps = {
     setGrid: (newGrid: GridState) => void;
     currentCrop: Crop | null;
     setCropCounts: React.Dispatch<React.SetStateAction<CropCounts>>;
-    hover: Effect | null,
-    selectedEffects: Effect[],
-    plantStarSeeds: boolean,
-    overTwentyFive: boolean
+    hover: Effect | null;
+    selectedEffects: Effect[];
+    plantStarSeeds: boolean;
+    overTwentyFive: boolean;
 };
 
 export const removeFromGrid = (
@@ -49,7 +54,7 @@ export const addToGrid = (
     x: number,
     y: number,
     currentCrop: Crop,
-    plantStarSeeds: boolean,
+    plantStarSeeds: boolean
 ): GridState => {
     let newGrid = [...grid.map((row) => [...row])];
 
@@ -80,7 +85,7 @@ export const addToGrid = (
                 effects: [],
                 fertilizer: null,
                 primaryCoord: [x, y],
-                starred: plantStarSeeds ? 'starred' : 'regular',
+                starred: plantStarSeeds ? "starred" : "regular",
             };
         }
     }
@@ -106,6 +111,55 @@ export const addToGrid = (
     return newGrid;
 };
 
+const extractThreeByThree = (
+    grid: GridState,
+    startX: number,
+    startY: number
+): GridCell[][] => {
+    const section: GridCell[][] = [];
+    for (let i = 0; i < 3; i++) {
+        const row: GridCell[] = [];
+        for (let j = 0; j < 3; j++) {
+            row.push(grid[startX + i][startY + j]);
+        }
+        section.push(row);
+    }
+    return section;
+};
+
+const renderThreeByThree = (
+    grid: GridState,
+    startX: number,
+    startY: number,
+    handleCellClick: (x: number, y: number) => void,
+    hover: Effect | null,
+    selectedEffects: Effect[]
+) => {
+    const section = extractThreeByThree(grid, startX, startY);
+    return (
+        <div
+            key={`${startX}-${startY}`}
+            className="three-by-three border-2 m-0.5 p-0.5"
+        >
+            {section.map((row, rowIndex) => (
+                <div key={rowIndex} className="grid-row flex flex-wrap">
+                    {row.map((cell, cellIndex) => (
+                        <GridCellComponent
+                            key={cellIndex}
+                            cellData={cell}
+                            x={startX + rowIndex}
+                            y={startY + cellIndex}
+                            onCellClick={handleCellClick}
+                            hover={hover}
+                            selectedEffects={selectedEffects}
+                        />
+                    ))}
+                </div>
+            ))}
+        </div>
+    );
+};
+
 const Grid: React.FC<GridProps> = ({
     grid,
     setGrid,
@@ -114,7 +168,7 @@ const Grid: React.FC<GridProps> = ({
     plantStarSeeds,
     hover,
     overTwentyFive,
-    selectedEffects
+    selectedEffects,
 }) => {
     const outputGridL = () => {
         let results = [];
@@ -178,31 +232,22 @@ const Grid: React.FC<GridProps> = ({
     );
 
     return (
-            
-                <div className="overflow-x-auto max-w-screen-lg pl-4 md:pl-10">
-                    <div className="grid-container flex justify-center items-start flex-wrap 
-                    w-[750px] border-black py-2 bg-olivine rounded-lg">
-                        {grid.map((row, rowIndex) => (
-                            <div
-                                key={rowIndex}
-                                className="grid-row flex flex-wrap"
-                            >
-                                {row.map((cell, cellIndex) => (
-                                    <GridCellComponent
-                                        key={cellIndex}
-                                        cellData={cell}
-                                        x={rowIndex}
-                                        y={cellIndex}
-                                        onCellClick={handleCellClick}
-                                        hover={hover}
-                                        selectedEffects={selectedEffects}
-                                    />
-                                ))}
-                            </div>
-                        ))}
-                    </div>
-                </div>
-
+        <div className="overflow-x-auto max-w-screen-lg px-0 -mt-3 lg:px-10">
+            <div className="grid-container flex justify-center items-start flex-wrap w-[700px] border-black py-2 bg-olivine rounded-lg">
+                {Array.from({ length: 3 }).map((_, i) =>
+                    Array.from({ length: 3 }).map((_, j) =>
+                        renderThreeByThree(
+                            grid,
+                            i * 3,
+                            j * 3,
+                            handleCellClick,
+                            hover,
+                            selectedEffects
+                        )
+                    )
+                )}
+            </div>
+        </div>
     );
 };
 

@@ -58,9 +58,12 @@ export const GridCellComponent: React.FC<GridCellProps> = ({
         selectedEffects.includes(effect as Effect)
     );
 
+    const isRightBoundary = (y + 1) % 3 === 0;
+    const isBottomBoundary = (x + 1) % 3 === 0;
+
     return (
         <div
-            className={`grid-cell w-[75px] h-[75px] border-2 border-black transition delay-150 m-1  relative ${
+            className={`grid-cell w-[65px] h-[65px] border-2 border-black transition delay-150 m-1  relative ${
                 cellData.effects.includes(hover as Effect)
                     ? "bg-blue-300"
                     : isSelectedEffectPresent
@@ -86,7 +89,7 @@ export const GridCellComponent: React.FC<GridCellProps> = ({
                 {cellData.effects.map((effect, index) => (
                     <div
                         key={index}
-                        className={`${effectToBorderClassMap[effect]} effect-icon m-0.5`}
+                        className={`${effectToBorderClassMap[effect]} effect-icon m-0.25`}
                     >
                         <FontAwesomeIcon
                             icon={effectToIconMap[effect]}

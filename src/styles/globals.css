@@ -119,3 +119,25 @@ select {
   font-family: 'FontAwesome', 'sans-serif';
 }
 
+
+
+.three-by-three {
+  background: rgba(200,200,200,.52);
+  border: 2px solid transparent;
+}
+
+.three-by-three:hover {
+  border:2px solid white;
+  background: rgba(170,170,170,.72);
+}
+
+
+/* Target every 3rd three-by-three for Y */
+.three-by-three:nth-child(odd){
+  background: rgba(42,42,42,.52); /* Replace with the desired background for Y */
+}
+
+.three-by-three:nth-child(odd):hover {
+  background: rgba(42,42,42,.72); /* Replace with the desired background for Y */
+}
+

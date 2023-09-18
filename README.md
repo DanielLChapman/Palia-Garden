@@ -36,7 +36,6 @@ Bugs: We are aware of certain bugs, especially concerning state refreshes with t
 ## 🔮 What's Next?
 Our roadmap includes:
 
-Introducing star seeds to increase profits.
 Incorporating fertilizers to enhance your crops.
 Unveiling a fresh and vibrant color palette.
 

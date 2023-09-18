@@ -27,6 +27,8 @@ const CropDropDown: React.FC<CropDropDownProps> = ({ leftOverCrops, type, handle
                     "Tomato",
                     "Potato",
                     "Blueberry",
+                    "Corn",
+                    "Spicy Pepper"
                 ];
             case "Seed Crafter":
                 return [
@@ -39,6 +41,8 @@ const CropDropDown: React.FC<CropDropDownProps> = ({ leftOverCrops, type, handle
                     "Wheat",
                     "Rice",
                     "Cotton",
+                    "Corn",
+                    "Spicy Pepper"
                 ];
             default:
                 return [];
