@@ -23,7 +23,7 @@ export default function Document() {
                 name="description"
                 content="Palia Garden Profit Planner. Has a garden planning section, a crafter section, with day selector to determine how much profit you can generate!"
             ></meta>
-            <body className="bg-olivine">
+            <body className="bg-cyan-9">
                 <Main />
                 <NextScript />
             </body>

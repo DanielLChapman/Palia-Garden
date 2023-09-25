@@ -46,7 +46,7 @@ function App({}) {
                         setPlantStarSeeds={setPlantStarSeeds}
                     />
                 </div>
-                <div className="flex justify-center my-4 space-x-8 xl:hidden">
+                <div className="justify-center my-4 space-x-8 hidden">
                     <label className="flex items-center space-x-2 border-2 border-white p-2 rounded-md shadow-sm hover:bg-gray-100 transition duration-200">
                         <input
                             type="checkbox"
@@ -81,7 +81,7 @@ function App({}) {
                 </div>
                 <div className="flex  p-4 justify-center  w-auto">
                     <div className="flex justify-center  h-full w-full font-montserrat">
-                        <div className="hidden xl:block border-2">
+                        <div className="hidden  border-2">
                             <div className="flex flex-wrap flex-col justify-center items-center pt-2">
                                 {/* Checkbox for Plant Star Seeds */}
                                 <div className="flex flex-col items-center m-2">

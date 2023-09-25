@@ -31,13 +31,13 @@ export const CropTable: React.FC<CropTableProps> = ({
     return (
         <>
         
-            <div className="flex flex-wrap justify-center">
+            <div className="flex flex-wrap justify-center ">
                 {Object.keys(crops).map((crop, index) => (
                     <div
                         key={index}
-                        className={`relative m-2 w-20 h-20 border-2 ${getEffectBorder(
+                        className={`relative m-2 w-[75px] h-[75px] border-2 ${getEffectBorder(
                             crops[crop].gardenBuff
-                        )} flex items-center justify-center cursor-pointer active:transform rounded-md active:scale-95 ${
+                        )} shadow-[0_0px_0px_1.5px_rgba(0,0,0,.6)] flex items-center justify-center cursor-pointer active:transform rounded-md active:scale-95 ${
                             currentCrop && crops[crop].name === currentCrop.name
                                 ? "selected"
                                 : ""
@@ -70,7 +70,7 @@ export const CropTable: React.FC<CropTableProps> = ({
                 ))}
                 <div
                     key={-5}
-                    className={`cursor-pointer relative text-4xl m-2 w-20 h-20 border-2 rounded-md effect-black flex items-center justify-center active:transform active:scale-95`}
+                    className={`cursor-pointer shadow-[0_0px_0px_1.5px_rgba(0,0,0,.6)] relative text-4xl m-2  w-[75px] h-[75px] border-2 rounded-md effect-black flex items-center justify-center active:transform active:scale-95`}
                     onClick={() => {
                         setCurrentCrop(null);
                     }}

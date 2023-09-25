@@ -62,7 +62,7 @@ export const EffectKey: React.FC<EffectKeyProps> = ({hover, setHover, selectedEf
             </div>
            */} 
             {expand && (
-                <div className="flex flex-wrap md:flex-col justify-center items-center font-montserrat">
+                <div className="flex flex-wrap lg:flex-col justify-center items-center font-montserrat">
                     {effects.map((effect, index) => {
                         const isSelectedEffectPresent = selectedEffects.some(effects => selectedEffects.includes(effect as Effect));
                         return (

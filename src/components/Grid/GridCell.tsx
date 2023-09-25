@@ -22,7 +22,7 @@ type GridCellProps = {
 export const effectToBorderClassMap: Record<string, string> = {
     "Water Retain": "effect-blue",
     "Quality Boost": "effect-orange",
-    "Grow Speed Increase": "effect-yellow",
+    "Grow Speed Increase": "effect-red",
     "Weed Block": "effect-purple",
     "Increased Yield Amount": "effect-green",
     // ... other effects
@@ -30,11 +30,11 @@ export const effectToBorderClassMap: Record<string, string> = {
 
 // For background colors (used in GridCellComponent)
 export const effectToBgClassMap: Record<string, string> = {
-    "Water Retain": "bg-blue-500",
-    "Quality Boost": "bg-orange-500",
-    "Grow Speed Increase": "bg-yellow-500",
-    "Weed Block": "bg-purple-500",
-    "Increased Yield Amount": "bg-green-500",
+    "Water Retain": "bg-blue-800",
+    "Quality Boost": "bg-orange-800",
+    "Grow Speed Increase": "bg-red-800",
+    "Weed Block": "bg-purple-800",
+    "Increased Yield Amount": "bg-green-800",
     // ... other effects
 };
 
@@ -57,9 +57,6 @@ export const GridCellComponent: React.FC<GridCellProps> = ({
     const isSelectedEffectPresent = cellData.effects.some((effect) =>
         selectedEffects.includes(effect as Effect)
     );
-
-    const isRightBoundary = (y + 1) % 3 === 0;
-    const isBottomBoundary = (x + 1) % 3 === 0;
 
     return (
         <div

@@ -26,57 +26,44 @@ body {
 }
 
 .effect-red {
-  border: 2px solid red;
-  border-color: red;
+  @apply border-2 border-red-500 text-red-600;
   box-sizing: border-box;
-  color: red;
 }
 
 .effect-orange {
-  border: 2px solid orange;
-  border-color: orange;
+  @apply border-2 border-orange-500 text-orange-600;
   box-sizing: border-box;
-  color: orange;
 }
 
 .effect-yellow {
-  border: 2px solid yellow;
-  border-color: yellow;
-  color: yellow;
+  @apply border-2 border-yellow-800 text-yellow-900;
   box-sizing: border-box;
 }
 
 .effect-green {
-  border: 2px solid green;
+  @apply border-2 border-green-700 text-green-700;
   box-sizing: border-box;
-  border-color: green;
-  color:green;
 }
 
 .effect-blue {
-  border: 2px solid blue;
+  @apply border-2 border-blue-700 text-blue-700;
   box-sizing: border-box;
-  border-color: blue;
-  color: blue;
 }
 
 .effect-purple {
-  border: 2px solid purple;
+  @apply border-2 border-purple-500 text-purple-500;
   box-sizing: border-box;
-  border-color: purple;
-  color: purple;
 }
 
 .effect-black {
-  border: 2px solid black;
+  @apply border-2 border-black text-black;
   box-sizing: border-box;
-  border-color: black;
-  color: black;
 }
 
+
 .effect-icon {
-    width: 18px;
-    height: 18px;
+    width: 16px;
+    height: 16px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -91,6 +78,7 @@ body {
     border-radius: 50%;
     transition: 1s;
     border: 3px solid;
+    box-shadow: 1px 1px 2px black;
 }
 
 .effect-name {
@@ -98,6 +86,8 @@ body {
   font-weight: 500;
   font-size:14px;
   letter-spacing: 1.05px;
+  @apply text-gray-200 mt-1
+
 }
 
 
