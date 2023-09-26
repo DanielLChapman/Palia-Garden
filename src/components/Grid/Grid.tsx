@@ -133,7 +133,8 @@ const renderThreeByThree = (
     startY: number,
     handleCellClick: (x: number, y: number) => void,
     hover: Effect | null,
-    selectedEffects: Effect[]
+    selectedEffects: Effect[],
+    currentCrop: Crop | null
 ) => {
     const section = extractThreeByThree(grid, startX, startY);
     return (
@@ -152,6 +153,7 @@ const renderThreeByThree = (
                             onCellClick={handleCellClick}
                             hover={hover}
                             selectedEffects={selectedEffects}
+                            currentCrop={currentCrop}
                         />
                     ))}
                 </div>
@@ -232,8 +234,8 @@ const Grid: React.FC<GridProps> = ({
     );
 
     return (
-        <div className="overflow-x-auto max-w-screen-lg px-0 -mt-3 lg:px-10">
-            <div className="grid-container flex justify-center items-start flex-wrap w-[700px] border-black py-2 bg-olivine rounded-lg">
+        <div className="overflow-x-auto max-w-screen-lg px-0 lg:px-10">
+            <div className="grid-container flex justify-center items-start flex-wrap w-[700px] border-2 border-gray-100 rounded-lg">
                 {Array.from({ length: 3 }).map((_, i) =>
                     Array.from({ length: 3 }).map((_, j) =>
                         renderThreeByThree(
@@ -242,7 +244,8 @@ const Grid: React.FC<GridProps> = ({
                             j * 3,
                             handleCellClick,
                             hover,
-                            selectedEffects
+                            selectedEffects,
+                            currentCrop,
                         )
                     )
                 )}

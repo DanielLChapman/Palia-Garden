@@ -146,7 +146,7 @@ function App({}) {
                             plantStarSeeds={plantStarSeeds}
                             selectedEffects={selectedEffects}
                         />
-                        <div className="hidden lg:block border-2 ">
+                        <div className="hidden lg:block border-2 rounded-lg  ">
                             <EffectKey
                                 hover={hover}
                                 setHover={setHover}

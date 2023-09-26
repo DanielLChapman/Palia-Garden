@@ -78,7 +78,7 @@ export const EffectKey: React.FC<EffectKeyProps> = ({hover, setHover, selectedEf
                                         }
                                     }}
                                     onClick={() => handleEffectClick(effect as Effect)}
-                                    className={`${effectToBorderClassMap[effect]} cursor-pointer effect-key-icon w-16 h-16 border-8 hover:scale-95 ${isSelectedEffectPresent ? 'bg-cadet-gray' : ''} hover:bg-blue-200`}
+                                    className={`${effectToBorderClassMap[effect]} cursor-pointer effect-key-icon w-[50px] h-[50px] border-8 hover:scale-95 ${isSelectedEffectPresent ? 'bg-cadet-gray' : ''} hover:bg-blue-200`}
                                 >
                                     <FontAwesomeIcon
                                         icon={effectToIconMap[effect]}

@@ -44,7 +44,6 @@ export const CropTable: React.FC<CropTableProps> = ({
                         }`}
                         onClick={() => {
                             if (currentCrop?.name === crops[crop].name) {
-                                setCurrentCrop(null);
                                 return;
                             }
                             setCurrentCrop(crops[crop]);
@@ -70,7 +69,7 @@ export const CropTable: React.FC<CropTableProps> = ({
                 ))}
                 <div
                     key={-5}
-                    className={`cursor-pointer shadow-[0_0px_0px_1.5px_rgba(0,0,0,.6)] relative text-4xl m-2  w-[75px] h-[75px] border-2 rounded-md effect-black flex items-center justify-center active:transform active:scale-95`}
+                    className={`${!currentCrop ? 'selected' : ''} cursor-pointer shadow-[0_0px_0px_1.5px_rgba(0,0,0,.6)] relative text-4xl m-2  w-[75px] h-[75px] border-2 rounded-md effect-black flex items-center justify-center active:transform active:scale-95`}
                     onClick={() => {
                         setCurrentCrop(null);
                     }}
