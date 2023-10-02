@@ -61,8 +61,8 @@ const DayContainer: React.FC<DayContainerProps> = ({ grid, overTwentyFive }) => 
     return (
         <div className="flex flex-col items-center space-y-6 font-pt-serif">
             {/* Day Selector */}
-            <div className="flex flex-row space-x-4 items-center">
-                <span className="text-lg font-semibold">
+            <div className="flex flex-row space-x-4 items-center ">
+                <span className="text-lg font-inter text-gray-2">
                     How Many Days To Simulate:
                 </span>
                 <input
@@ -73,7 +73,7 @@ const DayContainer: React.FC<DayContainerProps> = ({ grid, overTwentyFive }) => 
                     onChange={(e) => {
                         setAmountOfDays(Math.floor(parseInt(e.target.value)));
                     }}
-                    className="w-20 p-2 border-2 border-gray-300 rounded focus:outline-none focus:border-indigo-500"
+                    className="w-20 p-2 border-2 border-gray-300 font-inter rounded focus:outline-none focus:border-indigo-500"
                 />
             </div>
 

@@ -131,3 +131,4 @@ select {
   background: rgba(42,42,42,.72); /* Replace with the desired background for Y */
 }
 
+.icon-for-shadows {filter:drop-shadow(1px 1px 1px black)}

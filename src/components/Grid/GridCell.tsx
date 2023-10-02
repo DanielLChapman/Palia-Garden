@@ -87,7 +87,7 @@ export const GridCellComponent: React.FC<GridCellProps> = ({
                 <img
                     src={cellData.crop.image}
                     alt={cellData.crop.name}
-                    className="absolute inset-1/4 w-1/2 h-1/2"
+                    className="absolute inset-1/4 w-1/2 h-1/2 icon-for-shadows"
                 />
             )}
 
@@ -101,6 +101,7 @@ export const GridCellComponent: React.FC<GridCellProps> = ({
                         <FontAwesomeIcon
                             icon={effectToIconMap[effect]}
                             size="xs"
+                            className="icon-for-shadows"
                         />
                         {/*<div key={index} className={`${effectToBgClassMap[effect]} w-1/5 h-4`}></div>*/}
                     </div>
@@ -112,7 +113,7 @@ export const GridCellComponent: React.FC<GridCellProps> = ({
                 <div className="absolute bottom-1 left-1 flex items-center space-x-2">
                     <FontAwesomeIcon
                         icon={faStar}
-                        className="text-yellow-500"
+                        className="text-yellow-500 icon-for-shadows"
                     />
                 </div>
             )}

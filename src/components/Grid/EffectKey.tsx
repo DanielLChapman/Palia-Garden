@@ -83,9 +83,10 @@ export const EffectKey: React.FC<EffectKeyProps> = ({hover, setHover, selectedEf
                                     <FontAwesomeIcon
                                         icon={effectToIconMap[effect]}
                                         size="2x"  // Increase the size of the icon
+                                        className="icon-for-shadows"
                                     />
                                 </div>
-                                <span className={`text-md text-center ${effectToBorderClassMap[effect]} effect-name`}>{effect}</span>
+                                <span className={`text-md icon-for-shadows text-center ${effectToBorderClassMap[effect]} effect-name`}>{effect}</span>
                             </div>
                         )
                     } )}

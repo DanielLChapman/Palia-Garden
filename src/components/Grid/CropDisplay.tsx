@@ -21,11 +21,11 @@ const CropDisplay: React.FC<CropDisplayProps> = ({ currentCrops }) => {
     return (
         <div>
             {/* Title Line */}
-            <div className="text-center mb-4">
+            <div className="text-center mb-4 text-gray-1 font-montserrat">
                 <span className="mr-3">Generated Crops:</span>
-                <FontAwesomeIcon icon={faLeaf} className="text-dark-moss-green mr-2" />
+                <FontAwesomeIcon icon={faLeaf} className="text-dark-moss-green mr-2 icon-for-shadows" />
                 <span>= Regular</span>
-                <FontAwesomeIcon icon={faStar} className="text-yellow-500 mx-3" />
+                <FontAwesomeIcon icon={faStar} className="text-yellow-500 mx-3 icon-for-shadows"  />
                 <span>= Starred</span>
             </div>
 
@@ -33,7 +33,7 @@ const CropDisplay: React.FC<CropDisplayProps> = ({ currentCrops }) => {
                 {Object.keys(crops).map((crop, i) => (
                     <div
                         key={i}
-                        className={`relative group w-20 h-20 border-2 ${getEffectBorder(
+                        className={`relative shadow-[0_0px_0px_1.5px_rgba(0,0,0,.6)] group w-[85px] h-[85px] border-2 ${getEffectBorder(
                             crops[crop].gardenBuff
                         )} flex rounded-md items-center justify-center cursor-pointer transform transition-transform duration-150 hover:scale-105 ${i === 0 ? 'mt-[7px]' : ''}`}
                     >
@@ -42,16 +42,16 @@ const CropDisplay: React.FC<CropDisplayProps> = ({ currentCrops }) => {
                             alt={crops[crop].name}
                             width={32}
                             height={32}
-                            className="z-10"
+                            className="z-10 icon-for-shadows"
                         />
                         <div className="absolute top-1 left-1 flex items-center space-x-2">
-                            <FontAwesomeIcon icon={faStar} className="text-yellow-500" />
+                            <FontAwesomeIcon icon={faStar} className="text-yellow-500 icon-for-shadows" />
                             <span className="text-sm">{currentCrops[crops[crop].name].starred.count}</span>
                         </div>
 
                         <div className="absolute bottom-1 right-1 flex items-center space-x-2">
-                            <FontAwesomeIcon icon={faLeaf} className="text-dark-moss-green" />
-                            <span className="text-sm">{currentCrops[crops[crop].name].regular.count}</span>
+                            <FontAwesomeIcon icon={faLeaf} className="text-green-600 icon-for-shadows" />
+                            <span className="text-sm ">{currentCrops[crops[crop].name].regular.count}</span>
                         </div>
 
                         {/* Optional overlay on hover */}

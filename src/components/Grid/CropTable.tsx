@@ -54,6 +54,7 @@ export const CropTable: React.FC<CropTableProps> = ({
                             alt={crops[crop].name}
                             width={32}
                             height={32}
+                            className="icon-for-shadows"
                         />
                         <div className="absolute bottom-1 right-2 font-inter text-white font-semibold">
                             {crops[crop].growthTime}
@@ -61,7 +62,7 @@ export const CropTable: React.FC<CropTableProps> = ({
                         {cropCounts.get(crops[crop].name) &&
                         //@ts-ignore
                             cropCounts.get(crops[crop].name) > 0 && (
-                                <div className="absolute top-0.5 left-2 text-white text-sm font-inter">
+                                <div className="absolute top-0.5 left-2 text-white text-sm font-inter icon-for-shadows">
                                    <FontAwesomeIcon icon={faSeedling} beat />: {cropCounts.get(crops[crop].name)}
                                 </div>
                             )}
@@ -74,7 +75,7 @@ export const CropTable: React.FC<CropTableProps> = ({
                         setCurrentCrop(null);
                     }}
                 >
-                    <i className=" fa  ">&#xf12d;</i>
+                    <i className=" fa icon-for-shadows  ">&#xf12d;</i>
                 </div>
             </div>
         </>
