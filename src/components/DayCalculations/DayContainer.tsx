@@ -59,7 +59,7 @@ const DayContainer: React.FC<DayContainerProps> = ({ grid, overTwentyFive }) => 
     }, [grid, amountOfDays]);
 
     return (
-        <div className="flex flex-col items-center space-y-6 font-pt-serif">
+        <div className="flex flex-col items-center space-y-6 font-montserrat">
             {/* Day Selector */}
             <div className="flex flex-row space-x-4 items-center ">
                 <span className="text-lg font-inter text-gray-2">
@@ -80,7 +80,7 @@ const DayContainer: React.FC<DayContainerProps> = ({ grid, overTwentyFive }) => 
             <CropDisplay currentCrops={leftOverCrops} />
 
             <div className="flex flex-col items-center space-y-4 w-full">
-                <h3 className="text-xl font-bold">Crafters</h3>
+                <h3 className="text-xl font-bold font-inter text-gray-2">Crafters</h3>
                 <PreservationContainer
                     expectedCrops={expectedCrops}
                     leftOverCrops={leftOverCrops}

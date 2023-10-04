@@ -8,7 +8,7 @@ import {
     seedSellValues,
 } from "@/data/seedCrafter";
 import { PRESERVES_VALUES, PreserveJarInputKey } from "@/data/preservesJar";
-import ProfitSettings from "./Profits/Settings";
+import ProfitSettings from "./Profits/ProfitSettings";
 import ProfitsDisplay from "./Profits/ProfitsDisplay";
 import SeedsNeededDisplay from "./Profits/SeedsNeededDisplay";
 

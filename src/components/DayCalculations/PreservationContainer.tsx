@@ -163,6 +163,30 @@ const PreservationContainer: React.FC<PreservationProps> = ({
         setCrafters(updatedCrafters);
     };
 
+    const getAmountToAllocate = (crafter: CrafterState): number => {
+        let amount = 1;
+        if (
+            crafter.name !== null &&
+            crafter.type === "Seed Crafter" &&
+            crafter.name in SEED_CRAFTER_INPUTS
+        ) {
+            amount =
+                SEED_CRAFTER_INPUTS[crafter.name as SeedCrafterInputKey].input;
+        }
+        return amount;
+    };
+
+    const hasEnoughCropsToAllocate = (
+        crafter: CrafterState,
+        crops: CropStates
+    ): boolean => {
+        if (!crafter || crafter.name === null) {
+            return false;
+        }
+        const amount = getAmountToAllocate(crafter);
+        return amount <= crops[crafter.name][crafter.starred].count;
+    };
+
     const decreaseCrops = (id: string) => {
         const index = crafters.findIndex((crafter) => crafter.id === id);
         if (index === -1) {
@@ -173,15 +197,8 @@ const PreservationContainer: React.FC<PreservationProps> = ({
             return;
         }
 
-        let amount = 1;
-        if (
-            currentCrafter.type === "Seed Crafter" &&
-            currentCrafter.name in SEED_CRAFTER_INPUTS
-        ) {
-            amount =
-                SEED_CRAFTER_INPUTS[currentCrafter.name as SeedCrafterInputKey]
-                    .input;
-        }
+        const amount = getAmountToAllocate(currentCrafter);
+
         const updatedCrafter = { ...currentCrafter };
         const leftOverCopy = JSON.parse(JSON.stringify(leftOverCrops)); // Deep copy
         updatedCrafter.amount -= amount;
@@ -195,11 +212,14 @@ const PreservationContainer: React.FC<PreservationProps> = ({
     };
 
     const allocateCrops = (id: string) => {
+        //find current crafter
         const index = crafters.findIndex((crafter) => crafter.id === id);
         if (index === -1) {
             return;
         }
+        //set current crafter
         const currentCrafter = crafters[index];
+        //if its null, if there is no leftOverCrops with the currentCrafter crop, return
         if (
             currentCrafter.name === null ||
             !leftOverCrops[currentCrafter.name] ||
@@ -209,28 +229,9 @@ const PreservationContainer: React.FC<PreservationProps> = ({
             return;
         }
 
-        let amount = 1;
-        if (
-            currentCrafter.type === "Seed Crafter" &&
-            currentCrafter.name in SEED_CRAFTER_INPUTS
-        ) {
-            amount =
-                SEED_CRAFTER_INPUTS[currentCrafter.name as SeedCrafterInputKey]
-                    .input;
-        }
+        const amount = getAmountToAllocate(currentCrafter);
 
-        if (
-            amount >
-            leftOverCrops[currentCrafter.name][currentCrafter.starred].count
-        ) {
-            alert("Not Enough To Allocate");
-            return;
-        }
-
-        if (
-            amount >
-            leftOverCrops[currentCrafter.name][currentCrafter.starred].count
-        ) {
+        if (!hasEnoughCropsToAllocate(currentCrafter, leftOverCrops)) {
             alert("Not Enough To Allocate");
             return;
         }
@@ -247,31 +248,31 @@ const PreservationContainer: React.FC<PreservationProps> = ({
         setCrafters(updatedCrafters);
     };
 
-
     const imageMap = {
-        "Loom": "/images/crafters/loom.webp",
+        Loom: "/images/crafters/loom.webp",
         "Preservation Jar": "/images/crafters/preserves_jar.webp",
         "Seed Crafter": "/images/crafters/seed_collector.webp",
     };
-    
-    
+
     return (
-        <div className="w-full flex flex-col items-center font-pt-serif p-4 pb-2">
+        <div className="w-full flex flex-col items-center font-montserrat p-4 pb-2">
             <div className="w-[28rem] flex flex-col items-center">
                 <div className="flex justify-center space-x-4 pb-6 px-4">
                     {CRAFTER_OBJECTS.map((crafter, index) => (
                         <div
                             key={index}
-                            className="w-24 h-24 rounded-md border-dark-moss-green  border-2 cursor-pointer active:transform active:scale-95 flex justify-center items-center"
+                            className="w-24 h-24 border-cyan-2 rounded-lg border-2 cursor-pointer active:transform active:scale-95 flex justify-center items-center"
                             onClick={() => handleAddCrafter(crafter)}
                         >
                             <Image
                                 src={imageMap[crafter]}
+                                className="icon-for-shadows"
                                 alt={crafter}
                                 width={64}
                                 height={64}
                                 onError={(e) => {
-                                    e.currentTarget.src = "/path/to/placeholder.png"; 
+                                    e.currentTarget.src =
+                                        "/path/to/placeholder.png";
                                 }}
                             />
                         </div>
@@ -284,12 +285,12 @@ const PreservationContainer: React.FC<PreservationProps> = ({
                     {crafters.map((item, index) => (
                         <div
                             key={index}
-                            className="border p-4 flex flex-col relative bg-field-drab"
+                            className="border p-4 border-cyan-2 rounded-md flex flex-col relative bg-cyan-9 text-cyan-2"
                         >
-                            <div className="flex justify-between items-center mb-2">
+                            <div className="flex justify-between items-center mb-2 ">
                                 <span>{item.type}</span>
                                 <div
-                                    className="cursor-pointer"
+                                    className="cursor-pointer font-bold text-xl "
                                     onClick={() => {
                                         handleRemoveCrafter(item.id);
                                     }}
@@ -298,7 +299,7 @@ const PreservationContainer: React.FC<PreservationProps> = ({
                                 </div>
                             </div>
 
-                            <div className="mb-2 flex justify-center space-x-5">
+                            <div className="mb-2 mt-2 flex justify-center space-x-5">
                                 <CropDropDown
                                     leftOverCrops={leftOverCrops}
                                     type={item.type}
@@ -311,7 +312,7 @@ const PreservationContainer: React.FC<PreservationProps> = ({
 
                             <div className="flex justify-center space-x-5 pt-3">
                                 <button
-                                    className="px-2 py-1 rounded text-night disabled:opacity-50"
+                                    className="px-2 py-1 rounded  disabled:opacity-50"
                                     aria-disabled={
                                         item.type === null || item.amount === 0
                                     }
@@ -326,15 +327,28 @@ const PreservationContainer: React.FC<PreservationProps> = ({
                                 </button>
                                 <span className="mt-[3px]">{item.amount}</span>
                                 <button
-                                    className=" px-2 py-1 rounded text-night disabled:opacity-50"
-                                    aria-disabled={item.type === null}
-                                    disabled={item.type === null}
+                                    className=" px-2 py-1 rounded disabled:opacity-50"
+                                    aria-disabled={
+                                        item.type === null ||
+                                        !hasEnoughCropsToAllocate(
+                                            item,
+                                            leftOverCrops
+                                        )
+                                    }
+                                    disabled={
+                                        item.type === null ||
+                                        !hasEnoughCropsToAllocate(
+                                            item,
+                                            leftOverCrops
+                                        )
+                                    }
                                     onClick={() => {
                                         allocateCrops(item.id);
                                     }}
                                 >
                                     increase
                                 </button>
+                                 
                             </div>
                         </div>
                     ))}
