@@ -12,16 +12,12 @@ type CropTableProps = {
     currentCrop: Crop | null;
     setCurrentCrop: React.Dispatch<React.SetStateAction<Crop | null>>;
     cropCounts: Map<string, number>;
-    plantStarSeeds: boolean,
-    setPlantStarSeeds: React.Dispatch<React.SetStateAction<boolean>>
 };
 
 export const CropTable: React.FC<CropTableProps> = ({
     currentCrop,
     setCurrentCrop,
     cropCounts,
-    plantStarSeeds,
-    setPlantStarSeeds
 }) => {
     if (!crops) return <span>Please Refresh, something went wrong</span>;
 

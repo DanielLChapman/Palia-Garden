@@ -11,6 +11,7 @@ import { PRESERVES_VALUES, PreserveJarInputKey } from "@/data/preservesJar";
 import ProfitSettings from "./Profits/ProfitSettings";
 import ProfitsDisplay from "./Profits/ProfitsDisplay";
 import SeedsNeededDisplay from "./Profits/SeedsNeededDisplay";
+import { useSettings } from "../useSettings";
 
 type ProfitCalcType = {
     days: number;
@@ -47,13 +48,22 @@ const ProfitCalc: React.FC<ProfitCalcType> = ({
     leftOverCrops,
     crafters,
 }) => {
+    const {
+        useStarSeeds,
+        setUseStarSeeds,
+        plantStarSeeds,
+        setPlantStarSeeds,
+        overTwentyFive,
+        setOverTwentyFive,
+        reinvestSeeds,
+        setReinvestSeeds,
+    } = useSettings();
+
     const [profits, setProfits] = useState(0);
     const [seedsNeed, setSeedsNeed] = useState<initialSeedsNeededState>({});
-    const [useStarSeeds, setUseStarSeeds] = useState(true);
     const [seedsCreate, setSeedsCreate] = useState<initialSeedsCreatedState>(
         {}
     );
-    const [reinvestSeeds, setReinvestSeeds] = useState(true);
     const [costs, setCosts] = useState(0);
     const [expandSeedsNeeded, setExpandSeedsNeeded] = useState(false);
 
@@ -287,14 +297,7 @@ const ProfitCalc: React.FC<ProfitCalcType> = ({
     }, [days, crafters, leftOverCrops, useStarSeeds, reinvestSeeds]);
     return (
         <div className="space-y-2">
-            <div className=" p-4 rounded-md ">
-                <ProfitSettings
-                    useStarSeeds={useStarSeeds}
-                    setUseStarSeeds={setUseStarSeeds}
-                    reinvestSeeds={reinvestSeeds}
-                    setReinvestSeeds={setReinvestSeeds}
-                />
-            </div>
+        
             <div className=" p-4 rounded-md ">
                 <ProfitsDisplay profits={profits} costs={costs} />
             </div>

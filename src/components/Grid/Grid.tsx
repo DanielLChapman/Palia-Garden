@@ -10,6 +10,7 @@ import {
 } from "../Effects";
 import { CropCounts } from "../App";
 import { EffectKey } from "./EffectKey";
+import { useSettings } from "../useSettings";
 
 type GridProps = {
     grid: GridState;
@@ -18,8 +19,6 @@ type GridProps = {
     setCropCounts: React.Dispatch<React.SetStateAction<CropCounts>>;
     hover: Effect | null;
     selectedEffects: Effect[];
-    plantStarSeeds: boolean;
-    overTwentyFive: boolean;
 };
 
 export const removeFromGrid = (
@@ -167,11 +166,11 @@ const Grid: React.FC<GridProps> = ({
     setGrid,
     currentCrop,
     setCropCounts,
-    plantStarSeeds,
     hover,
-    overTwentyFive,
     selectedEffects,
 }) => {
+    const { plantStarSeeds, overTwentyFive } = useSettings();
+    
     const outputGridL = () => {
         let results = [];
         for (let i = 0; i < grid.length; i++) {
@@ -230,7 +229,7 @@ const Grid: React.FC<GridProps> = ({
             }
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        [grid, currentCrop]
+        [grid, currentCrop, plantStarSeeds]
     );
 
     return (
