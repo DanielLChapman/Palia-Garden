@@ -26,7 +26,7 @@ export default function Home({}) {
 
             {/* Hamburger/X button */}
             <button
-                className={`block md:hidden px-4 py-2 fixed top-6 right-8 z-50`}
+                className={`block md:hidden px-4 py-2 absolute top-6 right-8 z-50`}
                 onClick={() => setMenuOpen(!isMenuOpen)}
             >
                 <div

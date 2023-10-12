@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useSettings } from "./useSettings";
 
 type SideMenuProps = {
@@ -8,6 +8,8 @@ type SideMenuProps = {
 };
 
 function SideMenu({ isOpen, onClose, menuPage }: SideMenuProps) {
+    const [hoveredItem, setHoveredItem] = useState<string | null>(null);
+
     const {
         useStarSeeds,
         setUseStarSeeds,
@@ -26,6 +28,9 @@ function SideMenu({ isOpen, onClose, menuPage }: SideMenuProps) {
                         isOpen ? "translate-x-0" : "translate-x-full"
                     } w-full md:w-[400px] z-40`}
                 >
+                    <h2 className="pt-1 pl-8 mt-[1.35rem] text-2xl text-cyan-2">
+                        {menuPage}
+                    </h2>
                     <button
                         className={`hidden md:block px-4 py-2 fixed top-6 right-8 z-50`}
                         onClick={onClose}
@@ -47,44 +52,74 @@ function SideMenu({ isOpen, onClose, menuPage }: SideMenuProps) {
                         ></div>
                     </button>
 
-                    <div className="space-y-4 mt-14">
-                        {[
-                            {
-                                label: "Plant Star Seeds",
-                                value: plantStarSeeds,
-                                setter: setPlantStarSeeds,
-                            },
-                            {
-                                label: "Gardening Over level 25",
-                                value: overTwentyFive,
-                                setter: setOverTwentyFive,
-                            },
-                            {
-                                label: "Use Starred Seeds",
-                                value: useStarSeeds,
-                                setter: setUseStarSeeds,
-                            },
-                            {
-                                label: "Reinvest in Seeds",
-                                value: reinvestSeeds,
-                                setter: setReinvestSeeds,
-                            },
-                        ].map(({ label, value, setter }) => (
-                            <label
-                                key={label}
-                                className="flex items-center space-x-2 border-2 border-white p-2 rounded-md shadow-sm hover:bg-gray-100 transition duration-200"
-                            >
-                                <input
-                                    type="checkbox"
-                                    className="form-checkbox h-5 w-5 text-blue-600 rounded-md"
-                                    checked={value}
-                                    onChange={() => setter(!value)}
-                                />
-                                <span className="text-gray-900 font-medium">
-                                    {label}
-                                </span>
-                            </label>
-                        ))}
+                    <div className=" mt-4">
+                        <ul className=" text-sm font-medium text-gray-900 border-gray-200 rounded-lg">
+                            {[
+                                {
+                                    label: "Gardening Over level 25",
+                                    id: "overTwentyFive-checkbox",
+                                    value: overTwentyFive,
+                                    setter: setOverTwentyFive,
+                                    description:
+                                        "Sets gardening level to over 25 which greatly increases your chance of star crops.",
+                                },
+                                {
+                                    label: "Reinvest in Seeds",
+                                    id: "reinvestSeeds-checkbox",
+                                    value: reinvestSeeds,
+                                    setter: setReinvestSeeds,
+                                    description:
+                                        "Take out of total profit the cost of buying new seeds",
+                                },
+                                {
+                                    label: "Plant Star Seeds",
+                                    id: "plantStarSeeds-checkbox",
+                                    value: plantStarSeeds,
+                                    setter: setPlantStarSeeds,
+                                    description: "Plants star crops using star seeds. Crafted star seeds are prioritized for planting over being sold."
+                                },
+                                {
+                                    label: "Use Starred Seeds",
+                                    id: "useStarSeeds-checkbox",
+                                    value: useStarSeeds,
+                                    setter: setUseStarSeeds,
+                                    description: "Prioritize using starred seeds for all plantings, both regular and starred, instead of selling them to buy normal seeds."
+                                },
+                            ].map(
+                                ({ label, id, value, setter, description }) => (
+                                    <li
+                                        key={id}
+                                        className="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-600 relative"
+                                        onMouseEnter={() => setHoveredItem(id)}
+                                        onMouseLeave={() =>
+                                            setHoveredItem(null)
+                                        }
+                                    >
+                                        <div className="flex items-center pl-6">
+                                            <label
+                                                htmlFor={id}
+                                                className="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                                            >
+                                                {label}
+                                            </label>
+                                            <input
+                                                id={id}
+                                                type="checkbox"
+                                                className="w-4 h-4 text-blue-600 mr-14
+                                            focus:ring-blue-600ring-offset-gray-700 focus:ring-offset-gray-700 focus:ring-2 bg-gray-600 border-gray-500"
+                                                checked={value}
+                                                onChange={() => setter(!value)}
+                                            />
+                                        </div>
+                                        {hoveredItem === id && (
+                                            <div className="absolute left-6 top-full mt-2 p-2 w-56 text-sm bg-white border border-gray-300 rounded shadow-lg z-50">
+                                                {description}
+                                            </div>
+                                        )}
+                                    </li>
+                                )
+                            )}
+                        </ul>
                     </div>
                 </div>
             )}
