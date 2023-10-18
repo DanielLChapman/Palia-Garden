@@ -80,11 +80,26 @@ export const checkSelfForEffects = (
 ): GridState => {
     const newGrid = [...grid.map((row) => [...row])];
     const currentCrop = newGrid[x][y].crop;
+    const cell = newGrid[x][y];
 
-    if (!currentCrop) return newGrid;
+    if (!currentCrop) {
+        if (!cell.fertilizer) {
+            return newGrid;
+        } else {
+            if (!newGrid[x ][y ].effects.includes(cell.fertilizer.gardenBuff)) {
+                newGrid[x][y].effects.push(cell.fertilizer.gardenBuff);
+            }
+            return newGrid;
+        }
+    }
 
     const effectsCount = countNeighborEffects(newGrid, x, y, width, height);
-    const requiredForBuffs = currentCrop.requiredForBuffs || 1;
+    const requiredForBuffs = currentCrop?.requiredForBuffs || 1;
+
+    if (cell.fertilizer) {
+        let effect = cell.fertilizer.gardenBuff;
+        effectsCount.set(effect, requiredForBuffs);
+    }
 
     for (let i = 0; i < width; i++) {
         for (let j = 0; j < height; j++) {
@@ -158,52 +173,6 @@ export const applyEffect: (
 
     return newGrid;
 };
-
-/*
-export const removeEffect: (
-    grid: GridState,
-    x: number,
-    y: number,
-    effect: Effect
-) => GridState = (grid, x, y, effect) => {
-    const newGrid = [...grid.map((row) => [...row])];
-
-    const neighbors = [
-        [x + 1, y],
-        [x - 1, y],
-        [x, y + 1],
-        [x, y - 1],
-    ];
-
-    for (let [nx, ny] of neighbors) {
-        if (newGrid[nx] && newGrid[nx][ny]) {
-            let shouldRemove = true;
-            for (let [mx, my] of neighbors) {
-                if (mx !== x || my !== y) {
-                    // Exclude the current item
-                    if (
-                        newGrid[mx] &&
-                        newGrid[mx][my] &&
-                        newGrid[mx][my].effects &&
-                        newGrid[mx][my].effects.includes(effect)
-                    ) {
-                        shouldRemove = false;
-                        break;
-                    }
-                }
-            }
-            if (shouldRemove) {
-                const effectIndex = newGrid[nx][ny].effects.indexOf(effect);
-                if (effectIndex !== -1) {
-                    grid[nx][ny].effects.splice(effectIndex, 1);
-                }
-            }
-        }
-    }
-
-    return newGrid;
-};
-*/
 
 export const removeEffect: (
     grid: GridState,

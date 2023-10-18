@@ -266,6 +266,9 @@ const ProfitCalc: React.FC<ProfitCalcType> = ({
     //UPDATE THAT LATER
     const calculateRebuy = (seedsNeeded: initialSeedsNeededState) => {
         let total = 0;
+        if (!reinvestSeeds) {
+            return total;
+        }
         Object.keys(seedsNeeded).forEach((x) => {
             if (seedsNeeded[x].amounts.regular_amount > 0) {
                 total +=

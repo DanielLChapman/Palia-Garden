@@ -1,14 +1,11 @@
 import { Crop } from "@/data/crops";
 import { CellEffects } from "./Effects";
-
-type FertilizerType = {
-    name: string
-}
+import { Fertilizer } from "@/data/fertilizer";
 
 export type GridCell = {
     crop: Crop | null;
     effects: CellEffects; // Array of effect names, e.g., ["Water Retain", "Quality Boost"]
-    fertilizer: FertilizerType | null;
+    fertilizer: Fertilizer | null
     primaryCoord: [number, number] | null;
     starred?: 'regular' | 'starred'
 };

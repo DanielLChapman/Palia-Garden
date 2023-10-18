@@ -10,6 +10,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { Effect } from "../Effects";
 import { Crop } from "@/data/crops";
+import { Fertilizer } from "@/data/fertilizer";
 
 type GridCellProps = {
     cellData: GridCell;
@@ -19,6 +20,7 @@ type GridCellProps = {
     hover: Effect | null;
     selectedEffects: Effect[];
     currentCrop: Crop | null;
+    fertilizer?: Fertilizer
 };
 
 export const effectToBorderClassMap: Record<string, string> = {

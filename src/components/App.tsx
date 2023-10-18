@@ -25,6 +25,7 @@ function App({}) {
     const updateGrid = (newGrid: GridState) => {
         setGrid((prevGrid) => {
             if (newGrid !== prevGrid) {
+                console.log(newGrid)
                 return newGrid;
             }
             return prevGrid;

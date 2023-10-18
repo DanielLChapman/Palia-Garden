@@ -11,6 +11,7 @@ import {
 import { CropCounts } from "../App";
 import { EffectKey } from "./EffectKey";
 import { useSettings } from "../useSettings";
+import { Fertilizer } from "@/data/fertilizer";
 
 type GridProps = {
     grid: GridState;
@@ -153,6 +154,7 @@ const renderThreeByThree = (
                             hover={hover}
                             selectedEffects={selectedEffects}
                             currentCrop={currentCrop}
+                            fertilizer={cell.fertilizer || undefined}
                         />
                     ))}
                 </div>
@@ -160,6 +162,94 @@ const renderThreeByThree = (
         </div>
     );
 };
+
+//FERTILIZER
+
+export const addFertilizerToGrid = (
+    grid: GridState,
+    x: number,
+    y: number,
+    currentFertilizer: Fertilizer,
+): GridState => {
+    // Create a new grid from the current state to avoid direct mutation.
+    let newGrid = [...grid.map(row => [...row])];
+
+    // If there's no fertilizer selected, return the grid as is.
+    if (!currentFertilizer) return newGrid;
+
+    // Retrieve the current cell and crop.
+    let currentCell = newGrid[x][y];
+    let currentCrop = currentCell.crop;
+
+    // If there's no crop in the selected cell, return the grid as i
+    if (!currentCrop) {
+        newGrid[x][y].fertilizer = currentFertilizer;
+        newGrid = checkSelfForEffects(
+            newGrid,
+            x,
+            y,
+            1,
+            1
+        );
+        return newGrid;
+    }
+
+    // Determine the primary coordinates for the crop.
+    const [px, py] = currentCell.primaryCoord || [x, y];
+
+    // Apply the fertilizer to all cells occupied by the crop.
+    for (let i = 0; i < currentCrop.width; i++) {
+        for (let j = 0; j < currentCrop.height; j++) {
+            // Set the fertilizer for each cell.
+            newGrid[px + i][py + j].fertilizer = currentFertilizer;
+        }
+    }
+
+    newGrid = checkSelfForEffects(
+        newGrid,
+        x,
+        y,
+        currentCrop.width,
+        currentCrop.height
+    );
+
+    // Return the updated grid.
+    return newGrid;
+};
+
+
+export const removeFertilizerFromGrid = (
+    grid: GridState,
+    x: number,
+    y: number,
+): GridState => {
+    let newGrid = [...grid.map((row) => [...row])];
+
+    //check if there is a current crop
+    let currentCell = grid[x][y];
+
+    //if no, just set it to null
+    if (!currentCell.crop || (currentCell.crop.width === 1 && currentCell.crop.height === 1)) {
+        if (currentCell.fertilizer) {
+            newGrid = removeEffect(newGrid, x,y, currentCell.fertilizer?.gardenBuff);
+        }
+        newGrid[x][y].fertilizer = null;
+    }
+
+    //else
+    const [px, py] = newGrid[x][y].primaryCoord || [x, y];
+    for (let i = 0; i < (currentCell.crop?.width || 1); i++) {
+        for (let j = 0; j < (currentCell.crop?.height || 1); j++) {
+            newGrid[px + i][py + j].fertilizer = null;
+            if (currentCell.fertilizer) {
+                newGrid = removeEffect(newGrid, px + i, py + j, currentCell.fertilizer?.gardenBuff);
+            }
+        }
+    }
+
+    return newGrid;
+}
+
 
 const Grid: React.FC<GridProps> = ({
     grid,
