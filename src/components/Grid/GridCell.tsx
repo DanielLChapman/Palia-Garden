@@ -11,6 +11,7 @@ import {
 import { Effect } from "../Effects";
 import { Crop } from "@/data/crops";
 import { Fertilizer } from "@/data/fertilizer";
+import { generateStars } from "./GenerateStars";
 
 type GridCellProps = {
     cellData: GridCell;
@@ -20,7 +21,7 @@ type GridCellProps = {
     hover: Effect | null;
     selectedEffects: Effect[];
     currentCrop: Crop | null;
-    fertilizer?: Fertilizer
+    fertilizer?: Fertilizer;
 };
 
 export const effectToBorderClassMap: Record<string, string> = {
@@ -50,6 +51,15 @@ export const effectToIconMap: Record<string, IconDefinition> = {
     "Increased Yield Amount": faArrowUpWideShort,
 };
 
+export const effectToFertilizerClassMap: Record<string, string> = {
+    "Water Retain": "fertilizer-blue",
+    "Quality Boost": "fertilizer-orange",
+    "Grow Speed Increase": "fertilizer-red",
+    "Weed Block": "fertilizer-purple",
+    "Increased Yield Amount": "fertilizer-green",
+    // ... other effects
+};
+
 export const GridCellComponent: React.FC<GridCellProps> = ({
     cellData,
     x,
@@ -63,22 +73,37 @@ export const GridCellComponent: React.FC<GridCellProps> = ({
         selectedEffects.includes(effect as Effect)
     );
 
+    const renderFertilizerStars = () => {
+        if (cellData.fertilizer) {
+            // Fertilizer is present, get the corresponding color class
+            const colorClass =
+                effectToFertilizerClassMap[cellData.fertilizer.gardenBuff];
+            const stars = generateStars(10, colorClass); // generate 20 stars
+            return <>{stars}</>;
+        }
+        return null; // No fertilizer, don't render stars
+    };
+
     return (
         <div
             className={`grid-cell w-[65px] h-[65px] border-2 border-black transition delay-75 m-1 relative ${
                 currentCrop === null
-                  ? (cellData.crop ? "hover:bg-red-500 hover:delay-0" : "hover:bg-green-500 hover:delay-0")
-                  : (currentCrop.name !== cellData.crop?.name && cellData.crop
-                      ? "hover:bg-red-500 hover:delay-0"
-                      : (cellData.crop === null ? "hover:bg-green-500 hover:delay-0" : ""))
-              }
+                    ? cellData.crop
+                        ? "hover:bg-red-500 hover:delay-0"
+                        : "hover:bg-green-500 hover:delay-0"
+                    : currentCrop.name !== cellData.crop?.name && cellData.crop
+                    ? "hover:bg-red-500 hover:delay-0"
+                    : cellData.crop === null
+                    ? "hover:bg-green-500 hover:delay-0"
+                    : ""
+            }
                ${
-                cellData.effects.includes(hover as Effect)
-                    ? "bg-blue-300"
-                    : isSelectedEffectPresent
-                    ? "bg-cadet-gray"
-                    : "bg-field-drab"
-            }`}
+                   cellData.effects.includes(hover as Effect)
+                       ? "bg-blue-300"
+                       : isSelectedEffectPresent
+                       ? "bg-cadet-gray"
+                       : "bg-field-drab"
+               }`}
             onClick={() => {
                 onCellClick(x, y);
             }}
@@ -119,6 +144,7 @@ export const GridCellComponent: React.FC<GridCellProps> = ({
                     />
                 </div>
             )}
+
         </div>
     );
 };

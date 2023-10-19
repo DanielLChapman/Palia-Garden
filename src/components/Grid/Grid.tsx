@@ -68,13 +68,30 @@ export const addToGrid = (
         return newGrid;
     }
 
+    let fertilizerCount = new Map();
+
     // Remove overlapping crops
     for (let i = x; i < x + currentCrop.width; i++) {
         for (let j = y; j < y + currentCrop.height; j++) {
             if (newGrid[i][j].crop !== null) {
                 newGrid = removeFromGrid(newGrid, i, j);
             }
+            if (newGrid[i][j].fertilizer) {
+                fertilizerCount.set(newGrid[i][j].fertilizer?.gardenBuff, (fertilizerCount.get(newGrid[i][j].fertilizer?.gardenBuff) || 0) + 1);
+            }
         }
+    }
+
+    let needFertilizer = currentCrop.width * currentCrop.height;
+    if (fertilizerCount.size > 1 || (fertilizerCount.size === 1 && needFertilizer !== fertilizerCount.values().next().value )) {
+        for (let i = x; i < x + currentCrop.width; i++) {
+            for (let j = y; j < y + currentCrop.height; j++) {
+                if (newGrid[i][j].fertilizer) {
+                    newGrid = removeFertilizerFromGrid(newGrid, i, j);
+                }
+            }
+        }
+    
     }
 
     // Place the new crop
