@@ -137,23 +137,23 @@ select {
 .icon-for-shadows {filter:drop-shadow(1px 1px 1px black)}
 
 /* CSS for the colors of different fertilizer types */
-.fertilizer-blue .fa-star {
+.fertilizer-blue{
   color: blue; /* You can replace this with any shade of blue you prefer, in hex, rgba, or other color formats */
 }
 
-.fertilizer-orange .fa-star {
+.fertilizer-orange  {
   color: orange; /* You can replace this with any shade of orange you prefer */
 }
 
-.fertilizer-red .fa-star {
+.fertilizer-red . {
   color: red; /* You can replace this with any shade of red you prefer */
 }
 
-.fertilizer-purple .fa-star {
+.fertilizer-purple  {
   color: purple; /* You can replace this with any shade of purple you prefer */
 }
 
-.fertilizer-green .fa-star {
+.fertilizer-green {
   color: green; /* You can replace this with any shade of green you prefer */
 }
 

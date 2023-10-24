@@ -16,7 +16,7 @@ export function useGrid(): GridState {
     const createEmptyCell = (): GridCell => {
         let t: GridCell = {
             crop: null,
-            effects: [],
+            effects: ["Increased Yield Amount"],
             fertilizer: {
                 name: "Harvest Boost Fertilizer",
                 sources: ["Worm Farm", "Glow Worm Farm"],

@@ -6,6 +6,7 @@ import {
     faForward,
     IconDefinition,
     faBan,
+    faPoo,
     faArrowUpWideShort,
 } from "@fortawesome/free-solid-svg-icons";
 import { Effect } from "../Effects";
@@ -78,8 +79,16 @@ export const GridCellComponent: React.FC<GridCellProps> = ({
             // Fertilizer is present, get the corresponding color class
             const colorClass =
                 effectToFertilizerClassMap[cellData.fertilizer.gardenBuff];
-            const stars = generateStars(10, colorClass); // generate 20 stars
-            return <>{stars}</>;
+
+            return (
+                <div className={`${colorClass} absolute bottom-0 left-0 effect-icon m-0.25`}>
+                    <FontAwesomeIcon
+                        icon={faPoo}
+                        size="xs"
+                        className="icon-for-shadows"
+                    />
+                </div>
+            );
         }
         return null; // No fertilizer, don't render stars
     };
@@ -145,6 +154,7 @@ export const GridCellComponent: React.FC<GridCellProps> = ({
                 </div>
             )}
 
+            {renderFertilizerStars()}
         </div>
     );
 };
