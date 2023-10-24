@@ -43,7 +43,7 @@ export const fertilizers: FertilizerTyping = {
         cost: 2, // Cost per unit
         effect: "Stops weeds from appearing",
         gardenBuff: "Weed Block",
-        image: '/images/fertilizers/WeedBlock_Fertilizer.webp',
+        image: '/images/fertilizers/WeedBlock_Fertilizer.png',
     },
     HydrateProFertilizer: {
         name: "Hydrate Pro Fertilizer",

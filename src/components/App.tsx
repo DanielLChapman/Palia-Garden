@@ -10,6 +10,8 @@ import DayContainer from "./DayCalculations/DayContainer";
 import { EffectKey } from "./Grid/EffectKey";
 import { Effect } from "./Effects";
 import { SettingsProvider } from "./SettingsProvider";
+import { Fertilizer } from "@/data/fertilizer";
+import { FertilizerTable } from "./Grid/FertilizerTable";
 
 export type CropCounts = Map<string, number>;
 
@@ -17,10 +19,15 @@ function App({}) {
     const initialState = useGrid();
     const [grid, setGrid] = useState(initialState);
     const [currentCrop, setCurrentCrop] = useState<Crop | null>(null);
+    const [currentFertilizer, setCurrentFertilizer] =
+        useState<Fertilizer | null>(null);
     const [hover, setHover] = useState<Effect | null>(null);
     const [selectedEffects, setSelectedEffects] = useState<Effect[]>([]);
 
     const [cropCounts, setCropCounts] = useState<CropCounts>(new Map());
+    const [displayTable, setDisplayTable] = useState<"Crops" | "Fertilizer">(
+        "Crops"
+    );
 
     const updateGrid = (newGrid: GridState) => {
         setGrid((prevGrid) => {
@@ -36,11 +43,21 @@ function App({}) {
             {/* grid */}
             <div className="flex flex-col space-y-4 md:space-y-0 md:space-x-4 justify-center">
                 <div className="flex-1 p-4 justify-center flex">
-                    <CropTable
-                        currentCrop={currentCrop}
-                        setCurrentCrop={setCurrentCrop}
-                        cropCounts={cropCounts}
-                    />
+                    {displayTable === "Crops" && (
+                        <CropTable
+                            currentCrop={currentCrop}
+                            setCurrentCrop={setCurrentCrop}
+                            cropCounts={cropCounts}
+                            setDisplayTable={setDisplayTable}
+                        />
+                    )}
+                    {displayTable === "Fertilizer" && (
+                        <FertilizerTable
+                            currentFertilizer={currentFertilizer}
+                            setCurrentFertilizer={setCurrentFertilizer}
+                            setDisplayTable={setDisplayTable}
+                        />
+                    )}
                 </div>
 
                 <div className="flex lg:hidden p-r justify-center flex-1">
