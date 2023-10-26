@@ -81,7 +81,7 @@ export const checkSelfForEffects = (
     const newGrid = [...grid.map((row) => [...row])];
     const currentCrop = newGrid[x][y].crop;
     const cell = newGrid[x][y];
-
+/* 
     if (!currentCrop) {
         if (!cell.fertilizer) {
             return newGrid;
@@ -91,7 +91,7 @@ export const checkSelfForEffects = (
             }
             return newGrid;
         }
-    }
+    } */
 
     const effectsCount = countNeighborEffects(newGrid, x, y, width, height);
     const requiredForBuffs = currentCrop?.requiredForBuffs || 1;

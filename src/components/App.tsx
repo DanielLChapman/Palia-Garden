@@ -20,7 +20,7 @@ function App({}) {
     const [grid, setGrid] = useState(initialState);
     const [currentCrop, setCurrentCrop] = useState<Crop | null>(null);
     const [currentFertilizer, setCurrentFertilizer] =
-        useState<Fertilizer | null>(null);
+        useState<Fertilizer | null >(null);
     const [hover, setHover] = useState<Effect | null>(null);
     const [selectedEffects, setSelectedEffects] = useState<Effect[]>([]);
 
@@ -37,7 +37,6 @@ function App({}) {
             return prevGrid;
         });
     };
-
     return (
         <main className=" py-6 pt-0 ">
             {/* grid */}
@@ -75,6 +74,8 @@ function App({}) {
                             setGrid={updateGrid}
                             currentCrop={currentCrop}
                             setCropCounts={setCropCounts}
+                            currentFertilizer={currentFertilizer}
+                            displayTable={displayTable}
                             hover={hover}
                             selectedEffects={selectedEffects}
                         />

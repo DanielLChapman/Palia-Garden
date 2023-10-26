@@ -17,6 +17,8 @@ type GridProps = {
     grid: GridState;
     setGrid: (newGrid: GridState) => void;
     currentCrop: Crop | null;
+    currentFertilizer: Fertilizer | null;
+    displayTable: "Fertilizer" | "Crops";
     setCropCounts: React.Dispatch<React.SetStateAction<CropCounts>>;
     hover: Effect | null;
     selectedEffects: Effect[];
@@ -77,13 +79,22 @@ export const addToGrid = (
                 newGrid = removeFromGrid(newGrid, i, j);
             }
             if (newGrid[i][j].fertilizer) {
-                fertilizerCount.set(newGrid[i][j].fertilizer?.gardenBuff, (fertilizerCount.get(newGrid[i][j].fertilizer?.gardenBuff) || 0) + 1);
+                fertilizerCount.set(
+                    newGrid[i][j].fertilizer?.gardenBuff,
+                    (fertilizerCount.get(
+                        newGrid[i][j].fertilizer?.gardenBuff
+                    ) || 0) + 1
+                );
             }
         }
     }
 
     let needFertilizer = currentCrop.width * currentCrop.height;
-    if (fertilizerCount.size > 1 || (fertilizerCount.size === 1 && needFertilizer !== fertilizerCount.values().next().value )) {
+    if (
+        fertilizerCount.size > 1 ||
+        (fertilizerCount.size === 1 &&
+            needFertilizer !== fertilizerCount.values().next().value)
+    ) {
         for (let i = x; i < x + currentCrop.width; i++) {
             for (let j = y; j < y + currentCrop.height; j++) {
                 if (newGrid[i][j].fertilizer) {
@@ -91,7 +102,6 @@ export const addToGrid = (
                 }
             }
         }
-    
     }
 
     // Place the new crop
@@ -186,10 +196,10 @@ export const addFertilizerToGrid = (
     grid: GridState,
     x: number,
     y: number,
-    currentFertilizer: Fertilizer,
+    currentFertilizer: Fertilizer
 ): GridState => {
     // Create a new grid from the current state to avoid direct mutation.
-    let newGrid = [...grid.map(row => [...row])];
+    let newGrid = [...grid.map((row) => [...row])];
 
     // If there's no fertilizer selected, return the grid as is.
     if (!currentFertilizer) return newGrid;
@@ -197,17 +207,16 @@ export const addFertilizerToGrid = (
     // Retrieve the current cell and crop.
     let currentCell = newGrid[x][y];
     let currentCrop = currentCell.crop;
+    let cellFertilizer = currentCell.fertilizer;
 
-    // If there's no crop in the selected cell, return the grid as i
+    if (cellFertilizer) {
+        newGrid = removeFertilizerFromGrid(newGrid,x,y);
+    }
+
+    // If there's no fertilizer in the selected cell, return the grid as i
     if (!currentCrop) {
         newGrid[x][y].fertilizer = currentFertilizer;
-        newGrid = checkSelfForEffects(
-            newGrid,
-            x,
-            y,
-            1,
-            1
-        );
+        newGrid = checkSelfForEffects(newGrid, x, y, 1, 1);
         return newGrid;
     }
 
@@ -218,6 +227,9 @@ export const addFertilizerToGrid = (
     for (let i = 0; i < currentCrop.width; i++) {
         for (let j = 0; j < currentCrop.height; j++) {
             // Set the fertilizer for each cell.
+            if (newGrid[px + i][py + j].fertilizer) {
+                newGrid = removeFertilizerFromGrid(newGrid,px+i,py+j);
+            }
             newGrid[px + i][py + j].fertilizer = currentFertilizer;
         }
     }
@@ -234,11 +246,10 @@ export const addFertilizerToGrid = (
     return newGrid;
 };
 
-
 export const removeFertilizerFromGrid = (
     grid: GridState,
     x: number,
-    y: number,
+    y: number
 ): GridState => {
     let newGrid = [...grid.map((row) => [...row])];
 
@@ -246,9 +257,17 @@ export const removeFertilizerFromGrid = (
     let currentCell = grid[x][y];
 
     //if no, just set it to null
-    if (!currentCell.crop || (currentCell.crop.width === 1 && currentCell.crop.height === 1)) {
+    if (
+        !currentCell.crop ||
+        (currentCell.crop.width === 1 && currentCell.crop.height === 1)
+    ) {
         if (currentCell.fertilizer) {
-            newGrid = removeEffect(newGrid, x,y, currentCell.fertilizer?.gardenBuff);
+            newGrid = removeEffect(
+                newGrid,
+                x,
+                y,
+                currentCell.fertilizer?.gardenBuff
+            );
         }
         newGrid[x][y].fertilizer = null;
     }
@@ -259,25 +278,31 @@ export const removeFertilizerFromGrid = (
         for (let j = 0; j < (currentCell.crop?.height || 1); j++) {
             newGrid[px + i][py + j].fertilizer = null;
             if (currentCell.fertilizer) {
-                newGrid = removeEffect(newGrid, px + i, py + j, currentCell.fertilizer?.gardenBuff);
+                newGrid = removeEffect(
+                    newGrid,
+                    px + i,
+                    py + j,
+                    currentCell.fertilizer?.gardenBuff
+                );
             }
         }
     }
 
     return newGrid;
-}
-
+};
 
 const Grid: React.FC<GridProps> = ({
     grid,
     setGrid,
     currentCrop,
     setCropCounts,
+    currentFertilizer,
+    displayTable,
     hover,
     selectedEffects,
 }) => {
     const { plantStarSeeds, overTwentyFive } = useSettings();
-    
+
     const outputGridL = () => {
         let results = [];
         for (let i = 0; i < grid.length; i++) {
@@ -323,21 +348,33 @@ const Grid: React.FC<GridProps> = ({
             if (!grid) {
                 return;
             }
-            //handle click
-            if (currentCrop) {
-                let t = addToGrid(grid, x, y, currentCrop, plantStarSeeds);
-                recountGrid(t);
-                setGrid(t);
+            if (displayTable === "Crops") {
+                //handle click
+                if (currentCrop) {
+                    let t = addToGrid(grid, x, y, currentCrop, plantStarSeeds);
+                    recountGrid(t);
+                    setGrid(t);
+                } else {
+                    //remove
+                    const newGrid = removeFromGrid(grid, x, y);
+                    recountGrid(newGrid);
+                    setGrid(newGrid);
+                }
             } else {
-                //remove
-                const newGrid = removeFromGrid(grid, x, y);
-                recountGrid(newGrid);
-                setGrid(newGrid);
+                //removes surounding effects, doesn't replace the fertilizer, and doesn't add
+                if (currentFertilizer) {
+                    let t = addFertilizerToGrid(grid,x,y,currentFertilizer);
+                    setGrid(t);
+                } else {
+                    const newGrid = removeFertilizerFromGrid(grid, x, y);
+                    setGrid(newGrid);
+                }
             }
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        [grid, currentCrop, plantStarSeeds]
+        [grid, currentCrop, currentFertilizer, displayTable, plantStarSeeds]
     );
+
 
     return (
         <div className="overflow-x-auto max-w-screen-lg px-0 lg:px-10">
@@ -351,7 +388,7 @@ const Grid: React.FC<GridProps> = ({
                             handleCellClick,
                             hover,
                             selectedEffects,
-                            currentCrop,
+                            currentCrop
                         )
                     )
                 )}
