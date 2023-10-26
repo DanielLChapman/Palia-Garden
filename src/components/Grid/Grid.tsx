@@ -223,6 +223,8 @@ export const addFertilizerToGrid = (
     // Determine the primary coordinates for the crop.
     const [px, py] = currentCell.primaryCoord || [x, y];
 
+    console.log(px, py, currentCrop.width, currentCrop.height);
+
     // Apply the fertilizer to all cells occupied by the crop.
     for (let i = 0; i < currentCrop.width; i++) {
         for (let j = 0; j < currentCrop.height; j++) {
@@ -236,8 +238,8 @@ export const addFertilizerToGrid = (
 
     newGrid = checkSelfForEffects(
         newGrid,
-        x,
-        y,
+        px,
+        py,
         currentCrop.width,
         currentCrop.height
     );
@@ -264,8 +266,8 @@ export const removeFertilizerFromGrid = (
         if (currentCell.fertilizer) {
             newGrid = removeEffect(
                 newGrid,
-                x,
-                y,
+                px,
+                py,
                 currentCell.fertilizer?.gardenBuff
             );
         }

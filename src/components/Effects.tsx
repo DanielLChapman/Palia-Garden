@@ -81,17 +81,6 @@ export const checkSelfForEffects = (
     const newGrid = [...grid.map((row) => [...row])];
     const currentCrop = newGrid[x][y].crop;
     const cell = newGrid[x][y];
-/* 
-    if (!currentCrop) {
-        if (!cell.fertilizer) {
-            return newGrid;
-        } else {
-            if (!newGrid[x ][y ].effects.includes(cell.fertilizer.gardenBuff)) {
-                newGrid[x][y].effects.push(cell.fertilizer.gardenBuff);
-            }
-            return newGrid;
-        }
-    } */
 
     const effectsCount = countNeighborEffects(newGrid, x, y, width, height);
     const requiredForBuffs = currentCrop?.requiredForBuffs || 1;
