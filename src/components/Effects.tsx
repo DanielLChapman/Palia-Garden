@@ -90,8 +90,10 @@ export const checkSelfForEffects = (
         effectsCount.set(effect, requiredForBuffs);
     }
 
+
     for (let i = 0; i < width; i++) {
         for (let j = 0; j < height; j++) {
+            newGrid[x + i][y + j].effects = [];
             for (let [currentEffect, count] of effectsCount.entries()) {
                 if (
                     count >= requiredForBuffs &&
@@ -102,7 +104,6 @@ export const checkSelfForEffects = (
             }
         }
     }
-
     return newGrid;
 };
 

@@ -209,11 +209,23 @@ export const addFertilizerToGrid = (
     let currentCrop = currentCell.crop;
     let cellFertilizer = currentCell.fertilizer;
 
+    //if fertilizer is already there
+    //if its the same fertilizer, just ignore the double click
+    //otherwise
+    //remove it, and the called function will also check the surrounding crops for fertilizers as well and remove them
     if (cellFertilizer) {
+        if (cellFertilizer.name === currentFertilizer.name) {
+            return newGrid;
+        } 
         newGrid = removeFertilizerFromGrid(newGrid,x,y);
     }
 
-    // If there's no fertilizer in the selected cell, return the grid as i
+    //Otherwise there is no fertilizer
+    //Check the currentCrop, if there is no currentCrop, we can add the fertilizer to the spot, and then check the effect
+
+    //if there is a crop, we need to double check the width and height of the crop. 
+    //the fertilizer removal should have cleared the fertilizer out on all of the crops
+    //so we just have to loop through, add the fertilizer to the correct spots and set the effects
     if (!currentCrop) {
         newGrid[x][y].fertilizer = currentFertilizer;
         newGrid = checkSelfForEffects(newGrid, x, y, 1, 1);
@@ -223,15 +235,10 @@ export const addFertilizerToGrid = (
     // Determine the primary coordinates for the crop.
     const [px, py] = currentCell.primaryCoord || [x, y];
 
-    console.log(px, py, currentCrop.width, currentCrop.height);
-
     // Apply the fertilizer to all cells occupied by the crop.
     for (let i = 0; i < currentCrop.width; i++) {
         for (let j = 0; j < currentCrop.height; j++) {
             // Set the fertilizer for each cell.
-            if (newGrid[px + i][py + j].fertilizer) {
-                newGrid = removeFertilizerFromGrid(newGrid,px+i,py+j);
-            }
             newGrid[px + i][py + j].fertilizer = currentFertilizer;
         }
     }
@@ -260,35 +267,37 @@ export const removeFertilizerFromGrid = (
 
     //if no, just set it to null
     if (
-        !currentCell.crop ||
-        (currentCell.crop.width === 1 && currentCell.crop.height === 1)
+        !currentCell.crop
     ) {
-        if (currentCell.fertilizer) {
-            newGrid = removeEffect(
-                newGrid,
-                px,
-                py,
-                currentCell.fertilizer?.gardenBuff
-            );
-        }
+        
         newGrid[x][y].fertilizer = null;
+        newGrid = checkSelfForEffects(
+            newGrid,
+            x,
+            y,
+            1,
+            1
+        );
+        return newGrid;
     }
 
+    let cropWidth = (currentCell.crop?.width || 1);
+    let cropHeight = (currentCell.crop?.height || 1); 
     //else
     const [px, py] = newGrid[x][y].primaryCoord || [x, y];
-    for (let i = 0; i < (currentCell.crop?.width || 1); i++) {
-        for (let j = 0; j < (currentCell.crop?.height || 1); j++) {
+    for (let i = 0; i < cropWidth; i++) {
+        for (let j = 0; j < cropHeight; j++) {
             newGrid[px + i][py + j].fertilizer = null;
-            if (currentCell.fertilizer) {
-                newGrid = removeEffect(
-                    newGrid,
-                    px + i,
-                    py + j,
-                    currentCell.fertilizer?.gardenBuff
-                );
-            }
         }
     }
+
+    newGrid = checkSelfForEffects(
+        newGrid,
+        px,
+        py,
+        cropWidth,
+        cropHeight
+    );
 
     return newGrid;
 };
