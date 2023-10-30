@@ -43,6 +43,7 @@ export const removeFromGrid = (
                 effects: [],
                 fertilizer: null,
                 primaryCoord: null,
+                needFertilizer: true,
             };
             removeEffect(newGrid, px + i, py + j, currentCrop.gardenBuff);
         }
@@ -113,6 +114,7 @@ export const addToGrid = (
                 fertilizer: null,
                 primaryCoord: [x, y],
                 starred: plantStarSeeds ? "starred" : "regular",
+                needFertilizer: true,
             };
         }
     }

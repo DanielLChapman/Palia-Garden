@@ -84,9 +84,14 @@ export const checkSelfForEffects = (
 
     const effectsCount = countNeighborEffects(newGrid, x, y, width, height);
     const requiredForBuffs = currentCrop?.requiredForBuffs || 1;
+    let needFertilizer = true;
 
     if (cell.fertilizer) {
         let effect = cell.fertilizer.gardenBuff;
+        let effectC = effectsCount.get(effect);
+        if (effectC && effectC >= requiredForBuffs) {
+            needFertilizer = false;
+        }
         effectsCount.set(effect, requiredForBuffs);
     }
 
@@ -97,13 +102,16 @@ export const checkSelfForEffects = (
             for (let [currentEffect, count] of effectsCount.entries()) {
                 if (
                     count >= requiredForBuffs &&
-                    !newGrid[x + i][y + j].effects.includes(currentEffect)
+                    !newGrid[x + i][y + j].effects.includes(currentEffect) &&
+                    (newGrid[x+i][y+j].crop !== null || newGrid[x+i][y+j].fertilizer !== null)
                 ) {
                     newGrid[x + i][y + j].effects.push(currentEffect);
+                    newGrid[x + i][y + j].needFertilizer = needFertilizer;
                 }
             }
         }
     }
+
     return newGrid;
 };
 

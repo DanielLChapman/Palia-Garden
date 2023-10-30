@@ -1,6 +1,6 @@
 import { Crop } from "@/data/crops";
 import { GridState } from "../useGrid";
-import { CropStates, ExpectedCropState } from "./DayContainer";
+import { CropStates, ExpectedCropState, FertilizerCountStates } from "./DayContainer";
 import { CellEffects } from "../Effects";
 
 const getHarvestOutput = (
@@ -39,18 +39,20 @@ const getHarvestOutput = (
 
     if (starred === "regular") {
         if (hasQualityBoost) {
+            let starredAmount = getStarredAmount(harvestAmount);
             return Math.random() < 0.2
                 ? { regular: harvestAmount, starred: 0 }
                 : {
-                      regular: harvestAmount - getStarredAmount(harvestAmount),
-                      starred: getStarredAmount(harvestAmount),
+                      regular: harvestAmount - starredAmount,
+                      starred: starredAmount,
                   };
         } else {
+            let starredAmount = getStarredAmount(harvestAmount);
             return Math.random() < 0.5
                 ? { regular: harvestAmount, starred: 0 }
                 : {
-                      regular: harvestAmount - getStarredAmount(harvestAmount),
-                      starred: getStarredAmount(harvestAmount),
+                      regular: harvestAmount - starredAmount,
+                      starred: starredAmount,
                   };
         }
     } else if (starred === "starred") {
@@ -59,9 +61,10 @@ const getHarvestOutput = (
             if (rand < 0.01) {
                 return { regular: harvestAmount, starred: 0 };
             } else if (rand < 0.155) {
+                let starredAmount = getStarredAmount(harvestAmount);
                 return {
-                    regular: getStarredAmount(harvestAmount),
-                    starred: harvestAmount - getStarredAmount(harvestAmount),
+                    regular: starredAmount,
+                    starred: harvestAmount - starredAmount,
                 };
             } else {
                 return { regular: 0, starred: harvestAmount };
@@ -71,9 +74,10 @@ const getHarvestOutput = (
             if (rand < 0.16) {
                 return { regular: harvestAmount, starred: 0 };
             } else if (rand < 0.63) {
+                let starredAmount = getStarredAmount(harvestAmount);
                 return {
-                    regular: getStarredAmount(harvestAmount),
-                    starred: harvestAmount - getStarredAmount(harvestAmount),
+                    regular: starredAmount,
+                    starred: harvestAmount - starredAmount,
                 };
             } else {
                 return { regular: 0, starred: harvestAmount };
@@ -83,9 +87,14 @@ const getHarvestOutput = (
 };
 
 const getHarvestSpeed = (crop: Crop, effects: CellEffects) => {
-    return effects.includes("Grow Speed Increase") && Math.random() < 0.1
-        ? crop.growthTime - 1
-        : crop.growthTime;
+    //for every 2 days of growth, grant an additional bonus day of growth
+    let days = crop.growthTime;
+    if (effects.includes("Grow Speed Increase")) {
+        let t = Math.floor(days / 2);
+        days -= t;
+    }
+    return days;
+
 };
 
 const calculateHarvests = (
@@ -130,20 +139,29 @@ const calculateHarvests = (
 
 export function countGrid(
     initialState: CropStates,
+    initialFertilizer: FertilizerCountStates,
     days: number,
     grid: GridState,
     overTwentyFive: boolean,
-): CropStates {
-    if (!grid) return initialState;
+): {newState: CropStates, fertilizers: FertilizerCountStates} {
+    if (!grid) return {newState: initialState, fertilizers: initialFertilizer};
     let newState = JSON.parse(JSON.stringify(initialState));
+    let newFertilizerState = JSON.parse(JSON.stringify(initialFertilizer));
 
     for (let i = 0; i < grid.length; i++) {
         for (let j = 0; j < grid[0].length; j++) {
             const cell = grid[i][j];
             if (!cell) continue;
-
-            const { crop, effects, primaryCoord } = cell;
+            const { crop, effects, primaryCoord, fertilizer, needFertilizer } = cell;
             if (!crop) continue;
+            if (needFertilizer && fertilizer) {
+                newFertilizerState[fertilizer.name] = {
+                    count: newFertilizerState[fertilizer.name]?.count + 1 || 1
+                }
+            }
+           
+            
+            
             if (!primaryCoord) continue;
             if (primaryCoord[0] !== i || primaryCoord[1] !== j) continue;
 
@@ -167,7 +185,7 @@ export function countGrid(
                     harvestSpeed,
                     crop.reharvestable,
                     4,
-                    crop.reharvestTime
+                    crop.reharvestTime,
                 );
             for (let i = 0; i < numberOfHarvests; i++) {
                 const harvestOutput = getHarvestOutput(
@@ -185,5 +203,5 @@ export function countGrid(
         }
     }
 
-    return newState;
+    return {newState: newState, fertilizers: newFertilizerState};
 }

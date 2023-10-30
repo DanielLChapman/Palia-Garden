@@ -6,6 +6,7 @@ import PreservationContainer, { CrafterState } from "./PreservationContainer";
 import CropDisplay from "../Grid/CropDisplay";
 import ProfitCalc from "./ProfitCalc";
 import { useSettings } from "../useSettings";
+import { fertilizers } from "@/data/fertilizer";
 
 type DayContainerProps = {
     grid: GridState;
@@ -43,6 +44,19 @@ export const initialState: CropStates = Object.fromEntries(
         },
     ])
 );
+export type FertilizerCountStates = {
+    [fertilizerName: string]: {
+        count: number
+    }
+}
+
+export const initialFertilizers: FertilizerCountStates = Object.fromEntries(
+    Object.keys(fertilizers).map((x) => [
+        fertilizers[x].name, {
+            count: 0
+        }
+    ])
+)
 
 const DayContainer: React.FC<DayContainerProps> = ({ grid }) => {
     const [amountOfDays, setAmountOfDays] = useState<number>(0);
@@ -54,9 +68,10 @@ const DayContainer: React.FC<DayContainerProps> = ({ grid }) => {
     const { plantStarSeeds, overTwentyFive } = useSettings();
 
     useEffect(() => {
-        const newExpectedCrops = countGrid(initialState, amountOfDays, grid, overTwentyFive);
+        const {newState: newExpectedCrops, fertilizers: fertilizerCounts} = countGrid(initialState, initialFertilizers, amountOfDays, grid, overTwentyFive);
         setExpectedCrops(newExpectedCrops);
         setLeftOverCrops(newExpectedCrops);
+        console.log(fertilizerCounts)
     }, [grid, amountOfDays]);
 
     return (

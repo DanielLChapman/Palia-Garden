@@ -8,6 +8,7 @@ export type GridCell = {
     fertilizer: Fertilizer | null;
     primaryCoord: [number, number] | null;
     starred?: "regular" | "starred";
+    needFertilizer: boolean;
 };
 
 export type GridState = GridCell[][];
@@ -20,6 +21,9 @@ export function useGrid(): GridState {
             fertilizer: null,
             primaryCoord: null,
             starred: "regular",
+            needFertilizer: true,
+            //need fertilizer: if there is fertilizer, we check if there are enough neighbor effects to need to use it or not
+            //if not, set it to false
         };
 
         return t;
