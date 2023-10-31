@@ -95,18 +95,42 @@ export const checkSelfForEffects = (
         effectsCount.set(effect, requiredForBuffs);
     }
 
-
     for (let i = 0; i < width; i++) {
         for (let j = 0; j < height; j++) {
             newGrid[x + i][y + j].effects = [];
             for (let [currentEffect, count] of effectsCount.entries()) {
+                //if no crop or fertilizer, there should be no effect
                 if (
-                    count >= requiredForBuffs &&
-                    !newGrid[x + i][y + j].effects.includes(currentEffect) &&
-                    (newGrid[x+i][y+j].crop !== null || newGrid[x+i][y+j].fertilizer !== null)
+                    !newGrid[x + i][y + j].crop &&
+                    !newGrid[x + i][y + j].fertilizer
                 ) {
-                    newGrid[x + i][y + j].effects.push(currentEffect);
-                    newGrid[x + i][y + j].needFertilizer = needFertilizer;
+                    //keep it empty and move to the next one
+                    continue;
+                } else if (!newGrid[x + i][y + j].crop) {
+                    //if there is no crop but there is fertilizer, the effect should only be the fertilizer
+                    if (
+                        count >= requiredForBuffs &&
+                        newGrid[x + i][y + j].fertilizer !== null &&
+                        !newGrid[x + i][y + j].effects.includes(
+                            currentEffect
+                        ) &&
+                        newGrid[x + i][y + j].fertilizer?.gardenBuff ===
+                            currentEffect
+                    ) {
+                        newGrid[x + i][y + j].effects.push(currentEffect);
+                        newGrid[x + i][y + j].needFertilizer = needFertilizer;
+                    }
+                } else {
+                    if (
+                        count >= requiredForBuffs &&
+                        !newGrid[x + i][y + j].effects.includes(
+                            currentEffect
+                        ) &&
+                        newGrid[x + i][y + j].crop !== null
+                    ) {
+                        newGrid[x + i][y + j].effects.push(currentEffect);
+                        newGrid[x + i][y + j].needFertilizer = needFertilizer;
+                    }
                 }
             }
         }
@@ -132,7 +156,9 @@ export const applyEffect: (
         if (!neighborCrop || neighborCrop.name === newGrid[x][y].crop?.name)
             continue;
 
-        if (["Blueberry", "Apple", 'Spicy Pepper'].includes(neighborCrop.name)) {
+        if (
+            ["Blueberry", "Apple", "Spicy Pepper"].includes(neighborCrop.name)
+        ) {
             const primaryCoord = newGrid[nx][ny].primaryCoord;
             if (primaryCoord) {
                 const [px, py] = primaryCoord;
@@ -234,4 +260,3 @@ export const removeEffect: (
 
     return newGrid;
 };
-

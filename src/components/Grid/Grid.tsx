@@ -29,7 +29,7 @@ export const removeFromGrid = (
     x: number,
     y: number
 ): GridState => {
-    const newGrid = [...grid.map((row) => [...row])];
+    let newGrid = [...grid.map((row) => [...row])];
     const currentCrop = newGrid[x][y].crop;
 
     if (!currentCrop) return newGrid;
@@ -41,13 +41,22 @@ export const removeFromGrid = (
             newGrid[px + i][py + j] = {
                 crop: null,
                 effects: [],
-                fertilizer: null,
+                fertilizer: newGrid[px + i][py + j].fertilizer,
                 primaryCoord: null,
                 needFertilizer: true,
             };
             removeEffect(newGrid, px + i, py + j, currentCrop.gardenBuff);
         }
     }
+
+    // Check the crop itself for effects from its neighbors
+    newGrid = checkSelfForEffects(
+        newGrid,
+        x,
+        y,
+        currentCrop.width,
+        currentCrop.height
+    );
 
     return newGrid;
 };
@@ -110,8 +119,8 @@ export const addToGrid = (
         for (let j = 0; j < currentCrop.height; j++) {
             newGrid[x + i][y + j] = {
                 crop: currentCrop,
-                effects: [],
-                fertilizer: null,
+                effects: newGrid[x + i][y + j].effects,
+                fertilizer: newGrid[x + i][y + j].fertilizer,
                 primaryCoord: [x, y],
                 starred: plantStarSeeds ? "starred" : "regular",
                 needFertilizer: true,
