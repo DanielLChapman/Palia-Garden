@@ -1,23 +1,25 @@
-import React, { useCallback, useState } from "react";
-import { GridState, useGrid } from "./useGrid";
-import Header from "./Header";
-import Footer from "./Footer";
+import React, { useState } from "react";
+import { GridState } from "./useGrid";
 import Grid from "./Grid/Grid";
 import { CropTable } from "./Grid/CropTable";
 import { Crop } from "@/data/crops";
-import CropDisplay from "./Grid/CropDisplay";
 import DayContainer from "./DayCalculations/DayContainer";
 import { EffectKey } from "./Grid/EffectKey";
 import { Effect } from "./Effects";
-import { SettingsProvider } from "./SettingsProvider";
 import { Fertilizer } from "@/data/fertilizer";
 import { FertilizerTable } from "./Grid/FertilizerTable";
 
 export type CropCounts = Map<string, number>;
 
-function App({}) {
-    const initialState = useGrid();
-    const [grid, setGrid] = useState(initialState);
+type AppProps = {
+    grid: GridState;
+    setGrid: React.Dispatch<React.SetStateAction<GridState>>;
+    initialState: GridState;
+  };
+  
+
+  const App: React.FC<AppProps> = ({ grid, setGrid, initialState }) => {
+    
     const [currentCrop, setCurrentCrop] = useState<Crop | null>(null);
     const [currentFertilizer, setCurrentFertilizer] =
         useState<Fertilizer | null >(null);
@@ -30,7 +32,7 @@ function App({}) {
     );
 
     const updateGrid = (newGrid: GridState) => {
-        setGrid((prevGrid) => {
+        setGrid((prevGrid: GridState) => {
             if (newGrid !== prevGrid) {
                 return newGrid;
             }

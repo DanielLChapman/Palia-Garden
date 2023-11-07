@@ -52,75 +52,89 @@ function SideMenu({ isOpen, onClose, menuPage }: SideMenuProps) {
                         ></div>
                     </button>
 
-                    <div className=" mt-4">
-                        <ul className=" text-sm font-medium text-gray-900 border-gray-200 rounded-lg">
-                            {[
-                                {
-                                    label: "Gardening Over level 25",
-                                    id: "overTwentyFive-checkbox",
-                                    value: overTwentyFive,
-                                    setter: setOverTwentyFive,
-                                    description:
-                                        "Sets gardening level to over 25 which greatly increases your chance of star crops.",
-                                },
-                                {
-                                    label: "Reinvest in Seeds",
-                                    id: "reinvestSeeds-checkbox",
-                                    value: reinvestSeeds,
-                                    setter: setReinvestSeeds,
-                                    description:
-                                        "Take out of total profit the cost of buying new seeds",
-                                },
-                                {
-                                    label: "Plant Star Seeds",
-                                    id: "plantStarSeeds-checkbox",
-                                    value: plantStarSeeds,
-                                    setter: setPlantStarSeeds,
-                                    description: "Plants star crops using star seeds. Crafted star seeds are prioritized for planting over being sold."
-                                },
-                                {
-                                    label: "Use Starred Seeds",
-                                    id: "useStarSeeds-checkbox",
-                                    value: useStarSeeds,
-                                    setter: setUseStarSeeds,
-                                    description: "Prioritize using starred seeds for all plantings, both regular and starred, instead of selling them to buy normal seeds."
-                                },
-                            ].map(
-                                ({ label, id, value, setter, description }) => (
-                                    <li
-                                        key={id}
-                                        className="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-600 relative"
-                                        onMouseEnter={() => setHoveredItem(id)}
-                                        onMouseLeave={() =>
-                                            setHoveredItem(null)
-                                        }
-                                    >
-                                        <div className="flex items-center pl-6">
-                                            <label
-                                                htmlFor={id}
-                                                className="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                                            >
-                                                {label}
-                                            </label>
-                                            <input
-                                                id={id}
-                                                type="checkbox"
-                                                className="w-4 h-4 text-blue-600 mr-14
+                    {menuPage === "Settings" && (
+                        <div className=" mt-4">
+                            <ul className=" text-sm font-medium text-gray-900 border-gray-200 rounded-lg">
+                                {[
+                                    {
+                                        label: "Gardening Over level 25",
+                                        id: "overTwentyFive-checkbox",
+                                        value: overTwentyFive,
+                                        setter: setOverTwentyFive,
+                                        description:
+                                            "Sets gardening level to over 25 which greatly increases your chance of star crops.",
+                                    },
+                                    {
+                                        label: "Reinvest in Seeds",
+                                        id: "reinvestSeeds-checkbox",
+                                        value: reinvestSeeds,
+                                        setter: setReinvestSeeds,
+                                        description:
+                                            "Take out of total profit the cost of buying new seeds",
+                                    },
+                                    {
+                                        label: "Plant Star Seeds",
+                                        id: "plantStarSeeds-checkbox",
+                                        value: plantStarSeeds,
+                                        setter: setPlantStarSeeds,
+                                        description:
+                                            "Plants star crops using star seeds. Crafted star seeds are prioritized for planting over being sold.",
+                                    },
+                                    {
+                                        label: "Use Starred Seeds",
+                                        id: "useStarSeeds-checkbox",
+                                        value: useStarSeeds,
+                                        setter: setUseStarSeeds,
+                                        description:
+                                            "Prioritize using starred seeds for all plantings, both regular and starred, instead of selling them to buy normal seeds.",
+                                    },
+                                ].map(
+                                    ({
+                                        label,
+                                        id,
+                                        value,
+                                        setter,
+                                        description,
+                                    }) => (
+                                        <li
+                                            key={id}
+                                            className="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-600 relative"
+                                            onMouseEnter={() =>
+                                                setHoveredItem(id)
+                                            }
+                                            onMouseLeave={() =>
+                                                setHoveredItem(null)
+                                            }
+                                        >
+                                            <div className="flex items-center pl-6">
+                                                <label
+                                                    htmlFor={id}
+                                                    className="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                                                >
+                                                    {label}
+                                                </label>
+                                                <input
+                                                    id={id}
+                                                    type="checkbox"
+                                                    className="w-4 h-4 text-blue-600 mr-14
                                             focus:ring-blue-600ring-offset-gray-700 focus:ring-offset-gray-700 focus:ring-2 bg-gray-600 border-gray-500"
-                                                checked={value}
-                                                onChange={() => setter(!value)}
-                                            />
-                                        </div>
-                                        {hoveredItem === id && (
-                                            <div className="absolute left-6 top-full mt-2 p-2 w-56 text-sm bg-white border border-gray-300 rounded shadow-lg z-50">
-                                                {description}
+                                                    checked={value}
+                                                    onChange={() =>
+                                                        setter(!value)
+                                                    }
+                                                />
                                             </div>
-                                        )}
-                                    </li>
-                                )
-                            )}
-                        </ul>
-                    </div>
+                                            {hoveredItem === id && (
+                                                <div className="absolute left-6 top-full mt-2 p-2 w-56 text-sm bg-white border border-gray-300 rounded shadow-lg z-50">
+                                                    {description}
+                                                </div>
+                                            )}
+                                        </li>
+                                    )
+                                )}
+                            </ul>
+                        </div>
+                    )}
                 </div>
             )}
         </>

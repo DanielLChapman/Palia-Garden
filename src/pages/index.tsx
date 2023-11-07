@@ -2,6 +2,7 @@ import App from "@/components/App";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import SideMenu from "@/components/SideMenu";
+import { useGrid } from "@/components/useGrid";
 import { useState } from "react";
 
 export default function Home({}) {
@@ -9,6 +10,9 @@ export default function Home({}) {
     const [menuPage, setMenuPage] = useState<"Share" | "Settings" | "Mobile">(
         "Share"
     );
+    const {grid: initialState, setGrid: setLocalGrid, recheckLocalStorage}= useGrid();
+    const [grid, setGrid] = useState(initialState);
+
     return (
         <div className="max-w-[1500px] mx-auto py-2 px-6 relative">
             <Header
@@ -16,7 +20,7 @@ export default function Home({}) {
                 setMenuPage={setMenuPage}
                 isOpen={isMenuOpen}
             />
-            <App />
+            <App grid={grid} setGrid={setGrid} initialState={initialState}/>
             <Footer />
             <SideMenu
                 isOpen={isMenuOpen}
