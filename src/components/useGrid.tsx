@@ -18,30 +18,48 @@ export function useGrid(): {
     grid: GridState;
     setGrid: (value: GridState) => void;
     recheckLocalStorage: () => void;
+    saveGridToLocalStorage: (value: GridState) => void
 } {
-    const [grid, setGrid] = useState<GridState>(Array.from({ length: 9 }, () =>
-        Array.from({ length: 9 }, createEmptyCell)
-    ));
+    // Initialize the grid state without setting it directly to an empty grid
+    const [grid, setGrid] = useState<GridState | null>(null);
 
+    // Load the grid from localStorage only once when the component mounts
     useEffect(() => {
-        const storedValue = localStorage.getItem('grid');
-        if (storedValue) {
-            try {
-                setGrid(JSON.parse(storedValue));
-            } catch (e) {
-                console.error('Failed to parse grid from localStorage:', e);
+        const loadGridFromLocalStorage = () => {
+            const storedValue = localStorage.getItem("grid");
+            if (storedValue) {
+                try {
+                    setGrid(JSON.parse(storedValue));
+                } catch (e) {
+                    console.error("Failed to parse grid from localStorage:", e);
+                    // Fallback to empty grid if there's an error
+                    setGrid(
+                        Array.from({ length: 9 }, () =>
+                            Array.from({ length: 9 }, createEmptyCell)
+                        )
+                    );
+                }
+            } else {
+                // Set to empty grid if nothing is in localStorage
+                setGrid(
+                    Array.from({ length: 9 }, () =>
+                        Array.from({ length: 9 }, createEmptyCell)
+                    )
+                );
             }
-        }
+        };
+
+        loadGridFromLocalStorage();
     }, []);
 
     const recheckLocalStorage = useCallback(() => {
         try {
-            const storedValue = localStorage.getItem('grid');
+            const storedValue = localStorage.getItem("grid");
             if (storedValue) {
                 setGrid(JSON.parse(storedValue));
             }
         } catch (e) {
-            console.error('Failed to parse grid from localStorage:', e);
+            console.error("Failed to parse grid from localStorage:", e);
         }
     }, []);
 
@@ -49,18 +67,27 @@ export function useGrid(): {
         try {
             localStorage.setItem("grid", JSON.stringify(value));
         } catch (e) {
-            console.error('Failed to save grid to localStorage:', e);
+            console.error("Failed to save grid to localStorage:", e);
         }
     }, []);
 
-    useEffect(() => {
-        saveGridToLocalStorage(grid);
-    }, [grid, saveGridToLocalStorage]);
+
+    if (grid === null) {
+        return {
+            grid: Array.from({ length: 9 }, () =>
+                Array.from({ length: 9 }, createEmptyCell)
+            ),
+            setGrid,
+            recheckLocalStorage,
+            saveGridToLocalStorage
+        };
+    }
 
     return {
         grid,
         setGrid,
-        recheckLocalStorage
+        recheckLocalStorage,
+        saveGridToLocalStorage
     };
 }
 

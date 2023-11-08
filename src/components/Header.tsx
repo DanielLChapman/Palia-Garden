@@ -1,4 +1,5 @@
 import React from "react";
+import { GridState } from "./useGrid";
 
 type HeaderProps = {
     onMenuToggle: React.Dispatch<
@@ -7,13 +8,18 @@ type HeaderProps = {
     setMenuPage: React.Dispatch<
         React.SetStateAction<"Share" | "Settings" | "Mobile">
     >;
-    isOpen: boolean
+    isOpen: boolean;
+    
 };
 
-function Header({ onMenuToggle, setMenuPage, isOpen }: HeaderProps) {
+function Header({
+    onMenuToggle,
+    setMenuPage,
+    isOpen,
+    
+}: HeaderProps) {
     return (
         <header className="flex items-center justify-between py-4 px-4 md:px-8 z-50">
-
             <h1 className="logo flex items-center font-montserrat text-gray-100 font-bold text-2xl ">
                 Palia Garden Profit Planner
             </h1>
@@ -37,8 +43,6 @@ function Header({ onMenuToggle, setMenuPage, isOpen }: HeaderProps) {
                     Settings
                 </button>
             </div>
-
-            
         </header>
     );
 }

@@ -13,7 +13,7 @@ export type CropCounts = Map<string, number>;
 
 type AppProps = {
     grid: GridState;
-    setGrid: React.Dispatch<React.SetStateAction<GridState>>;
+    setGrid: (value: GridState) => void
     initialState: GridState;
   };
   

@@ -1,13 +1,20 @@
 import React, { useState } from "react";
 import { useSettings } from "./useSettings";
+import { GridState } from "./useGrid";
 
 type SideMenuProps = {
     isOpen: boolean;
     onClose: () => void;
     menuPage: "Share" | "Settings" | "Mobile";
+    grid: GridState;
+    setLocalGrid: (grid: GridState) => void;
+    recheckLocalStorage: () => void;
+    saveGridToLocalStorage: (value: GridState) => void
 };
 
-function SideMenu({ isOpen, onClose, menuPage }: SideMenuProps) {
+function SideMenu({ isOpen, onClose, menuPage, grid,
+    setLocalGrid,
+    recheckLocalStorage, saveGridToLocalStorage}: SideMenuProps) {
     const [hoveredItem, setHoveredItem] = useState<string | null>(null);
 
     const {
@@ -133,6 +140,15 @@ function SideMenu({ isOpen, onClose, menuPage }: SideMenuProps) {
                                     )
                                 )}
                             </ul>
+                        </div>
+                    )}
+
+                    {menuPage === "Share" && (
+                        <div className=" mt-4">
+                            <button className="" onClick={() => {
+                                saveGridToLocalStorage(grid)
+                            }}>Save</button>
+                           <button className="" onClick={recheckLocalStorage}>Load</button>
                         </div>
                     )}
                 </div>

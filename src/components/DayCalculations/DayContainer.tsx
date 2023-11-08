@@ -71,7 +71,6 @@ const DayContainer: React.FC<DayContainerProps> = ({ grid }) => {
         const {newState: newExpectedCrops, fertilizers: fertilizerCounts} = countGrid(initialState, initialFertilizers, amountOfDays, grid, overTwentyFive);
         setExpectedCrops(newExpectedCrops);
         setLeftOverCrops(newExpectedCrops);
-        console.log(fertilizerCounts)
     }, [grid, amountOfDays]);
 
     return (

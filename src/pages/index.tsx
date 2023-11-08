@@ -2,16 +2,34 @@ import App from "@/components/App";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import SideMenu from "@/components/SideMenu";
-import { useGrid } from "@/components/useGrid";
-import { useState } from "react";
+import { GridState, useGrid } from "@/components/useGrid";
+import { useEffect, useState } from "react";
 
 export default function Home({}) {
     const [isMenuOpen, setMenuOpen] = useState(false);
     const [menuPage, setMenuPage] = useState<"Share" | "Settings" | "Mobile">(
         "Share"
     );
-    const {grid: initialState, setGrid: setLocalGrid, recheckLocalStorage}= useGrid();
-    const [grid, setGrid] = useState(initialState);
+    const {
+        grid: initialState,
+        setGrid: setLocalGrid,
+        recheckLocalStorage,
+        saveGridToLocalStorage,
+    } = useGrid();
+
+    const [grid, setGrid] = useState<GridState >(initialState);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        if (initialState) {
+            setGrid(initialState);
+            setIsLoading(false);
+        }
+    }, [initialState]);
+
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
 
     return (
         <div className="max-w-[1500px] mx-auto py-2 px-6 relative">
@@ -20,12 +38,16 @@ export default function Home({}) {
                 setMenuPage={setMenuPage}
                 isOpen={isMenuOpen}
             />
-            <App grid={grid} setGrid={setGrid} initialState={initialState}/>
+            <App grid={grid} setGrid={setGrid} initialState={initialState} />
             <Footer />
             <SideMenu
                 isOpen={isMenuOpen}
                 onClose={() => setMenuOpen(false)}
                 menuPage={menuPage}
+                grid={grid}
+                setLocalGrid={setLocalGrid}
+                saveGridToLocalStorage={saveGridToLocalStorage}
+                recheckLocalStorage={recheckLocalStorage}
             />
 
             {/* Hamburger/X button */}
