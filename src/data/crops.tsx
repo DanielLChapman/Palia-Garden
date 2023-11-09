@@ -8,6 +8,7 @@ export type SeedGeneration = {
 };
 
 export type Crop = {
+    id:number;
     name: string;
     growthTime: number;
     reharvestTime?: number;
@@ -31,6 +32,7 @@ export type CropTyping = {
 }
 export const crops: CropTyping = {
     Tomato: {
+        id: 1,
         name: "Tomato",
         growthTime: 4,
         image: '/images/crops/tomato.webp',
@@ -52,6 +54,7 @@ export const crops: CropTyping = {
         released: true,
     },
     Potato: {
+        id: 2,
         name: "Potato",
         growthTime: 6,
         reharvestable: false,
@@ -72,6 +75,7 @@ export const crops: CropTyping = {
         released: true,
     },
     Rice: {
+        id: 3,
         name: "Rice",
         growthTime: 3,
         image: '/images/crops/rice.webp',
@@ -92,6 +96,7 @@ export const crops: CropTyping = {
         released: true,
     },
     Wheat: {
+        id:4,
         name: "Wheat",
         growthTime: 5,
         reharvestable: false,
@@ -112,6 +117,7 @@ export const crops: CropTyping = {
         released: true,
     },
     Carrot: {
+        id:5,
         name: "Carrot",
         growthTime: 4,
         reharvestable: false,
@@ -132,6 +138,7 @@ export const crops: CropTyping = {
         released: true,
     },
     Onion: {
+        id: 6,
         name: "Onion",
         growthTime: 5,
         reharvestable: false,
@@ -152,6 +159,7 @@ export const crops: CropTyping = {
         released: true,
     },
     Cotton: {
+        id: 7,
         name: "Cotton",
         growthTime: 4,
         reharvestable: false,
@@ -172,6 +180,7 @@ export const crops: CropTyping = {
         released: true,
     },
     Blueberry: {
+        id: 8,
         name: "Blueberry",
         growthTime: 9,
         reharvestable: true,
@@ -193,6 +202,7 @@ export const crops: CropTyping = {
         released: true,
     },
     Apple: {
+        id: 9, 
         name: "Apple",
         growthTime: 12,
         reharvestable: true,
@@ -214,6 +224,7 @@ export const crops: CropTyping = {
         released: true,
     },
     Corn: {
+        id: 10,
         name: "Corn",
         growthTime: 5,
         reharvestable: false,
@@ -235,6 +246,7 @@ export const crops: CropTyping = {
         released: true,
     },
     'Spicy Pepper': {
+        id: 11,
         name: "Spicy Pepper",
         growthTime: 6,
         reharvestable: true,
@@ -257,6 +269,7 @@ export const crops: CropTyping = {
     }
     /*
     Apricot: {
+        id: 12,
         name: "Apricot",
         growthTime: 12,
         reharvestable: true,
@@ -275,6 +288,22 @@ export const crops: CropTyping = {
     }*/
     
 };
+
+export function getCropById(id: number) {
+    // Get all the values from the object
+  const items = Object.values(crops);
+
+  // Find the item with the given id
+  const item = items.find(item => item.id === id);
+
+  // If the item is found, return it
+  if (item) {
+    return item;
+  }
+
+  // If the item is not found, return null
+  return null;
+}
 
 
 export type CropList = 'Onion' | 'Carrot' | 'Apple' | 'Tomato' | 'Potato' | 'Blueberry' | 'Wheat' | 'Rice' | 'Cotton' | 'Corn' | 'Spicy Pepper';
