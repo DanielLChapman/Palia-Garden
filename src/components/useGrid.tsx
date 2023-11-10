@@ -1,8 +1,13 @@
 import { Crop, crops, getCropById } from "@/data/crops";
-import { CellEffects } from "./Effects";
+import { CellEffects, checkSelfForEffects } from "./Effects";
 import { Fertilizer, getFertilizerById } from "@/data/fertilizer";
 import { useCallback, useEffect, useState } from "react";
-import { compressToBase64, decompressFromBase64 } from "lz-string";
+import {
+    compressToBase64,
+    decompressFromBase64,
+    compressToEncodedURIComponent,
+    decompressFromEncodedURIComponent,
+} from "lz-string";
 
 export type GridCell = {
     crop: Crop | null;
@@ -15,8 +20,7 @@ export type GridCell = {
 
 export type GridState = GridCell[][];
 
-
-function serialized(grid: GridState): string {
+export function serialized(grid: GridState): string {
     try {
         let serialized = grid
             .map((row) =>
@@ -25,42 +29,50 @@ function serialized(grid: GridState): string {
                         let t = `${cell.crop ? cell.crop.id : "0"}:${
                             cell.fertilizer ? cell.fertilizer.id : "0"
                         }`;
-                        t += `:${cell.primaryCoord ? cell.primaryCoord.join('~') : "-1~-1"}`;
-                        t += `:${cell.starred === 'starred' ? "2" : "1"}`;
+                        t += `:${
+                            cell.primaryCoord
+                                ? cell.primaryCoord.join("~")
+                                : "-1~-1"
+                        }`;
+                        t += `:${cell.starred === "starred" ? "2" : "1"}`;
                         return t;
                     })
                     .join(",")
             )
             .join(";");
 
-        let compressed = compressToBase64(serialized); // Make sure you have a compress function
-        console.log(compressed)
+        let compressed = compressToEncodedURIComponent(serialized); // Make sure you have a compress function
+
         let base64Encoded = btoa(compressed);
+
         return base64Encoded;
     } catch (error) {
-        console.error('Failed to serialize grid:', error);
-        return ''; // Return an empty string or handle the error as appropriate
+        console.error("Failed to serialize grid:", error);
+        return ""; // Return an empty string or handle the error as appropriate
     }
 }
 
-
 function deserialized(serialzied: string): GridState {
     let compressed = atob(serialzied);
-    let decompressed = decompressFromBase64(compressed);
+    let decompressed = decompressFromEncodedURIComponent(compressed);
 
-    let rows = decompressed.split(';');
-    let grid: GridState = rows.map(row => 
-        row.split(',').map(cell => {
-            let [cropId, fertilizerId, primaryCell, starredState] = cell.split(':');
-            let pc = primaryCell.split('~').map(Number); // Convert to numbers immediately
+    let rows = decompressed.split(";");
+    let grid: GridState = rows.map((row) =>
+        row.split(",").map((cell) => {
+            let [cropId, fertilizerId, primaryCell, starredState] =
+                cell.split(":");
+            let pc = primaryCell.split("~").map(Number); // Convert to numbers immediately
             let pc2: [number, number] = [pc[0], pc[1]]; // Assert that pc2 is a tuple
-            
+
             return {
-                crop: cropId !== '0' ? getCropById(parseInt(cropId, 10)) : null,
-                fertilizer: fertilizerId !== '0' ? getFertilizerById(parseInt(fertilizerId, 10)) : null,
+                crop: cropId !== "0" ? getCropById(parseInt(cropId, 10)) : null,
+                fertilizer:
+                    fertilizerId !== "0"
+                        ? getFertilizerById(parseInt(fertilizerId, 10))
+                        : null,
                 primaryCoord: pc2[0] !== -1 ? pc2 : null, // Check only the first element for -1
                 effects: [],
-                starred: starredState === '2' ? 'starred' : 'regular',
+                starred: starredState === "2" ? "starred" : "regular",
                 needFertilizer: true,
             };
         })
@@ -68,6 +80,36 @@ function deserialized(serialzied: string): GridState {
 
     return grid;
 }
+
+const applyEffects = (value: GridState): GridState => {
+    console.log('apply effects');
+    let newGrid = value;
+
+    for (let i = 0; i < newGrid.length; i++) {
+        for (let j = 0; j < newGrid[i].length; j++) {
+            let currentCell = newGrid[i][j];
+            if (currentCell.crop) {
+                if (
+                    currentCell.primaryCoord &&
+                    currentCell.primaryCoord[0] === i &&
+                    currentCell.primaryCoord[1] === j
+                ) {
+                    newGrid = checkSelfForEffects(
+                        newGrid,
+                        i,
+                        j,
+                        currentCell.crop?.width || 1,
+                        currentCell.crop?.width || 1
+                    );
+                }
+            } else if (currentCell.fertilizer) {
+                newGrid = checkSelfForEffects(newGrid, i, j, 1, 1);
+            }
+        }
+    }
+
+    return newGrid;
+};
 
 export function useGrid(): {
     grid: GridState;
@@ -86,10 +128,14 @@ export function useGrid(): {
                 try {
                     // Attempt to detect if the stored value is serialized
                     if (isSerializedFormat(storedValue)) {
-                        setGrid(deserialized(storedValue));
+                        let t = deserialized(storedValue);
+                        t = applyEffects(t);
+                        setGrid(t);
                     } else {
                         // Assume the stored value is in the old JSON format
-                        setGrid(JSON.parse(storedValue));
+                        let t = JSON.parse(storedValue);
+                        t = applyEffects(t);
+                        setGrid(t);
                     }
                 } catch (e) {
                     console.error("Failed to parse grid from localStorage:", e);
@@ -107,9 +153,24 @@ export function useGrid(): {
         try {
             const storedValue = localStorage.getItem("grid");
             if (storedValue) {
-                setGrid(deserialized(storedValue));
+                try {
+                    // Attempt to detect if the stored value is serialized
+                    if (isSerializedFormat(storedValue)) {
+                        let t = deserialized(storedValue);
+                        t = applyEffects(t);
+                        setGrid(t);
+                    } else {
+                        // Assume the stored value is in the old JSON format
+                        let t = JSON.parse(storedValue);
+                        t = applyEffects(t);
+                        setGrid(t);
+                    }
+                } catch (e) {
+                    console.error("Failed to parse grid from localStorage:", e);
+                    setGrid(createEmptyGrid());
+                }
             } else {
-                console.log('nothing found');
+                setGrid(createEmptyGrid());
             }
         } catch (e) {
             console.error("Failed to parse grid from localStorage:", e);
@@ -137,8 +198,10 @@ export function useGrid(): {
     };
 
     // Helper function to create an empty grid
-    const createEmptyGrid = () => Array.from({ length: 9 }, () => Array.from({ length: 9 }, createEmptyCell));
-
+    const createEmptyGrid = () =>
+        Array.from({ length: 9 }, () =>
+            Array.from({ length: 9 }, createEmptyCell)
+        );
 
     if (grid === null) {
         return {
@@ -150,6 +213,8 @@ export function useGrid(): {
             saveGridToLocalStorage,
         };
     }
+
+    
 
     return {
         grid,
