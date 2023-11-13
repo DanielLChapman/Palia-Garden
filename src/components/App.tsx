@@ -12,13 +12,11 @@ import { FertilizerTable } from "./Grid/FertilizerTable";
 export type CropCounts = Map<string, number>;
 
 type AppProps = {
-    grid: GridState;
-    setGrid: React.Dispatch<React.SetStateAction<GridState>>;
-    initialState: GridState;
+
   };
   
 
-  const App: React.FC<AppProps> = ({ grid, setGrid, initialState }) => {
+  const App: React.FC<AppProps> = ({  }) => {
     
     const [currentCrop, setCurrentCrop] = useState<Crop | null>(null);
     const [currentFertilizer, setCurrentFertilizer] =
@@ -31,14 +29,6 @@ type AppProps = {
         "Crops"
     );
 
-    const updateGrid = (newGrid: GridState) => {
-        setGrid((prevGrid: GridState) => {
-            if (newGrid !== prevGrid) {
-                return newGrid;
-            }
-            return prevGrid;
-        });
-    };
     return (
         <main className=" py-6 pt-0 ">
             {/* grid */}
@@ -72,8 +62,6 @@ type AppProps = {
                 <div className="flex  p-4 justify-center  w-auto">
                     <div className="flex justify-center  h-full w-full font-montserrat">
                         <Grid
-                            grid={grid}
-                            setGrid={updateGrid}
                             currentCrop={currentCrop}
                             setCropCounts={setCropCounts}
                             currentFertilizer={currentFertilizer}
@@ -94,7 +82,7 @@ type AppProps = {
                 </div>
             </div>
 
-            {cropCounts.size > 0 && <DayContainer grid={grid} />}
+            {cropCounts.size > 0 && <DayContainer />}
         </main>
     );
 }

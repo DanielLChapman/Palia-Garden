@@ -79,7 +79,7 @@ body {
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    transition: 1s;
+    transition: 0s;
     border: 3px solid;
     box-shadow: 1px 1px 2px black;
 }

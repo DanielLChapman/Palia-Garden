@@ -1,5 +1,6 @@
 import App from "@/components/App";
 import Footer from "@/components/Footer";
+import { useGridContext } from "@/components/GridContext/useGridContext";
 import Header from "@/components/Header";
 import SideMenu from "@/components/SideMenu";
 import { GridState, useGrid } from "@/components/useGrid";
@@ -10,6 +11,9 @@ export default function Home({}) {
     const [menuPage, setMenuPage] = useState<"Share" | "Settings" | "Mobile">(
         "Share"
     );
+    const {grid, updateGrid, saveGrid, loadGrid} = useGridContext();
+
+    /*
     const {
         grid: initialState,
         setGrid: setLocalGrid,
@@ -17,15 +21,14 @@ export default function Home({}) {
         saveGridToLocalStorage,
     } = useGrid();
 
-    const [grid, setGrid] = useState<GridState >(initialState);
+    const [grid, setGrid] = useState<GridState >(initialState);*/
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        if (initialState) {
-            setGrid(initialState);
+        if (grid) {
             setIsLoading(false);
         }
-    }, [initialState]);
+    }, [grid]);
 
     if (isLoading) {
         return <div>Loading...</div>;
@@ -38,16 +41,16 @@ export default function Home({}) {
                 setMenuPage={setMenuPage}
                 isOpen={isMenuOpen}
             />
-            <App grid={grid} setGrid={setGrid} initialState={initialState} />
+            <App   />
             <Footer />
             <SideMenu
                 isOpen={isMenuOpen}
                 onClose={() => setMenuOpen(false)}
                 menuPage={menuPage}
                 grid={grid}
-                setLocalGrid={setLocalGrid}
-                saveGridToLocalStorage={saveGridToLocalStorage}
-                recheckLocalStorage={recheckLocalStorage}
+                setLocalGrid={updateGrid}
+                saveGridToLocalStorage={saveGrid}
+                recheckLocalStorage={loadGrid}
             />
 
             {/* Hamburger/X button */}

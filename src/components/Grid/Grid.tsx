@@ -12,10 +12,9 @@ import { CropCounts } from "../App";
 import { EffectKey } from "./EffectKey";
 import { useSettings } from "../useSettings";
 import { Fertilizer } from "@/data/fertilizer";
+import { useGridContext } from "../GridContext/useGridContext";
 
 type GridProps = {
-    grid: GridState;
-    setGrid: (newGrid: GridState) => void;
     currentCrop: Crop | null;
     currentFertilizer: Fertilizer | null;
     displayTable: "Fertilizer" | "Crops";
@@ -45,15 +44,16 @@ export const removeFromGrid = (
                 primaryCoord: null,
                 needFertilizer: true,
             };
-            removeEffect(newGrid, px + i, py + j, currentCrop.gardenBuff);
+            newGrid = removeEffect(newGrid, px + i, py + j, currentCrop.gardenBuff);
+            
         }
     }
 
     // Check the crop itself for effects from its neighbors
     newGrid = checkSelfForEffects(
         newGrid,
-        x,
-        y,
+        px,
+        py,
         currentCrop.width,
         currentCrop.height
     );
@@ -314,8 +314,6 @@ export const removeFertilizerFromGrid = (
 };
 
 const Grid: React.FC<GridProps> = ({
-    grid,
-    setGrid,
     currentCrop,
     setCropCounts,
     currentFertilizer,
@@ -324,6 +322,43 @@ const Grid: React.FC<GridProps> = ({
     selectedEffects,
 }) => {
     const { plantStarSeeds, overTwentyFive } = useSettings();
+    const {grid, updateGrid} = useGridContext();
+
+    const handleCellClick = useCallback(
+        async (x: number, y: number) => {
+            if (!grid) {
+                return;
+            }
+            if (displayTable === "Crops") {
+                //handle click
+                if (currentCrop) {
+                    let t = addToGrid(grid, x, y, currentCrop, plantStarSeeds);
+                    recountGrid(t);
+                    updateGrid(t);
+                } else {
+                    //remove
+                    const newGrid = removeFromGrid(grid, x, y);
+                    recountGrid(newGrid);
+                    updateGrid(newGrid);
+                }
+            } else {
+                //removes surounding effects, doesn't replace the fertilizer, and doesn't add
+                if (currentFertilizer) {
+                    let t = addFertilizerToGrid(grid,x,y,currentFertilizer);
+                    updateGrid(t);
+                } else {
+                    const newGrid = removeFertilizerFromGrid(grid, x, y);
+                    updateGrid(newGrid);
+                }
+            }
+        },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [grid, currentCrop, currentFertilizer, displayTable, plantStarSeeds]
+    );
+
+    if (!grid) {
+        return <span>Loading...</span>
+    }
 
     const outputGridL = () => {
         let results = [];
@@ -365,37 +400,7 @@ const Grid: React.FC<GridProps> = ({
         setCropCounts(newCropCounts);
     };
 
-    const handleCellClick = useCallback(
-        async (x: number, y: number) => {
-            if (!grid) {
-                return;
-            }
-            if (displayTable === "Crops") {
-                //handle click
-                if (currentCrop) {
-                    let t = addToGrid(grid, x, y, currentCrop, plantStarSeeds);
-                    recountGrid(t);
-                    setGrid(t);
-                } else {
-                    //remove
-                    const newGrid = removeFromGrid(grid, x, y);
-                    recountGrid(newGrid);
-                    setGrid(newGrid);
-                }
-            } else {
-                //removes surounding effects, doesn't replace the fertilizer, and doesn't add
-                if (currentFertilizer) {
-                    let t = addFertilizerToGrid(grid,x,y,currentFertilizer);
-                    setGrid(t);
-                } else {
-                    const newGrid = removeFertilizerFromGrid(grid, x, y);
-                    setGrid(newGrid);
-                }
-            }
-        },
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        [grid, currentCrop, currentFertilizer, displayTable, plantStarSeeds]
-    );
+    
 
 
     return (

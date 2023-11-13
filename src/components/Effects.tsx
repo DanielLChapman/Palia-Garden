@@ -59,7 +59,11 @@ const countNeighborEffects = (
 ): Map<Effect, number> => {
     const effects = new Map<Effect, number>();
     const cropNeighbors = getNeighbors(x, y, width, height);
+    
     for (let [cx, cy] of cropNeighbors) {
+        if (cx < 0 || cy < 0 || cx > 8 || cy > 8) {
+            continue;
+        }
         const currentEffect = grid[cx][cy].crop?.gardenBuff;
         if (
             grid[x][y].crop?.name !== grid[cx][cy].crop?.name &&
@@ -97,6 +101,9 @@ export const checkSelfForEffects = (
 
     for (let i = 0; i < width; i++) {
         for (let j = 0; j < height; j++) {
+            if (x + i > 8 || y + j > 8) {
+                continue;
+            }
             newGrid[x + i][y + j].effects = [];
             for (let [currentEffect, count] of effectsCount.entries()) {
                 //if no crop or fertilizer, there should be no effect

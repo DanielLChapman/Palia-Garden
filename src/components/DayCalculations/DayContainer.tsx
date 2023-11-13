@@ -7,9 +7,9 @@ import CropDisplay from "../Grid/CropDisplay";
 import ProfitCalc from "./ProfitCalc";
 import { useSettings } from "../useSettings";
 import { fertilizers } from "@/data/fertilizer";
+import { useGridContext } from "../GridContext/useGridContext";
 
 type DayContainerProps = {
-    grid: GridState;
 };
 
 export type CropQualityTyping = "regular" | "starred";
@@ -58,7 +58,7 @@ export const initialFertilizers: FertilizerCountStates = Object.fromEntries(
     ])
 )
 
-const DayContainer: React.FC<DayContainerProps> = ({ grid }) => {
+const DayContainer: React.FC<DayContainerProps> = ({ }) => {
     const [amountOfDays, setAmountOfDays] = useState<number>(0);
     const [expectedCrops, setExpectedCrops] =
         useState<CropStates>(initialState);
@@ -66,6 +66,7 @@ const DayContainer: React.FC<DayContainerProps> = ({ grid }) => {
         useState<CropStates>(expectedCrops);
     const [crafters, setCrafters] = useState<CrafterState[]>([]);
     const { plantStarSeeds, overTwentyFive } = useSettings();
+    const {grid} = useGridContext();
 
     useEffect(() => {
         const {newState: newExpectedCrops, fertilizers: fertilizerCounts} = countGrid(initialState, initialFertilizers, amountOfDays, grid, overTwentyFive);

@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { GridState, useGrid } from '../useGrid';
 import { GridContext } from './GridContext';
 
@@ -14,6 +14,10 @@ export const GridProvider: React.FC<GridProviderProps> = ({ children }) => {
     const updateGrid = useCallback((value: GridState) => {
         setGrid(value);
     }, [])
+
+    useEffect(() => {
+        setGrid(initialGridState);
+    }, [initialGridState])
 
     return (
         <GridContext.Provider value={{ grid, updateGrid, saveGrid, loadGrid }}>

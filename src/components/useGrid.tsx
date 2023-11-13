@@ -81,8 +81,7 @@ function deserialized(serialzied: string): GridState {
     return grid;
 }
 
-const applyEffects = (value: GridState): GridState => {
-    console.log('apply effects');
+const applyEffects = (value: GridState): GridState => { 
     let newGrid = value;
 
     for (let i = 0; i < newGrid.length; i++) {
@@ -158,6 +157,7 @@ export function useGrid(): {
                     if (isSerializedFormat(storedValue)) {
                         let t = deserialized(storedValue);
                         t = applyEffects(t);
+                        
                         setGrid(t);
                     } else {
                         // Assume the stored value is in the old JSON format

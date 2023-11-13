@@ -95,7 +95,7 @@ export const GridCellComponent: React.FC<GridCellProps> = ({
 
     return (
         <div
-            className={`grid-cell w-[65px] h-[65px] border-2 border-black transition delay-75 m-1 relative ${
+            className={`grid-cell w-[65px] h-[65px] border-2 border-black transition duration-0 delay-0 m-1 relative ${
                 currentCrop === null
                     ? cellData.crop
                         ? "hover:bg-red-500 hover:delay-0"
