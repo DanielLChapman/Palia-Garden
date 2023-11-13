@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { GridState } from "./useGrid";
 import Grid from "./Grid/Grid";
 import { CropTable } from "./Grid/CropTable";
@@ -13,7 +13,7 @@ export type CropCounts = Map<string, number>;
 
 type AppProps = {
     grid: GridState;
-    setGrid: (value: GridState) => void
+    setGrid: React.Dispatch<React.SetStateAction<GridState>>;
     initialState: GridState;
   };
   
