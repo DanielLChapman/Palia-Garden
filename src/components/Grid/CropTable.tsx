@@ -7,6 +7,7 @@ import { Effect } from "../Effects";
 import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSeedling, faPoo } from '@fortawesome/free-solid-svg-icons'
+import { useGrid } from "../useGrid";
 
 type CropTableProps = {
     currentCrop: Crop | null;

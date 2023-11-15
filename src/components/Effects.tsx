@@ -61,9 +61,7 @@ const countNeighborEffects = (
     const cropNeighbors = getNeighbors(x, y, width, height);
     
     for (let [cx, cy] of cropNeighbors) {
-        if (cx < 0 || cy < 0 || cx > 8 || cy > 8) {
-            continue;
-        }
+        //somethings happening here
         const currentEffect = grid[cx][cy].crop?.gardenBuff;
         if (
             grid[x][y].crop?.name !== grid[cx][cy].crop?.name &&
@@ -101,6 +99,7 @@ export const checkSelfForEffects = (
 
     for (let i = 0; i < width; i++) {
         for (let j = 0; j < height; j++) {
+            //somethings happening here
             if (x + i > 8 || y + j > 8) {
                 continue;
             }
@@ -232,7 +231,7 @@ export const removeEffect: (
                 );
                 const requiredForBuffs =
                     newGrid[nx][ny].crop?.requiredForBuffs || 1;
-
+                    
                 // Check if the effect should be removed
                 if ((effectsCount.get(effect) || 0) < requiredForBuffs) {
                     for (

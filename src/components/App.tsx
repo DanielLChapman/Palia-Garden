@@ -1,5 +1,5 @@
-import React, { useCallback, useState } from "react";
-import { GridState } from "./useGrid";
+import React, { useCallback, useEffect, useState } from "react";
+import { GridState, useGrid } from "./useGrid";
 import Grid from "./Grid/Grid";
 import { CropTable } from "./Grid/CropTable";
 import { Crop } from "@/data/crops";
@@ -12,11 +12,11 @@ import { FertilizerTable } from "./Grid/FertilizerTable";
 export type CropCounts = Map<string, number>;
 
 type AppProps = {
-
+    gridCounts: CropCounts
   };
   
 
-  const App: React.FC<AppProps> = ({  }) => {
+  const App: React.FC<AppProps> = ({ gridCounts }) => {
     
     const [currentCrop, setCurrentCrop] = useState<Crop | null>(null);
     const [currentFertilizer, setCurrentFertilizer] =
@@ -24,11 +24,15 @@ type AppProps = {
     const [hover, setHover] = useState<Effect | null>(null);
     const [selectedEffects, setSelectedEffects] = useState<Effect[]>([]);
 
-    const [cropCounts, setCropCounts] = useState<CropCounts>(new Map());
+    const [cropCounts, setCropCounts] = useState<CropCounts>(gridCounts);
     const [displayTable, setDisplayTable] = useState<"Crops" | "Fertilizer">(
         "Crops"
     );
 
+    useEffect(() => {
+        setCropCounts(gridCounts)
+    }, [gridCounts])
+    
     return (
         <main className=" py-6 pt-0 ">
             {/* grid */}

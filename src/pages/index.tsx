@@ -11,7 +11,7 @@ export default function Home({}) {
     const [menuPage, setMenuPage] = useState<"Share" | "Settings" | "Mobile">(
         "Share"
     );
-    const {grid, updateGrid, saveGrid, loadGrid} = useGridContext();
+    const {grid, updateGrid, saveGrid, loadGrid, gridCounts} = useGridContext();
 
     /*
     const {
@@ -41,7 +41,7 @@ export default function Home({}) {
                 setMenuPage={setMenuPage}
                 isOpen={isMenuOpen}
             />
-            <App   />
+            <App  gridCounts={gridCounts} />
             <Footer />
             <SideMenu
                 isOpen={isMenuOpen}

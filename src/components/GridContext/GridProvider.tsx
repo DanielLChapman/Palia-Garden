@@ -8,7 +8,7 @@ type GridProviderProps = {
 };
 
 export const GridProvider: React.FC<GridProviderProps> = ({ children }) => {
-    const { grid: initialGridState, setGrid: setLocalGrid, recheckLocalStorage: loadGrid, saveGridToLocalStorage: saveGrid } = useGrid();
+    const { grid: initialGridState, setGrid: setLocalGrid, recheckLocalStorage: loadGrid, saveGridToLocalStorage: saveGrid, gridCounts } = useGrid();
     const [grid, setGrid] = useState(initialGridState);
 
     const updateGrid = useCallback((value: GridState) => {
@@ -20,7 +20,7 @@ export const GridProvider: React.FC<GridProviderProps> = ({ children }) => {
     }, [initialGridState])
 
     return (
-        <GridContext.Provider value={{ grid, updateGrid, saveGrid, loadGrid }}>
+        <GridContext.Provider value={{ grid, updateGrid, saveGrid, loadGrid, gridCounts }}>
             {children}
         </GridContext.Provider>
     );

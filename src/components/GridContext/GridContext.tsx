@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useCallback } from 'react';
 import { GridState } from '../useGrid';
+import { CropCounts } from '../App';
 
 // Define the type for your grid context
 type GridContextType = {
@@ -7,6 +8,7 @@ type GridContextType = {
     updateGrid: (value: GridState) => void;
     saveGrid: (value: GridState) => void;
     loadGrid: () => void;
+    gridCounts: CropCounts;
 };
 
 // Create the context

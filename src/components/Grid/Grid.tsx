@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { GridCell, GridState } from "../useGrid";
 import { GridCellComponent } from "./GridCell";
 import { Crop, crops } from "@/data/crops";
@@ -313,6 +313,36 @@ export const removeFertilizerFromGrid = (
     return newGrid;
 };
 
+export const recountGrid = (grid: GridState):CropCounts => {
+    const newCropCounts = new Map<string, number>();
+    if (!grid) {
+        alert("Something went really wrong!");
+        return newCropCounts;
+    }
+   
+
+    for (let i = 0; i < grid.length; i++) {
+        for (let j = 0; j < grid[i].length; j++) {
+            let cell = grid[i][j];
+
+            if (cell.crop && cell.primaryCoord) {
+                if (
+                    cell.primaryCoord[0] === i &&
+                    cell.primaryCoord[1] === j
+                ) {
+                    const cropName = cell.crop.name;
+                    newCropCounts.set(
+                        cropName,
+                        (newCropCounts.get(cropName) || 0) + 1
+                    );
+                }
+            }
+        }
+    }
+
+    return newCropCounts;
+};
+
 const Grid: React.FC<GridProps> = ({
     currentCrop,
     setCropCounts,
@@ -333,12 +363,12 @@ const Grid: React.FC<GridProps> = ({
                 //handle click
                 if (currentCrop) {
                     let t = addToGrid(grid, x, y, currentCrop, plantStarSeeds);
-                    recountGrid(t);
+                    setCropCounts(recountGrid(t));
                     updateGrid(t);
                 } else {
                     //remove
                     const newGrid = removeFromGrid(grid, x, y);
-                    recountGrid(newGrid);
+                    setCropCounts(recountGrid(newGrid));
                     updateGrid(newGrid);
                 }
             } else {
@@ -371,35 +401,8 @@ const Grid: React.FC<GridProps> = ({
         }
     };
 
-    const recountGrid = (grid: GridState) => {
-        if (!grid) {
-            alert("Something went really wrong!");
-            return;
-        }
-        const newCropCounts = new Map<string, number>();
-
-        for (let i = 0; i < grid.length; i++) {
-            for (let j = 0; j < grid[i].length; j++) {
-                let cell = grid[i][j];
-
-                if (cell.crop && cell.primaryCoord) {
-                    if (
-                        cell.primaryCoord[0] === i &&
-                        cell.primaryCoord[1] === j
-                    ) {
-                        const cropName = cell.crop.name;
-                        newCropCounts.set(
-                            cropName,
-                            (newCropCounts.get(cropName) || 0) + 1
-                        );
-                    }
-                }
-            }
-        }
-
-        setCropCounts(newCropCounts);
-    };
-
+    
+    
     
 
 

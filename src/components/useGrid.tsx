@@ -8,6 +8,8 @@ import {
     compressToEncodedURIComponent,
     decompressFromEncodedURIComponent,
 } from "lz-string";
+import { CropCounts } from "./App";
+import { recountGrid } from "./Grid/Grid";
 
 export type GridCell = {
     crop: Crop | null;
@@ -114,64 +116,70 @@ export function useGrid(): {
     grid: GridState;
     setGrid: (value: GridState) => void;
     recheckLocalStorage: () => void;
+    
     saveGridToLocalStorage: (value: GridState) => void;
+    gridCounts: CropCounts;
 } {
     // Initialize the grid state without setting it directly to an empty grid
     const [grid, setGrid] = useState<GridState | null>(null);
+    const [gridCounts, setGridCounts] = useState<CropCounts>(new Map<string, number>());
+
+    const updateGridCounts = (value: GridState) => {
+        if (value) {
+            let t = recountGrid(value);
+            setGridCounts(recountGrid(value));
+        }
+        
+    };
+
+
+    const loadGridFromStringValue = (storedValue: string | null) => {
+        if (storedValue) {
+            try {
+                // Attempt to detect if the stored value is serialized
+                // NEED GRID VALIDATION
+                if (isSerializedFormat(storedValue)) {
+                    let t = deserialized(storedValue);
+                    t = applyEffects(t);
+                    
+                    setGrid(t);
+                    updateGridCounts(t);
+                } else {
+                    // Assume the stored value is in the old JSON format
+                    let t = JSON.parse(storedValue);
+                    t = applyEffects(t);
+                    setGrid(t);
+                    updateGridCounts(t);
+                }
+                
+            } catch (e) {
+                console.error("Failed to parse grid from localStorage:", e);
+                setGrid(createEmptyGrid());
+            }
+        } else {
+            setGrid(createEmptyGrid());
+        }
+        
+    }
 
     // Load the grid from localStorage only once when the component mounts
     useEffect(() => {
-        const loadGridFromLocalStorage = () => {
-            const storedValue = localStorage.getItem("grid");
-            if (storedValue) {
-                try {
-                    // Attempt to detect if the stored value is serialized
-                    if (isSerializedFormat(storedValue)) {
-                        let t = deserialized(storedValue);
-                        t = applyEffects(t);
-                        setGrid(t);
-                    } else {
-                        // Assume the stored value is in the old JSON format
-                        let t = JSON.parse(storedValue);
-                        t = applyEffects(t);
-                        setGrid(t);
-                    }
-                } catch (e) {
-                    console.error("Failed to parse grid from localStorage:", e);
-                    setGrid(createEmptyGrid());
-                }
-            } else {
-                setGrid(createEmptyGrid());
-            }
-        };
 
-        loadGridFromLocalStorage();
+        recheckLocalStorage();
     }, []);
+
+    const checkString = useCallback((value: string) => {
+        if (!value) {
+            alert('Invalid String');
+        }
+        loadGridFromStringValue(value);
+        
+    }, [])
 
     const recheckLocalStorage = useCallback(() => {
         try {
             const storedValue = localStorage.getItem("grid");
-            if (storedValue) {
-                try {
-                    // Attempt to detect if the stored value is serialized
-                    if (isSerializedFormat(storedValue)) {
-                        let t = deserialized(storedValue);
-                        t = applyEffects(t);
-                        
-                        setGrid(t);
-                    } else {
-                        // Assume the stored value is in the old JSON format
-                        let t = JSON.parse(storedValue);
-                        t = applyEffects(t);
-                        setGrid(t);
-                    }
-                } catch (e) {
-                    console.error("Failed to parse grid from localStorage:", e);
-                    setGrid(createEmptyGrid());
-                }
-            } else {
-                setGrid(createEmptyGrid());
-            }
+            loadGridFromStringValue(storedValue);
         } catch (e) {
             console.error("Failed to parse grid from localStorage:", e);
         }
@@ -211,6 +219,7 @@ export function useGrid(): {
             setGrid,
             recheckLocalStorage,
             saveGridToLocalStorage,
+            gridCounts,
         };
     }
 
@@ -221,6 +230,7 @@ export function useGrid(): {
         setGrid,
         recheckLocalStorage,
         saveGridToLocalStorage,
+        gridCounts,
     };
 }
 
