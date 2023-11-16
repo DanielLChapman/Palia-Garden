@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useSettings } from "./useSettings";
-import { GridState } from "./useGrid";
+import { GridState, serialized, useGrid } from "./useGrid";
+import { useGridContext } from "./GridContext/useGridContext";
 
 type SideMenuProps = {
     isOpen: boolean;
@@ -9,13 +10,22 @@ type SideMenuProps = {
     grid: GridState;
     setLocalGrid: (grid: GridState) => void;
     recheckLocalStorage: () => void;
-    saveGridToLocalStorage: (value: GridState) => void
+    saveGridToLocalStorage: (value: GridState) => void;
 };
 
-function SideMenu({ isOpen, onClose, menuPage, grid,
+function SideMenu({
+    isOpen,
+    onClose,
+    menuPage,
+    grid,
     setLocalGrid,
-    recheckLocalStorage, saveGridToLocalStorage}: SideMenuProps) {
+    recheckLocalStorage,
+    saveGridToLocalStorage,
+}: SideMenuProps) {
     const [hoveredItem, setHoveredItem] = useState<string | null>(null);
+    const [str, setStr] = useState("");
+
+    const { checkString } = useGridContext();
 
     const {
         useStarSeeds,
@@ -144,12 +154,33 @@ function SideMenu({ isOpen, onClose, menuPage, grid,
                     )}
 
                     {menuPage === "Share" && (
-                        <div className=" mt-4">
-                            <button className="" onClick={() => {
-                                saveGridToLocalStorage(grid)
-                            }}>Save</button>
-                           <button className="" onClick={recheckLocalStorage}>Load</button>
+                        <div className="mt-4">
+                        <div className="flex justify-start space-x-2 ml-8  mb-4">
+                            <button className="bg-cyan-500 text-white py-2 px-4 rounded hover:bg-cyan-600 focus:outline-none" onClick={() => saveGridToLocalStorage(grid)}>Save</button>
+                            <button className="bg-cyan-500 text-white py-2 px-4 rounded hover:bg-cyan-600 focus:outline-none" onClick={recheckLocalStorage}>Load</button>
                         </div>
+                    
+                        <div className="p-4 border-2 border-gray-300 rounded-lg mb-4 shadow mx-8 ">
+                            <div className="font-bold mb-2 text-cyan-500">Share This Grid</div>
+                            <div className="bg-gray-100 p-2 rounded mb-2 cursor-pointer" onClick={() => navigator.clipboard.writeText(serialized(grid))}>
+                                <div className="truncate text-gray-700 text-sm">Click to copy:</div>
+                                <div className="text-blue-600 truncate">{serialized(grid)}</div>
+                            </div>
+                            <div className="bg-gray-100 p-2 rounded cursor-pointer" onClick={() => navigator.clipboard.writeText(`${window.location.href}${serialized(grid)}`)}>
+                                <div className="truncate text-gray-700 text-sm ">Click to copy link:</div>
+                                <div className="text-blue-600 truncate">{window.location.href}{serialized(grid)}</div>
+                            </div>
+                        </div>
+                    
+                        <div className="p-4 border-2 border-gray-300 rounded-lg shadow mx-8">
+                            <div className="font-bold mb-2 text-cyan-500">Load Grid</div>
+                            <div className="flex items-center space-x-2">
+                                <input type="text" value={str} onChange={(e) => setStr(e.target.value)} className="flex-1 p-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500" />
+                                <button className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 focus:outline-none" onClick={() => checkString(str)}>Load</button>
+                            </div>
+                        </div>
+                    </div>
+                    
                     )}
                 </div>
             )}

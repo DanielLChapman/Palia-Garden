@@ -10,6 +10,10 @@ import {
 } from "lz-string";
 import { CropCounts } from "./App";
 import { recountGrid } from "./Grid/Grid";
+import {
+    isValidBase64String,
+    isValidGridStructure,
+} from "./tools/serializedValidation";
 
 export type GridCell = {
     crop: Crop | null;
@@ -55,35 +59,59 @@ export function serialized(grid: GridState): string {
 }
 
 function deserialized(serialzied: string): GridState {
-    let compressed = atob(serialzied);
-    let decompressed = decompressFromEncodedURIComponent(compressed);
+    if (!isValidBase64String(serialzied)) {
+        alert("Invalid String");
+        return Array.from({ length: 9 }, () =>
+            Array.from({ length: 9 }, createEmptyCell)
+        );
+    }
 
-    let rows = decompressed.split(";");
-    let grid: GridState = rows.map((row) =>
-        row.split(",").map((cell) => {
-            let [cropId, fertilizerId, primaryCell, starredState] =
-                cell.split(":");
-            let pc = primaryCell.split("~").map(Number); // Convert to numbers immediately
-            let pc2: [number, number] = [pc[0], pc[1]]; // Assert that pc2 is a tuple
+    try {
+        let compressed = atob(serialzied);
+        let decompressed = decompressFromEncodedURIComponent(compressed);
 
-            return {
-                crop: cropId !== "0" ? getCropById(parseInt(cropId, 10)) : null,
-                fertilizer:
-                    fertilizerId !== "0"
-                        ? getFertilizerById(parseInt(fertilizerId, 10))
-                        : null,
-                primaryCoord: pc2[0] !== -1 ? pc2 : null, // Check only the first element for -1
-                effects: [],
-                starred: starredState === "2" ? "starred" : "regular",
-                needFertilizer: true,
-            };
-        })
-    );
+        if (!isValidGridStructure(decompressed)) {
+            alert("Invalid Decompressed Structure");
+            return Array.from({ length: 9 }, () =>
+                Array.from({ length: 9 }, createEmptyCell)
+            );
+        }
 
-    return grid;
+        let rows = decompressed.split(";");
+        let grid: GridState = rows.map((row) =>
+            row.split(",").map((cell) => {
+                let [cropId, fertilizerId, primaryCell, starredState] =
+                    cell.split(":");
+                let pc = primaryCell.split("~").map(Number); // Convert to numbers immediately
+                let pc2: [number, number] = [pc[0], pc[1]]; // Assert that pc2 is a tuple
+
+                return {
+                    crop:
+                        cropId !== "0"
+                            ? getCropById(parseInt(cropId, 10))
+                            : null,
+                    fertilizer:
+                        fertilizerId !== "0"
+                            ? getFertilizerById(parseInt(fertilizerId, 10))
+                            : null,
+                    primaryCoord: pc2[0] !== -1 ? pc2 : null, // Check only the first element for -1
+                    effects: [],
+                    starred: starredState === "2" ? "starred" : "regular",
+                    needFertilizer: true,
+                };
+            })
+        );
+
+        return grid;
+    } catch (error) {
+        console.error("Deserialization error:", error);
+        return Array.from({ length: 9 }, () =>
+            Array.from({ length: 9 }, createEmptyCell)
+        );
+    }
 }
 
-const applyEffects = (value: GridState): GridState => { 
+const applyEffects = (value: GridState): GridState => {
     let newGrid = value;
 
     for (let i = 0; i < newGrid.length; i++) {
@@ -116,22 +144,23 @@ export function useGrid(): {
     grid: GridState;
     setGrid: (value: GridState) => void;
     recheckLocalStorage: () => void;
-    
+
     saveGridToLocalStorage: (value: GridState) => void;
     gridCounts: CropCounts;
+    checkString: (value: string) => void;
 } {
     // Initialize the grid state without setting it directly to an empty grid
     const [grid, setGrid] = useState<GridState | null>(null);
-    const [gridCounts, setGridCounts] = useState<CropCounts>(new Map<string, number>());
+    const [gridCounts, setGridCounts] = useState<CropCounts>(
+        new Map<string, number>()
+    );
 
     const updateGridCounts = (value: GridState) => {
         if (value) {
             let t = recountGrid(value);
             setGridCounts(recountGrid(value));
         }
-        
     };
-
 
     const loadGridFromStringValue = (storedValue: string | null) => {
         if (storedValue) {
@@ -140,8 +169,9 @@ export function useGrid(): {
                 // NEED GRID VALIDATION
                 if (isSerializedFormat(storedValue)) {
                     let t = deserialized(storedValue);
-                    t = applyEffects(t);
                     
+                    t = applyEffects(t);
+
                     setGrid(t);
                     updateGridCounts(t);
                 } else {
@@ -151,7 +181,6 @@ export function useGrid(): {
                     setGrid(t);
                     updateGridCounts(t);
                 }
-                
             } catch (e) {
                 console.error("Failed to parse grid from localStorage:", e);
                 setGrid(createEmptyGrid());
@@ -159,22 +188,20 @@ export function useGrid(): {
         } else {
             setGrid(createEmptyGrid());
         }
-        
-    }
+    };
 
     // Load the grid from localStorage only once when the component mounts
     useEffect(() => {
-
         recheckLocalStorage();
     }, []);
 
     const checkString = useCallback((value: string) => {
         if (!value) {
-            alert('Invalid String');
+            alert("Invalid String");
         }
-        loadGridFromStringValue(value);
         
-    }, [])
+        loadGridFromStringValue(value);
+    }, []);
 
     const recheckLocalStorage = useCallback(() => {
         try {
@@ -220,10 +247,9 @@ export function useGrid(): {
             recheckLocalStorage,
             saveGridToLocalStorage,
             gridCounts,
+            checkString,
         };
     }
-
-    
 
     return {
         grid,
@@ -231,6 +257,7 @@ export function useGrid(): {
         recheckLocalStorage,
         saveGridToLocalStorage,
         gridCounts,
+        checkString,
     };
 }
 

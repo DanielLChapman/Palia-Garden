@@ -9,6 +9,7 @@ type GridContextType = {
     saveGrid: (value: GridState) => void;
     loadGrid: () => void;
     gridCounts: CropCounts;
+    checkString: (value: string) => void;
 };
 
 // Create the context
