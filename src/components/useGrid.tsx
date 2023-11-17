@@ -139,8 +139,10 @@ const applyEffects = (value: GridState): GridState => {
 
     return newGrid;
 };
-
-export function useGrid(): {
+interface UseGridParams {
+    urlID?: string | null;
+}
+export function useGrid({ urlID }: UseGridParams): {
     grid: GridState;
     setGrid: (value: GridState) => void;
     recheckLocalStorage: () => void;
@@ -169,7 +171,7 @@ export function useGrid(): {
                 // NEED GRID VALIDATION
                 if (isSerializedFormat(storedValue)) {
                     let t = deserialized(storedValue);
-                    
+
                     t = applyEffects(t);
 
                     setGrid(t);
@@ -190,16 +192,40 @@ export function useGrid(): {
         }
     };
 
-    // Load the grid from localStorage only once when the component mounts
+    // Load the grid from url, then localStorage only once when the component mounts
     useEffect(() => {
-        recheckLocalStorage();
+        if (urlID) {
+            if (isValidBase64String(urlID)) {
+                let compressed = atob(urlID);
+                let decompressed =
+                    decompressFromEncodedURIComponent(compressed);
+
+                if (decompressed !== null ) {
+                    if (!isValidGridStructure(decompressed)) {
+                        console.error("Invalid URL ID, Trying Local Storage Instead");
+                        recheckLocalStorage();
+                    } else {
+                        loadGridFromStringValue(urlID);
+                    }
+                } else {
+                    console.error("Invalid URL ID, Trying Local Storage Instead");
+                    recheckLocalStorage();
+                }
+
+            } else {
+                console.error("Invalid URL ID, Trying Local Storage Instead");
+                recheckLocalStorage();
+            }
+        } else {
+            recheckLocalStorage();
+        }
     }, []);
 
     const checkString = useCallback((value: string) => {
         if (!value) {
             alert("Invalid String");
         }
-        
+
         loadGridFromStringValue(value);
     }, []);
 
@@ -261,7 +287,7 @@ export function useGrid(): {
     };
 }
 
-function createEmptyCell(): GridCell {
+export function createEmptyCell(): GridCell {
     return {
         crop: null,
         effects: [],

@@ -4,10 +4,10 @@ export function isValidBase64String(str: string) {
 }
 
 export function isValidGridStructure(decompressedString: string) {
-    if (decompressedString.length < 300 || decompressedString.length > 1000) {
-        console.log(decompressedString.length, decompressedString);
+    if (decompressedString && (decompressedString.length < 300 || decompressedString.length > 1000)) {
         return false;
     }
+
     const rows = decompressedString.split(";");
     if (rows.length !== 9) {
         return false;

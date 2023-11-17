@@ -5,10 +5,11 @@ import { GridContext } from './GridContext';
 
 type GridProviderProps = {
     children: React.ReactNode;
+    urlID?: string | null | undefined;
 };
 
-export const GridProvider: React.FC<GridProviderProps> = ({ children }) => {
-    const { grid: initialGridState, setGrid: setLocalGrid, recheckLocalStorage: loadGrid, saveGridToLocalStorage: saveGrid, gridCounts, checkString } = useGrid();
+export const GridProvider: React.FC<GridProviderProps> = ({ children, urlID }) => {
+    const { grid: initialGridState, setGrid: setLocalGrid, recheckLocalStorage: loadGrid, saveGridToLocalStorage: saveGrid, gridCounts, checkString } = useGrid({ urlID });
     const [grid, setGrid] = useState(initialGridState);
 
     const updateGrid = useCallback((value: GridState) => {
